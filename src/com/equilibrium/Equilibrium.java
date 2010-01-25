@@ -21,12 +21,30 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public int selectedCol = 0;					//Indice di colonna della casella selezionata
 	public LinearLayout l;						//Layout principale
 	public Cell lastClicked = null;				//Ultima casella cliccata
+	public Vector<Integer> playerRows;		//Righe del giocatore
+	public Vector<Integer> playerCols;		//Caselle del giocatore
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.main);
+        
+        //Scelto righe e colonne random
+        int totRows = (int) Math.floor(lato / 2);
+        int totCols = (int) Math.ceil(lato / 2);
+        playerRows = new Vector<Integer>();
+        playerCols = new Vector<Integer>();
+        while ((totRows > 0) || (totCols > 0)) {
+        	int tmp = (int)(lato*Math.random())+1;
+        	if ((totRows > 0) && (playerRows.contains(tmp) == false)) {
+        		playerRows.add(tmp);
+        		totRows--;
+        	} else if (playerCols.contains(tmp) == false) {
+        		playerCols.add(tmp);
+        		totCols--;
+        	}
+        }
         
         l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
@@ -36,13 +54,21 @@ public class Equilibrium extends Activity implements OnClickListener {
         a.setStretchAllColumns(true);
         
         amatriciana = new Cell[lato+2][];
-        
+        boolean isPlayer = false;
         for (int i = 0; i < lato+2; i++) {
+        	if (playerRows.contains(i) == true) {
+        		isPlayer = true;
+        	} else {
+        		isPlayer = false;
+        	}
         	amatriciana[i] = new Cell[lato+2];
         	TableRow r = new TableRow(this);
         	for (int j = 0; j < lato+2; j++) {
         		amatriciana[i][j] = new Cell(this, i, j);
         		if ((j < lato+1) && (i < lato+1)) {
+        			if ((isPlayer == true) || (playerCols.contains(j) == true)) {
+        				amatriciana[i][j].setBkColor(0xFF444455, true);
+            		}
 	        		String sign;
 	        		if ((i+j) % 2 == 0) {
 	        			sign = "+";
@@ -53,8 +79,8 @@ public class Equilibrium extends Activity implements OnClickListener {
 	        		}
 	        		amatriciana[i][j].setSign(sign);
         		} else {
-        			amatriciana[i][j].setBkColor(Color.TRANSPARENT);
-        			amatriciana[i][j].setNumberColor(Color.BLUE);
+        			amatriciana[i][j].setBkColor(Color.TRANSPARENT, true);
+        			amatriciana[i][j].setNumberColor(Color.CYAN);
         		}
         		if ((j != 0) && (i != 0)) {
         			r.addView(amatriciana[i][j]);
@@ -128,4 +154,25 @@ public class Equilibrium extends Activity implements OnClickListener {
 		amatriciana[selectedRow][selectedCol].setNumber((String) b.getText());
 		hideNumbers();
 	}
+    
+    /*public boolean onTouchEvent(MotionEvent event) {
+    	
+    	float x = event.getX();
+    	float y = event.getY();
+    	
+    	int row = (int) Math.floor(y / amatriciana[1][1].getSize());
+    	int col = (int) Math.floor(x / amatriciana[1][1].getSize())+1;
+    	
+    	if (event.getAction() == MotionEvent.ACTION_DOWN) {
+    		amatriciana[row][col].setBkColor(Color.GREEN);
+    	}
+    	if (event.getAction() == MotionEvent.ACTION_MOVE) {
+    		amatriciana[row][col].setBkColor(Color.GREEN);
+    	}
+    	if (event.getAction() == MotionEvent.ACTION_UP) {
+    		amatriciana[row][col].setBkColor(Color.DKGRAY);
+    	}
+    	
+    	return true;
+    }*/
 }

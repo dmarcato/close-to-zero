@@ -2,14 +2,14 @@ package com.equilibrium;
 
 import java.util.Vector;
 
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
 
-public class Cell extends View implements OnClickListener {
+public class Cell extends View {
 
 	private Equilibrium e;
 	private String sign;
@@ -18,6 +18,7 @@ public class Cell extends View implements OnClickListener {
 	private int row;
 	private int col;
 	private boolean numberSetted = false;
+	private int originalBkColor = Color.DKGRAY;
 	private int bkColor = Color.DKGRAY;
 	private int borderColor = Color.BLACK;
 	private int signColor = Color.RED;
@@ -33,7 +34,6 @@ public class Cell extends View implements OnClickListener {
     public Cell(Context context, int r, int c) {
         super(context);
         e = (Equilibrium) getContext();
-        setOnClickListener(this);
         sign = "";
         number = "";
         row = r;
@@ -109,9 +109,9 @@ public class Cell extends View implements OnClickListener {
         canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
         canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
         
-        p.setTextSize(10);
+        p.setTextSize(11);
         p.setColor(signColor);
-        canvas.drawText(sign, 2, 10, p);
+        canvas.drawText(sign, 3, 11, p);
         
         p.setTextSize(12);
         p.setColor(numberColor);
@@ -119,7 +119,14 @@ public class Cell extends View implements OnClickListener {
     }
     
     public void setBkColor(int color) {
+    	setBkColor(color, false);
+    }
+    
+    public void setBkColor(int color, boolean original) {
     	bkColor = color;
+    	if (original == true) {
+    		originalBkColor = color;
+    	}
     	invalidate();
     }
     
@@ -162,10 +169,12 @@ public class Cell extends View implements OnClickListener {
     }
     
     public void setAround(int num) {
-    	around[num] = true;
-    	if ((--possibilities) == 0) {
-    		number = "0";
-    		e.showNumbers(row, col);
+    	if (around[num] == false) {
+    		--possibilities;
+    		around[num] = true;
+    	}
+    	if ((possibilities == 0) && (numberSetted == false)) {
+    		setNumber("0");
     	}
     }
     
@@ -182,38 +191,46 @@ public class Cell extends View implements OnClickListener {
     public int getSize() {
     	return size;
     }
-    
-	public void onClick(View v) {
+	
+	public boolean onTouchEvent(MotionEvent event) {
 		//Controllo di non essere nei bordi delle somme o di non aver cliccato la stessa casella
 		if ((row != e.lato+1) && (col != e.lato+1) && (e.lastClicked != this)) {
-			e.selectedRow = row;
-			e.selectedCol = col;
-			if (numberSetted == false) {
-				/*Dialog tmp = new Dialog(getContext());
-				GridView gridview = new GridView(getContext());
-				
-				int[] num = new int[e.lato];
-				for (int i = 0; i < e.lato; i++) {
-					//Controllo i lati
-					num[i] = i+1;
-				}
-				
-				gridview.setNumColumns(GridView.AUTO_FIT);
-			    gridview.setAdapter(new ButtonAdapter(getContext(), num, tmp, this));
-			    
-			    tmp.setTitle("Scegli un numero");
-			    tmp.setContentView(gridview);
-				tmp.show();*/
-				e.showNumbers(row, col);
-			} else {
-				e.hideNumbers();
-			}
-			bkColor = Color.GRAY;
-			if (e.lastClicked != null) {
-				e.lastClicked.setBkColor(Color.DKGRAY);
-			}
-			e.lastClicked = this;
-			invalidate();
-		}
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+	    		setBkColor(Color.GREEN);
+	    	}
+	    	if (event.getAction() == MotionEvent.ACTION_UP) {
+	    		setBkColor(originalBkColor);
+    			e.selectedRow = row;
+    			e.selectedCol = col;
+    			if (numberSetted == false) {
+    				e.showNumbers(row, col);
+    			} else {
+    				e.hideNumbers();
+    			}
+    			bkColor = Color.GRAY;
+    			if (e.lastClicked != null) {
+    				e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
+    			}
+    			e.lastClicked = this;
+    			invalidate();
+    		}
+    	}
+    	return true;
 	}
 }
+
+/*Dialog tmp = new Dialog(getContext());
+GridView gridview = new GridView(getContext());
+
+int[] num = new int[e.lato];
+for (int i = 0; i < e.lato; i++) {
+	//Controllo i lati
+	num[i] = i+1;
+}
+
+gridview.setNumColumns(GridView.AUTO_FIT);
+gridview.setAdapter(new ButtonAdapter(getContext(), num, tmp, this));
+
+tmp.setTitle("Scegli un numero");
+tmp.setContentView(gridview);
+tmp.show();*/
