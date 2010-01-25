@@ -18,7 +18,7 @@ public class Cell extends View implements OnClickListener {
 	private int row;
 	private int col;
 	private boolean numberSetted = false;
-	private int bkColor = Color.GRAY;
+	private int bkColor = Color.DKGRAY;
 	private int borderColor = Color.BLACK;
 	private int signColor = Color.RED;
 	private int numberColor = Color.YELLOW;
@@ -174,27 +174,33 @@ public class Cell extends View implements OnClickListener {
     }
     
 	public void onClick(View v) {
-		e.selectedRow = row;
-		e.selectedCol = col;
-		if ((numberSetted == false) && ((row != e.lato+1) && (col != e.lato+1))) {
-			/*Dialog tmp = new Dialog(getContext());
-			GridView gridview = new GridView(getContext());
-			
-			int[] num = new int[e.lato];
-			for (int i = 0; i < e.lato; i++) {
-				//Controllo i lati
-				num[i] = i+1;
+		if ((row != e.lato+1) && (col != e.lato+1)) {
+			e.selectedRow = row;
+			e.selectedCol = col;
+			if (numberSetted == false) {
+				/*Dialog tmp = new Dialog(getContext());
+				GridView gridview = new GridView(getContext());
+				
+				int[] num = new int[e.lato];
+				for (int i = 0; i < e.lato; i++) {
+					//Controllo i lati
+					num[i] = i+1;
+				}
+				
+				gridview.setNumColumns(GridView.AUTO_FIT);
+			    gridview.setAdapter(new ButtonAdapter(getContext(), num, tmp, this));
+			    
+			    tmp.setTitle("Scegli un numero");
+			    tmp.setContentView(gridview);
+				tmp.show();*/
+				e.showNumbers(row, col);
 			}
-			
-			gridview.setNumColumns(GridView.AUTO_FIT);
-		    gridview.setAdapter(new ButtonAdapter(getContext(), num, tmp, this));
-		    
-		    tmp.setTitle("Scegli un numero");
-		    tmp.setContentView(gridview);
-			tmp.show();*/
-			e.showNumbers(row, col);
+			bkColor = Color.GRAY;
+			if (e.lastClicked != null) {
+				e.lastClicked.setBkColor(Color.DKGRAY);
+			}
+			e.lastClicked = this;
+			invalidate();
 		}
-		bkColor = Color.CYAN;
-		invalidate();
 	}
 }

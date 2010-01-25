@@ -19,6 +19,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public int selectedRow = 0;
 	public int selectedCol = 0;
 	public LinearLayout l;
+	public Cell lastClicked = null;
 	
     /** Called when the activity is first created. */
     @Override
