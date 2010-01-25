@@ -174,7 +174,8 @@ public class Cell extends View implements OnClickListener {
     }
     
 	public void onClick(View v) {
-		if ((row != e.lato+1) && (col != e.lato+1)) {
+		//Controllo di non essere nei bordi delle somme o di non aver cliccato la stessa casella
+		if ((row != e.lato+1) && (col != e.lato+1) && (e.lastClicked != this)) {
 			e.selectedRow = row;
 			e.selectedCol = col;
 			if (numberSetted == false) {
@@ -194,6 +195,8 @@ public class Cell extends View implements OnClickListener {
 			    tmp.setContentView(gridview);
 				tmp.show();*/
 				e.showNumbers(row, col);
+			} else {
+				e.hideNumbers();
 			}
 			bkColor = Color.GRAY;
 			if (e.lastClicked != null) {

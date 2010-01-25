@@ -5,6 +5,7 @@ import java.util.Vector;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,12 +15,12 @@ import android.widget.TableRow;
 
 public class Equilibrium extends Activity implements OnClickListener {
 	
-	public int lato = 6;
-	public Cell[][] amatriciana;
-	public int selectedRow = 0;
-	public int selectedCol = 0;
-	public LinearLayout l;
-	public Cell lastClicked = null;
+	public int lato = 6;						//Numero di caselle per riga
+	public Cell[][] amatriciana;				//Matrice delle caselle
+	public int selectedRow = 0;					//Indice di riga della casella selezionata
+	public int selectedCol = 0;					//Indice di colonna della casella selezionata
+	public LinearLayout l;						//Layout principale
+	public Cell lastClicked = null;				//Ultima casella cliccata
 	
     /** Called when the activity is first created. */
     @Override
@@ -29,6 +30,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         
         l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
+        l.setGravity(Gravity.FILL_VERTICAL);
         
         TableLayout a = new TableLayout(this);
         a.setStretchAllColumns(true);
@@ -115,9 +117,15 @@ public class Equilibrium extends Activity implements OnClickListener {
     	l.addView(b, 1);
     }
     
+    public void hideNumbers() {
+    	if (l.getChildCount() > 1) {
+    		l.removeViewAt(1);
+    	}
+    }
+    
     public void onClick(View v) {
 		Button b = (Button) v;
 		amatriciana[selectedRow][selectedCol].setNumber((String) b.getText());
-		showNumbers(selectedRow, selectedCol);
+		hideNumbers();
 	}
 }
