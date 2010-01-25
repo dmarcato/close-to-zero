@@ -179,6 +179,10 @@ public class Cell extends View implements OnClickListener {
     	return a;
     }
     
+    public int getSize() {
+    	return size;
+    }
+    
 	public void onClick(View v) {
 		//Controllo di non essere nei bordi delle somme o di non aver cliccato la stessa casella
 		if ((row != e.lato+1) && (col != e.lato+1) && (e.lastClicked != this)) {
