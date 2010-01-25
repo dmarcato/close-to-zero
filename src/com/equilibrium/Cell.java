@@ -23,6 +23,7 @@ public class Cell extends View implements OnClickListener {
 	private int signColor = Color.RED;
 	private int numberColor = Color.YELLOW;
 	private boolean[] around;
+	private int possibilities;
 	
 	 /**
      * Constructor.  This version is only needed if you will be instantiating
@@ -37,6 +38,7 @@ public class Cell extends View implements OnClickListener {
         number = "";
         row = r;
         col = c;
+        possibilities = e.lato;
         around = new boolean[e.lato+1];
         for (int i = 0; i <= e.lato; i++) {
         	around[i] = false;
@@ -159,8 +161,12 @@ public class Cell extends View implements OnClickListener {
     	}
     }
     
-    public void setAround(int number) {
-    	around[number] = true;
+    public void setAround(int num) {
+    	around[num] = true;
+    	if ((--possibilities) == 0) {
+    		number = "0";
+    		e.showNumbers(row, col);
+    	}
     }
     
     public Vector<Integer> getAvailableAround() {
