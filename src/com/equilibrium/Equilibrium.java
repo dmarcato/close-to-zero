@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -53,8 +54,10 @@ public class Equilibrium extends Activity implements OnClickListener {
     /* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_NEW_GAME, 0, "Nuova Partita").setIcon(android.R.drawable.ic_menu_add);
-        menu.add(0, MENU_SETTINGS, 1, "Impostazioni").setIcon(android.R.drawable.ic_menu_preferences);
+        SubMenu settingsMenu = menu.addSubMenu(0, MENU_SETTINGS, 1, "Impostazioni").setIcon(android.R.drawable.ic_menu_preferences);
         menu.add(0, MENU_QUIT, 2, "Esci").setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+        settingsMenu.add("Dimensione");
+        settingsMenu.add("Livello CPU");
         return true;
     }
 
