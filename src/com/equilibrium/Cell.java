@@ -2,7 +2,7 @@ package com.equilibrium;
 
 import java.util.Vector;
 
-import android.view.MotionEvent;
+//import android.view.MotionEvent;
 import android.view.View;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -15,14 +15,14 @@ public class Cell extends View {
 	private String sign;
 	private String number;
 	private int size;
-	private int row;
-	private int col;
+	public int row;
+	public int col;
 	private boolean numberSetted = false;
-	private int originalBkColor = Color.DKGRAY;
-	private int bkColor = Color.DKGRAY;
-	private int borderColor = Color.BLACK;
+	public int originalBkColor = 0xFFEEEEEE;
+	public int bkColor = 0xFFEEEEEE;
+	private int borderColor = Color.DKGRAY;
 	private int signColor = Color.RED;
-	private int numberColor = Color.YELLOW;
+	private int numberColor = Color.BLACK;
 	private boolean[] around;
 	private int possibilities;
 	
@@ -192,7 +192,24 @@ public class Cell extends View {
     	return size;
     }
 	
-	public boolean onTouchEvent(MotionEvent event) {
+    public void click() {
+    	setBkColor(0xFFCC99CC);
+    	if ((row != e.lato+1) && (col != e.lato+1)) {
+    		e.selectedRow = row;
+    		e.selectedCol = col;
+    		if (numberSetted == false) {
+    			e.showNumbers(row, col);
+    		} else {
+    			e.hideNumbers();
+    		}
+    		if ((e.lastClicked != null) && (e.lastClicked != this)) {
+    			e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
+    		}
+    		e.lastClicked = this;
+    	}
+    }
+    
+	/* public boolean onTouchEvent(MotionEvent event) {
 		//Controllo di non essere nei bordi delle somme o di non aver cliccato la stessa casella
 		if ((row != e.lato+1) && (col != e.lato+1) && (e.lastClicked != this)) {
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -216,7 +233,7 @@ public class Cell extends View {
     		}
     	}
     	return true;
-	}
+	}*/
 }
 
 /*Dialog tmp = new Dialog(getContext());
