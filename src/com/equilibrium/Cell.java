@@ -117,9 +117,9 @@ public class Cell extends View {
         canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
         canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
         
-        p.setTextSize(size/5);
+        p.setTextSize(size/3);
         p.setColor(signColor);
-        canvas.drawText(sign, 3, 11, p);
+        canvas.drawText(sign, size/8, size/3, p);
         
         p.setTextSize(size/3);
         p.setColor(numberColor);
