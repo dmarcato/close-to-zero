@@ -107,6 +107,7 @@ public class Cell extends View {
         	setBkColor(Color.TRANSPARENT);
         	p.setColor((e.turn)? 0xFF9999CC : 0xFFCC9999);
         	canvas.drawCircle(size/2, size/2, size/2-6, p);
+        	
         	return;
         }
         

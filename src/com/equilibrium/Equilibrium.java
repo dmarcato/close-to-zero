@@ -47,7 +47,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         		totCols--;
         	}
         }
-        
+        this.
         l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
         l.setGravity(Gravity.FILL_VERTICAL);
@@ -140,6 +140,8 @@ public class Equilibrium extends Activity implements OnClickListener {
     	Button btn;
     	for (int i = 0; i < around.size(); i++) {
     		btn = new Button(this);
+    		btn.setHeight(amatriciana[row][col].getSize());
+    		btn.setWidth(amatriciana[row][col].getSize());
             btn.setText(Integer.toString(around.elementAt(i)));
             btn.setOnClickListener(this);
             c.addView(btn);
