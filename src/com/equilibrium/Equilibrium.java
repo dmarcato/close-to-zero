@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,17 +20,21 @@ import android.widget.TableRow;
 
 public class Equilibrium extends Activity implements OnClickListener {
 	
-	public int lato = 3;						//Numero di caselle per riga
+	public int lato = 6;						//Numero di caselle per riga
 	public Cell[][] amatriciana;				//Matrice delle caselle
 	public int selectedRow = 0;					//Indice di riga della casella selezionata
 	public int selectedCol = 0;					//Indice di colonna della casella selezionata
 	public LinearLayout l;						//Layout principale
 	public Cell lastClicked = null;				//Ultima casella cliccata
 	public Cell lastMoved = null;				//Ultima casella mossa
-	public Vector<Integer> playerRows;		//Righe del giocatore
-	public Vector<Integer> playerCols;		//Caselle del giocatore
+	public Vector<Integer> playerRows;			//Righe del giocatore
+	public Vector<Integer> playerCols;			//Caselle del giocatore
 	public boolean turn = true;
 	public int turnLeft = 0;
+	
+	public static final int MENU_NEW_GAME = 424;
+	public static final int MENU_SETTINGS = 548;
+	public static final int MENU_QUIT = 189;
 	
     /** Called when the activity is first created. */
     @Override
@@ -42,6 +48,27 @@ public class Equilibrium extends Activity implements OnClickListener {
         setContentView(l);
         
         start();
+    }
+    
+    /* Creates the menu items */
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, MENU_NEW_GAME, 0, "Nuova Partita").setIcon(android.R.drawable.ic_menu_add);
+        menu.add(0, MENU_SETTINGS, 1, "Impostazioni").setIcon(android.R.drawable.ic_menu_preferences);
+        menu.add(0, MENU_QUIT, 2, "Esci").setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+        return true;
+    }
+
+    /* Handles item selections */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case MENU_NEW_GAME:
+            start();
+            return true;
+        case MENU_QUIT:
+            finish();
+            return true;
+        }
+        return false;
     }
     
     public void start() {
