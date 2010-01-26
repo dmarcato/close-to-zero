@@ -3,7 +3,8 @@ package com.equilibrium;
 import java.util.Vector;
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -14,7 +15,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 public class Equilibrium extends Activity implements OnClickListener {
 	
@@ -36,7 +36,16 @@ public class Equilibrium extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.main);
         
-        turnLeft = lato*lato;
+        l = new LinearLayout(this);
+        l.setOrientation(LinearLayout.VERTICAL);
+        l.setGravity(Gravity.FILL_VERTICAL);        
+        setContentView(l);
+        
+        start();
+    }
+    
+    public void start() {
+    	turnLeft = lato*lato;
         
         //Scelto righe e colonne random
         int totRows = (int) Math.floor(lato / 2);
@@ -53,10 +62,6 @@ public class Equilibrium extends Activity implements OnClickListener {
         		totCols--;
         	}
         }
-        this.
-        l = new LinearLayout(this);
-        l.setOrientation(LinearLayout.VERTICAL);
-        l.setGravity(Gravity.FILL_VERTICAL);
         
         TableLayout a = new TableLayout(this);
         a.setStretchAllColumns(true);
@@ -105,9 +110,10 @@ public class Equilibrium extends Activity implements OnClickListener {
         	a.addView(r);
         }
         
-        l.addView(a);
-        
-        setContentView(l);
+        if (l.getChildCount() > 0) {
+        	l.removeViewAt(0);
+        }
+        l.addView(a, 0);
     }
     
     public void updateSum(int row, int col) {
@@ -170,13 +176,13 @@ public class Equilibrium extends Activity implements OnClickListener {
     public void finishGame() {
     	int totPlayer = 0;
     	int totOther = 0;
-    	for (int i = 0; i < lato; i++) {
-    		if (playerRows.contains(i)) {
+    	for (int i = 1; i <= lato; i++) {
+    		if (playerRows.contains(i) == true) {
     			totPlayer += amatriciana[i][lato+1].getNumber();
     		} else {
     			totOther += amatriciana[i][lato+1].getNumber();
     		}
-    		if (playerCols.contains(i)) {
+    		if (playerCols.contains(i) == true) {
     			totPlayer += amatriciana[lato+1][i].getNumber();
     		} else {
     			totOther += amatriciana[lato+1][i].getNumber();
@@ -198,12 +204,23 @@ public class Equilibrium extends Activity implements OnClickListener {
     		amatriciana[lato+1][lato+1].setNumberColor(Color.BLACK);
     		winnerText = "Partita patta!";
     	}
-    	Dialog tmp = new Dialog(this);
-    	tmp.setTitle("Fine partita");
-    	TextView txt = new TextView(this);
-    	txt.setText(winnerText);
-    	tmp.setContentView(txt);
-    	tmp.show();
+    	
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setMessage(winnerText)
+    	       .setCancelable(false)
+    	       .setPositiveButton("Nuova partita", new DialogInterface.OnClickListener() {
+    	           public void onClick(DialogInterface dialog, int id) {
+    	                Equilibrium.this.start();
+    	                dialog.dismiss();
+    	           }
+    	       })
+    	       .setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                dialog.cancel();
+		           }
+		       });
+    	AlertDialog alert = builder.create();
+    	alert.show();
     }
     
     public void onClick(View v) {
