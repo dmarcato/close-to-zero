@@ -102,19 +102,28 @@ public class Cell extends View {
         
         Paint p = new Paint();
         p.setAntiAlias(true);
+        
+        if (e.amatriciana[e.lato+1][e.lato+1].equals(this))
+        {
+        	setBkColor(Color.TRANSPARENT);
+        	p.setColor((e.turn)? 0xFF9999CC : 0xFFCC9999);
+        	canvas.drawCircle(size/2, size/2, size/2-6, p);
+        	return;
+        }
+        
         p.setColor(borderColor);
         canvas.drawLine(0, 0, getWidth(), 0, p);
         canvas.drawLine(0, 0, 0, getHeight(), p);
         canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
         canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
         
-        p.setTextSize(e.amatriciana[1][1].getSize()/5);
+        p.setTextSize(size/5);
         p.setColor(signColor);
         canvas.drawText(sign, 3, 11, p);
         
-        p.setTextSize(e.amatriciana[1][1].getSize()/3);
+        p.setTextSize(size/3);
         p.setColor(numberColor);
-        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (getHeight()/8*5), p);
+        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (5*getHeight()/8), p);
     }
     
     public void setBkColor(int color) {

@@ -25,7 +25,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public Cell lastMoved = null;				//Ultima casella mossa
 	public Vector<Integer> playerRows;		//Righe del giocatore
 	public Vector<Integer> playerCols;		//Caselle del giocatore
-	
+	public boolean turn = true;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,10 +87,11 @@ public class Equilibrium extends Activity implements OnClickListener {
             			amatriciana[i][j].setNumberColor(Color.RED);
             		}
         		}
+
         		if ((j != 0) && (i != 0)) {
-        			if (((i != lato+1) || (j != lato+1))) {
+        			//if (((i != lato+1) || (j != lato+1))) {
         				r.addView(amatriciana[i][j]);
-        			}
+        			//}
         		}
         	}
         	a.addView(r);
@@ -160,6 +161,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 		Button b = (Button) v;
 		amatriciana[selectedRow][selectedCol].setNumber((String) b.getText());
 		hideNumbers();
+		turn = !turn;
 	}
     
     public void drawCross(int row, int col) {
