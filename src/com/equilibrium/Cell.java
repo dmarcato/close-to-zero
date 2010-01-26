@@ -2,7 +2,6 @@ package com.equilibrium;
 
 import java.util.Vector;
 
-//import android.view.MotionEvent;
 import android.view.View;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -216,7 +215,7 @@ public class Cell extends View {
     		e.lastClicked = this;
     	}
     }
-    
+        
 	/* public boolean onTouchEvent(MotionEvent event) {
 		//Controllo di non essere nei bordi delle somme o di non aver cliccato la stessa casella
 		if ((row != e.lato+1) && (col != e.lato+1) && (e.lastClicked != this)) {

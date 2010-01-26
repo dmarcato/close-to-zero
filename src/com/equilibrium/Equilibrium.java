@@ -178,11 +178,12 @@ public class Equilibrium extends Activity implements OnClickListener {
     		amatriciana[i][col].setBkColor(amatriciana[i][col].originalBkColor);
     	}
     }
-    
+        
     public boolean onTouchEvent(MotionEvent event) {
-    	
     	float x = event.getX();
-    	float y = event.getY() - 50;
+    	float y = event.getY();
+    	float paddingTop = getWindowManager().getDefaultDisplay().getHeight() - l.getHeight();
+    	y -= paddingTop;
     	
     	float cellSize = amatriciana[1][1].getSize();
     	float max = cellSize*lato;
