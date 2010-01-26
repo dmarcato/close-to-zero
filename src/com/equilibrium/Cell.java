@@ -107,7 +107,10 @@ public class Cell extends View {
         	setBkColor(Color.TRANSPARENT);
         	p.setColor((e.turn)? 0xFF9999CC : 0xFFCC9999);
         	canvas.drawCircle(size/2, size/2, size/2-6, p);
-        	
+
+        	p.setTextSize(size/3);
+            p.setColor(numberColor);
+            canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (5*getHeight()/8), p);
         	return;
         }
         
@@ -164,6 +167,7 @@ public class Cell extends View {
     	if ((row != e.lato+1) && (col != e.lato+1)) {
     		e.updateSum(row, col);
     		e.setAround(row, col, Integer.parseInt(number));
+    		e.turnLeft--;
     	}
     	invalidate();
     }
@@ -177,7 +181,7 @@ public class Cell extends View {
     }
     
     public void setAround(int num) {
-    	if (around[num] == false) {
+    	if ((num != 0) && (around[num] == false)) {
     		--possibilities;
     		around[num] = true;
     	}

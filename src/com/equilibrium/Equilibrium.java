@@ -3,6 +3,7 @@ package com.equilibrium;
 import java.util.Vector;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,10 +14,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 public class Equilibrium extends Activity implements OnClickListener {
 	
-	public int lato = 6;						//Numero di caselle per riga
+	public int lato = 3;						//Numero di caselle per riga
 	public Cell[][] amatriciana;				//Matrice delle caselle
 	public int selectedRow = 0;					//Indice di riga della casella selezionata
 	public int selectedCol = 0;					//Indice di colonna della casella selezionata
@@ -26,11 +28,15 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public Vector<Integer> playerRows;		//Righe del giocatore
 	public Vector<Integer> playerCols;		//Caselle del giocatore
 	public boolean turn = true;
+	public int turnLeft = 0;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.main);
+        
+        turnLeft = lato*lato;
         
         //Scelto righe e colonne random
         int totRows = (int) Math.floor(lato / 2);
@@ -78,7 +84,9 @@ public class Equilibrium extends Activity implements OnClickListener {
 	        		}
 	        		amatriciana[i][j].setSign(sign);
         		} else {
-        			amatriciana[i][j].setNumber("0");
+        			if (((i != lato+1) || (j != lato+1))) {
+        				amatriciana[i][j].setNumber("0");
+        			}
         			if ((isPlayer == true) || (playerCols.contains(j) == true)) {
         				amatriciana[i][j].setBkColor(0xFF9999CC, true);
         				amatriciana[i][j].setNumberColor(Color.BLUE);
@@ -159,11 +167,53 @@ public class Equilibrium extends Activity implements OnClickListener {
     	}
     }
     
+    public void finishGame() {
+    	int totPlayer = 0;
+    	int totOther = 0;
+    	for (int i = 0; i < lato; i++) {
+    		if (playerRows.contains(i)) {
+    			totPlayer += amatriciana[i][lato+1].getNumber();
+    		} else {
+    			totOther += amatriciana[i][lato+1].getNumber();
+    		}
+    		if (playerCols.contains(i)) {
+    			totPlayer += amatriciana[lato+1][i].getNumber();
+    		} else {
+    			totOther += amatriciana[lato+1][i].getNumber();
+    		}
+    	}
+    	String winnerText = "";
+    	if (Math.abs(totPlayer) < Math.abs(totOther)) {
+    		turn = true;
+    		amatriciana[lato+1][lato+1].setNumber(Integer.toString(totPlayer));
+    		amatriciana[lato+1][lato+1].setNumberColor(Color.BLUE);
+    		winnerText = "Vince il giocatore BLU!";
+    	} else if (Math.abs(totPlayer) > Math.abs(totOther)) {
+    		turn = false;
+    		amatriciana[lato+1][lato+1].setNumber(Integer.toString(totOther));
+    		amatriciana[lato+1][lato+1].setNumberColor(Color.RED);
+    		winnerText = "Vince il giocatore ROSSO!";
+    	} else {
+    		amatriciana[lato+1][lato+1].setNumber(Integer.toString(totOther));
+    		amatriciana[lato+1][lato+1].setNumberColor(Color.BLACK);
+    		winnerText = "Partita patta!";
+    	}
+    	Dialog tmp = new Dialog(this);
+    	tmp.setTitle("Fine partita");
+    	TextView txt = new TextView(this);
+    	txt.setText(winnerText);
+    	tmp.setContentView(txt);
+    	tmp.show();
+    }
+    
     public void onClick(View v) {
 		Button b = (Button) v;
 		amatriciana[selectedRow][selectedCol].setNumber((String) b.getText());
 		hideNumbers();
 		turn = !turn;
+		if (turnLeft == 0) {
+			finishGame();
+		}
 	}
     
     public void drawCross(int row, int col) {
