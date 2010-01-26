@@ -16,7 +16,7 @@ import android.widget.TableRow;
 
 public class Equilibrium extends Activity implements OnClickListener {
 	
-	public int lato = 5;						//Numero di caselle per riga
+	public int lato = 6;						//Numero di caselle per riga
 	public Cell[][] amatriciana;				//Matrice delle caselle
 	public int selectedRow = 0;					//Indice di riga della casella selezionata
 	public int selectedCol = 0;					//Indice di colonna della casella selezionata
@@ -39,7 +39,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         playerCols = new Vector<Integer>();
         while ((totRows > 0) || (totCols > 0)) {
         	int tmp = (int)(lato*Math.random())+1;
-        	if ((totRows > 0) && (playerRows.contains(tmp) == false)) {
+        	if ((totRows > 0) && (!playerRows.contains(tmp))) {
         		playerRows.add(tmp);
         		totRows--;
         	} else if (playerCols.contains(tmp) == false) {
@@ -58,7 +58,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         amatriciana = new Cell[lato+2][];
         boolean isPlayer = false;
         for (int i = 0; i < lato+2; i++) {
-        	if (playerRows.contains(i) == true) {
+        	if (playerRows.contains(i)) {
         		isPlayer = true;
         	} else {
         		isPlayer = false;

@@ -34,8 +34,7 @@ public class Cell extends View {
     public Cell(Context context, int r, int c) {
         super(context);
         e = (Equilibrium) getContext();
-        sign = "";
-        number = "";
+        sign = number = "";
         row = r;
         col = c;
         possibilities = e.lato;
@@ -109,13 +108,13 @@ public class Cell extends View {
         canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
         canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
         
-        p.setTextSize(11);
+        p.setTextSize(e.amatriciana[1][1].getSize()/5);
         p.setColor(signColor);
         canvas.drawText(sign, 3, 11, p);
         
-        p.setTextSize(12);
+        p.setTextSize(e.amatriciana[1][1].getSize()/3);
         p.setColor(numberColor);
-        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (getHeight()/2)+4, p);
+        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (getHeight()/8*5), p);
     }
     
     public void setBkColor(int color) {
