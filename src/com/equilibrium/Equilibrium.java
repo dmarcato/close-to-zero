@@ -53,11 +53,11 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     /* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, MENU_NEW_GAME, 0, "Nuova Partita").setIcon(android.R.drawable.ic_menu_add);
-        SubMenu settingsMenu = menu.addSubMenu(0, MENU_SETTINGS, 1, "Impostazioni").setIcon(android.R.drawable.ic_menu_preferences);
-        menu.add(0, MENU_QUIT, 2, "Esci").setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-        settingsMenu.add("Dimensione");
-        settingsMenu.add("Livello CPU");
+        menu.add(0, MENU_NEW_GAME, 0, R.string.menu_new).setIcon(android.R.drawable.ic_menu_add);
+        SubMenu settingsMenu = menu.addSubMenu(0, MENU_SETTINGS, 1, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
+        menu.add(0, MENU_QUIT, 2, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+        settingsMenu.add(R.string.menu_settings_size);
+        settingsMenu.add(R.string.menu_settings_cpu);
         return true;
     }
 
@@ -218,33 +218,33 @@ public class Equilibrium extends Activity implements OnClickListener {
     			totOther += amatriciana[lato+1][i].getNumber();
     		}
     	}
-    	String winnerText = "";
+    	int winnerText;
     	if (Math.abs(totPlayer) < Math.abs(totOther)) {
     		turn = true;
     		amatriciana[lato+1][lato+1].setNumber(Integer.toString(totPlayer));
     		amatriciana[lato+1][lato+1].setNumberColor(Color.BLUE);
-    		winnerText = "Vince il giocatore BLU!";
+    		winnerText = R.string.blue_player_win;
     	} else if (Math.abs(totPlayer) > Math.abs(totOther)) {
     		turn = false;
     		amatriciana[lato+1][lato+1].setNumber(Integer.toString(totOther));
     		amatriciana[lato+1][lato+1].setNumberColor(Color.RED);
-    		winnerText = "Vince il giocatore ROSSO!";
+    		winnerText = R.string.red_player_win;
     	} else {
     		amatriciana[lato+1][lato+1].setNumber(Integer.toString(totOther));
     		amatriciana[lato+1][lato+1].setNumberColor(Color.BLACK);
-    		winnerText = "Partita patta!";
+    		winnerText = R.string.noone_win;
     	}
     	
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	builder.setMessage(winnerText)
     	       .setCancelable(false)
-    	       .setPositiveButton("Nuova partita", new DialogInterface.OnClickListener() {
+    	       .setPositiveButton(R.string.new_game, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int id) {
     	                Equilibrium.this.start();
     	                dialog.dismiss();
     	           }
     	       })
-    	       .setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
+    	       .setNegativeButton(R.string.close_dialog, new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
 		                dialog.cancel();
 		           }

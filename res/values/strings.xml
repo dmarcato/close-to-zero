@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Equilibrium!</string>
+    
     <string name="app_name">Equilibrium</string>
+<string name="menu_new">New</string>
+<string name="menu_settings">Settings</string>
+<string name="menu_exit">Exit</string>
+<string name="hello">Hello Equilibrium</string>
+<string name="menu_settings_size">Size</string>
+<string name="menu_settings_cpu">CPU Level</string>
+<string name="red_player_win">Red player WINS!</string>
+<string name="blue_player_win">Blue player WINS!</string>
+<string name="noone_win">Noone wins...</string>
+<string name="new_game">New Game</string>
+<string name="close_dialog">Close</string>
 </resources>

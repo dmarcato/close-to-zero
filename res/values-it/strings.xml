@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    
+<string name="menu_new">Nuova partita</string>
+<string name="menu_settings">Impostazioni</string>
+<string name="menu_exit">Esci</string>
+
+<string name="menu_settings_size">Dimensione</string>
+<string name="menu_settings_cpu">Livello CPU</string>
+<string name="red_player_win">Vince il giocatore Rosso!</string>
+<string name="blue_player_win">Vince il giocatore Blu!</string>
+<string name="noone_win">Parità, nessun vincitore...</string>
+<string name="new_game">Nuova partita</string>
+<string name="close_dialog">Chiudi</string>
+</resources>
