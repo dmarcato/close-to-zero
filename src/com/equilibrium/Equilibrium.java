@@ -14,12 +14,14 @@ import android.view.MotionEvent;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
-public class Equilibrium extends Activity implements OnClickListener {
+public class Equilibrium extends Activity implements OnClickListener, OnTouchListener {
 	
 	public int lato = 6;						//Numero di caselle per riga
 	public Cell[][] amatriciana;				//Matrice delle caselle
@@ -277,37 +279,47 @@ public class Equilibrium extends Activity implements OnClickListener {
     		amatriciana[i][col].setBkColor(amatriciana[i][col].originalBkColor);
     	}
     }
-        
-    public boolean onTouchEvent(MotionEvent event) {
-    	float x = event.getX();
-    	float y = event.getY();
-    	float paddingTop = getWindowManager().getDefaultDisplay().getHeight() - l.getHeight();
-    	y -= paddingTop;
+
+	public boolean onTouch(View v, MotionEvent event) {
+		Cell c = (Cell) v;
+		
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (lastClicked != null)
+				lastClicked.setBkColor(lastClicked.originalBkColor);
+			drawCross(c.row, c.col);
+			lastMoved = c;
+			return true;
+		}
+		
+		if (event.getAction() == MotionEvent.ACTION_MOVE) {
+			event.recycle();
+			if (lastClicked != null)
+				lastClicked.setBkColor(lastClicked.originalBkColor);
+			drawCross(c.row, c.col);
+			lastMoved = c;
+			return true;
+		}
     	
-    	float cellSize = amatriciana[1][1].getSize();
-    	float max = cellSize*lato;
-    	
-    	if (((x > 0) && (y > 0)) && ((x < max) && (y < max))) {
-	    	int row = (int) Math.floor(y / cellSize)+1;
-	    	int col = (int) Math.floor(x / cellSize)+1;
-	    	
-	    	if (event.getAction() == MotionEvent.ACTION_DOWN) {
-	    		if (lastClicked != null)
-	    			lastClicked.setBkColor(lastClicked.originalBkColor);
-	    		drawCross(row, col);
-	    		lastMoved = amatriciana[row][col];
-	    	}
-	    	if (event.getAction() == MotionEvent.ACTION_MOVE) {
-	    		eraseCross(lastMoved.row, lastMoved.col);
-	    		drawCross(row, col);
-	    		lastMoved = amatriciana[row][col];
-	    	}
-	    	if (event.getAction() == MotionEvent.ACTION_UP) {
-	    		eraseCross(lastMoved.row, lastMoved.col);
-	    		amatriciana[row][col].click();
-	    	}
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+    		eraseCross(c.row, c.col);
+    		c.setBkColor(0xFFCC99CC);
+        	if ((c.row != lato+1) && (c.col != lato+1)) {
+        		selectedRow = c.row;
+        		selectedCol = c.col;
+        		if (c.numberSetted == false) {
+        			showNumbers(c.row, c.col);
+        		} else {
+        			hideNumbers();
+        		}
+        		if ((lastClicked != null) && (lastClicked != c)) {
+        			lastClicked.setBkColor(lastClicked.originalBkColor);
+        		}
+        		lastClicked = c;
+        	}
+        	
+        	return false;
     	}
-    	
-    	return false;
-    }
+		
+		return false;
+	}
 }

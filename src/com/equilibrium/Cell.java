@@ -2,13 +2,16 @@ package com.equilibrium;
 
 import java.util.Vector;
 
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
 
-public class Cell extends View {
+public class Cell extends View implements OnClickListener {
 
 	private Equilibrium e;
 	private String sign;
@@ -16,7 +19,7 @@ public class Cell extends View {
 	private int size;
 	public int row;
 	public int col;
-	private boolean numberSetted = false;
+	public boolean numberSetted = false;
 	public int originalBkColor = 0xFFEEEEEE;
 	public int bkColor = 0xFFEEEEEE;
 	private int borderColor = Color.DKGRAY;
@@ -41,6 +44,8 @@ public class Cell extends View {
         for (int i = 0; i <= e.lato; i++) {
         	around[i] = false;
         }
+        this.setOnClickListener(this);
+        this.setOnTouchListener(e);
     }
     
     /**
@@ -129,6 +134,48 @@ public class Cell extends View {
         canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (5*getHeight()/8), p);
     }
     
+    public void onClick(View v) {
+    	
+    }
+    
+    /*public boolean onTouchEvent(MotionEvent event) {
+    	Toast toast = Toast.makeText(getContext(), String.valueOf(row)+" - "+String.valueOf(col), Toast.LENGTH_SHORT);
+    	switch (event.getAction()) {
+    	case MotionEvent.ACTION_CANCEL:
+    		event.recycle();
+    		break;
+    	case MotionEvent.ACTION_DOWN:
+    		if (e.lastClicked != null)
+				e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
+			e.drawCross(row, col);
+			e.lastMoved = this;
+    		break;
+    	case MotionEvent.ACTION_OUTSIDE:
+    		e.eraseCross(row, col);
+    		event.setAction(MotionEvent.ACTION_CANCEL);
+    		toast.show();
+    		break;
+    	case MotionEvent.ACTION_UP:
+    		e.eraseCross(row, col);
+    		setBkColor(0xFFCC99CC);
+        	if ((row != e.lato+1) && (col != e.lato+1)) {
+        		e.selectedRow = row;
+        		e.selectedCol = col;
+        		if (numberSetted == false) {
+        			e.showNumbers(row, col);
+        		} else {
+        			e.hideNumbers();
+        		}
+        		if ((e.lastClicked != null) && (e.lastClicked != this)) {
+        			e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
+        		}
+        		e.lastClicked = this;
+        	}
+    		break;
+    	}
+		return true;
+    }*/
+    
     public void setBkColor(int color) {
     	setBkColor(color, false);
     }
@@ -202,23 +249,6 @@ public class Cell extends View {
     
     public int getSize() {
     	return size;
-    }
-	
-    public void click() {
-    	setBkColor(0xFFCC99CC);
-    	if ((row != e.lato+1) && (col != e.lato+1)) {
-    		e.selectedRow = row;
-    		e.selectedCol = col;
-    		if (numberSetted == false) {
-    			e.showNumbers(row, col);
-    		} else {
-    			e.hideNumbers();
-    		}
-    		if ((e.lastClicked != null) && (e.lastClicked != this)) {
-    			e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
-    		}
-    		e.lastClicked = this;
-    	}
     }
         
 	/* public boolean onTouchEvent(MotionEvent event) {
