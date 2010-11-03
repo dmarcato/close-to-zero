@@ -7,11 +7,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SubMenu;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
@@ -21,7 +23,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-public class Equilibrium extends Activity implements OnClickListener, OnTouchListener {
+public class Equilibrium extends Activity implements OnClickListener {
 	
 	public int lato = 6;						//Numero di caselle per riga
 	public Cell[][] amatriciana;				//Matrice delle caselle
@@ -279,47 +281,4 @@ public class Equilibrium extends Activity implements OnClickListener, OnTouchLis
     		amatriciana[i][col].setBkColor(amatriciana[i][col].originalBkColor);
     	}
     }
-
-	public boolean onTouch(View v, MotionEvent event) {
-		Cell c = (Cell) v;
-		
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			if (lastClicked != null)
-				lastClicked.setBkColor(lastClicked.originalBkColor);
-			drawCross(c.row, c.col);
-			lastMoved = c;
-			return true;
-		}
-		
-		if (event.getAction() == MotionEvent.ACTION_MOVE) {
-			event.recycle();
-			if (lastClicked != null)
-				lastClicked.setBkColor(lastClicked.originalBkColor);
-			drawCross(c.row, c.col);
-			lastMoved = c;
-			return true;
-		}
-    	
-		if (event.getAction() == MotionEvent.ACTION_UP) {
-    		eraseCross(c.row, c.col);
-    		c.setBkColor(0xFFCC99CC);
-        	if ((c.row != lato+1) && (c.col != lato+1)) {
-        		selectedRow = c.row;
-        		selectedCol = c.col;
-        		if (c.numberSetted == false) {
-        			showNumbers(c.row, c.col);
-        		} else {
-        			hideNumbers();
-        		}
-        		if ((lastClicked != null) && (lastClicked != c)) {
-        			lastClicked.setBkColor(lastClicked.originalBkColor);
-        		}
-        		lastClicked = c;
-        	}
-        	
-        	return false;
-    	}
-		
-		return false;
-	}
 }

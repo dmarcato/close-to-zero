@@ -2,7 +2,9 @@ package com.equilibrium;
 
 import java.util.Vector;
 
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -10,8 +12,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
+import android.graphics.Rect;
 
-public class Cell extends View implements OnClickListener {
+public class Cell extends View {
 
 	private Equilibrium e;
 	private String sign;
@@ -44,8 +47,6 @@ public class Cell extends View implements OnClickListener {
         for (int i = 0; i <= e.lato; i++) {
         	around[i] = false;
         }
-        this.setOnClickListener(this);
-        this.setOnTouchListener(e);
     }
     
     /**
@@ -134,26 +135,13 @@ public class Cell extends View implements OnClickListener {
         canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (5*getHeight()/8), p);
     }
     
-    public void onClick(View v) {
-    	
-    }
-    
-    /*public boolean onTouchEvent(MotionEvent event) {
-    	Toast toast = Toast.makeText(getContext(), String.valueOf(row)+" - "+String.valueOf(col), Toast.LENGTH_SHORT);
+    public boolean onTouchEvent(MotionEvent event) {
     	switch (event.getAction()) {
-    	case MotionEvent.ACTION_CANCEL:
-    		event.recycle();
-    		break;
     	case MotionEvent.ACTION_DOWN:
     		if (e.lastClicked != null)
 				e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
 			e.drawCross(row, col);
 			e.lastMoved = this;
-    		break;
-    	case MotionEvent.ACTION_OUTSIDE:
-    		e.eraseCross(row, col);
-    		event.setAction(MotionEvent.ACTION_CANCEL);
-    		toast.show();
     		break;
     	case MotionEvent.ACTION_UP:
     		e.eraseCross(row, col);
@@ -174,7 +162,7 @@ public class Cell extends View implements OnClickListener {
     		break;
     	}
 		return true;
-    }*/
+    }
     
     public void setBkColor(int color) {
     	setBkColor(color, false);
