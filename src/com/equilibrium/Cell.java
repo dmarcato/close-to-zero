@@ -222,7 +222,6 @@ public class Cell extends View {
     	number = txt;
     	numberSetted = true;
     	this.normal();
-    	e.eraseCross(row, col);
     	//Aggiorno il punteggio totale
     	if ((row != e.lato+1) && (col != e.lato+1)) {
     		e.updateSum(row, col);

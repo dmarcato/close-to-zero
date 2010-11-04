@@ -283,6 +283,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     public void onClick(View v) {
 		Button b = (Button) v;
 		amatriciana[selectedRow][selectedCol].setNumber((String) b.getText());
+		eraseCross(selectedRow, selectedCol);
 		hideNumbers();
 		turn = !turn;
 		if (turnLeft == 0) {
