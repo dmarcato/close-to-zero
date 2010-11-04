@@ -42,6 +42,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public Vector<Integer> playerCols;			//Caselle del giocatore
 	public boolean turn = true;
 	public int turnLeft = 0;
+	public boolean showPartialSum = true;
 	public boolean cpu = false;
 	
 	public static final int MENU_NEW_GAME = 424;
@@ -72,6 +73,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         // Get the xml/preferences.xml preferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         cpu = prefs.getBoolean("vsCpu", false);
+        showPartialSum = prefs.getBoolean("partialSum", true);
         lato = Integer.parseInt(prefs.getString("size", "6"));
 	}
     
@@ -157,9 +159,9 @@ public class Equilibrium extends Activity implements OnClickListener {
         		}
 
         		if ((j != 0) && (i != 0)) {
-        			//if (((i != lato+1) || (j != lato+1))) {
+        			if ((showPartialSum == true) || ((showPartialSum == false) && ((i != lato+1) && (j != lato+1)))) {
         				r.addView(amatriciana[i][j]);
-        			//}
+        			}
         		}
         	}
         	a.addView(r);
@@ -290,16 +292,15 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void drawCross(int row, int col) {
     	for (int i = 1; i <= lato; i++) {
-    		amatriciana[row][i].setBkColor(amatriciana[row][lato+1].bkColor);
-    		amatriciana[i][col].setBkColor(amatriciana[lato+1][col].bkColor);
+    		amatriciana[row][i].highlight();
+    		amatriciana[i][col].highlight();
     	}
-    	amatriciana[row][col].setBkColor(0xFFCC99CC);
     }
     
     public void eraseCross(int row, int col) {
     	for (int i = 1; i <= lato; i++) {
-    		amatriciana[row][i].setBkColor(amatriciana[row][i].originalBkColor);
-    		amatriciana[i][col].setBkColor(amatriciana[i][col].originalBkColor);
+    		amatriciana[row][i].normal();
+    		amatriciana[i][col].normal();
     	}
     }
 }

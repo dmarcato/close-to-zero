@@ -14,5 +14,11 @@
 		android:defaultValue="false"
 		android:summary="@string/vs_cpu_summary"
 		android:key="vsCpu" />
+		
+	<CheckBoxPreference
+		android:title="@string/partial_sum"
+		android:defaultValue="true"
+		android:summary="@string/partial_sum_summary"
+		android:key="partialSum" />
 	
 </PreferenceScreen>

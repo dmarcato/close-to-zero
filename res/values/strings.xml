@@ -19,4 +19,6 @@
 <string name="app_name">Equilibrium</string>
 <string name="vs_cpu">vs CPU</string>
 <string name="vs_cpu_summary">Second player is controlled by CPU</string>
+<string name="partial_sum">Show partial sum</string>
+<string name="partial_sum_summary">Display a row and a col with partial sums</string>
 </resources>

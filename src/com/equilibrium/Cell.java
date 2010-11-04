@@ -33,7 +33,10 @@ public class Cell extends View {
 	private Drawable bkImage = null;
 	private int originalAlpha = 255-30;
 	private int selectedAlpha = 255-150;
-	private int currentAlpha = 255-30;
+	private int currentAlpha = 0;
+	private int originalShadow = 0;
+	private int highlightShadow = 0;
+	private int currentShadow = 0;
 	private boolean[] around;
 	private int possibilities;
 	
@@ -50,6 +53,7 @@ public class Cell extends View {
         sign = number = "";
         row = r;
         col = c;
+        currentAlpha = originalAlpha;
         possibilities = e.lato;
         around = new boolean[e.lato+1];
         for (int i = 0; i <= e.lato; i++) {
@@ -139,7 +143,7 @@ public class Cell extends View {
 	        
 	        p.setTextSize(size*2/3);
 	        p.setFakeBoldText(true);
-	        p.setShadowLayer(2, 0, 0, signColor);
+	        p.setShadowLayer(2, 0, 0, currentShadow);
 	        p.setColor(numberColor);
 	        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (3*size/4), p);
         }
@@ -150,6 +154,7 @@ public class Cell extends View {
     	case MotionEvent.ACTION_DOWN:
     		if (e.lastClicked != null) {
 				e.lastClicked.currentAlpha = originalAlpha;
+				e.eraseCross(e.lastClicked.row, e.lastClicked.col);
     		}
 			e.lastMoved = this;
     		break;
@@ -167,6 +172,7 @@ public class Cell extends View {
         			e.lastClicked.currentAlpha = originalAlpha;
         		}
         		e.lastClicked = this;
+        		e.drawCross(row, col);
         	}
     		break;
     	}
@@ -187,6 +193,9 @@ public class Cell extends View {
     
     public void setSignColor(int color) {
     	signColor = color;
+    	originalShadow = Color.argb(100, Color.red(signColor), Color.green(signColor), Color.blue(signColor));
+    	highlightShadow = Color.argb(255, Color.red(signColor), Color.green(signColor), Color.blue(signColor));
+    	currentShadow = originalShadow;
     	invalidate();
     }
     
@@ -212,6 +221,8 @@ public class Cell extends View {
     public void setNumber(String txt) {
     	number = txt;
     	numberSetted = true;
+    	this.normal();
+    	e.eraseCross(row, col);
     	//Aggiorno il punteggio totale
     	if ((row != e.lato+1) && (col != e.lato+1)) {
     		e.updateSum(row, col);
@@ -251,6 +262,15 @@ public class Cell extends View {
     
     public int getSize() {
     	return size;
+    }
+    
+    public void highlight() {
+    	currentShadow = highlightShadow;
+    }
+    
+    public void normal() {
+    	currentShadow = originalShadow;
+    	currentAlpha = originalAlpha;
     }
         
 	/* public boolean onTouchEvent(MotionEvent event) {
