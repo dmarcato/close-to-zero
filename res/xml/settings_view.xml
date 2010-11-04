@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory
+		android:title="First Category">
+  
+		<ListPreference
+			android:title="@string/dimension"
+			android:summary="@string/dimension_summary"
+			android:key="dimension"
+			android:defaultValue="digiGreen"
+			android:entries="@array/list_dimensions"
+			android:entryValues="@array/list_dimensions" />
+  
+		<CheckBoxPreference
+			android:title="Checkbox Preference"
+			android:defaultValue="false"
+			android:summary="This preference can be true or false"
+			android:key="checkboxPref" />
+		
+	</PreferenceCategory>
+</PreferenceScreen>

@@ -2,6 +2,7 @@ package com.equilibrium;
 
 import java.util.Vector;
 
+import android.R;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.TouchDelegate;
@@ -13,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 
 public class Cell extends View {
 
@@ -27,7 +29,11 @@ public class Cell extends View {
 	public int bkColor = 0xFFEEEEEE;
 	private int borderColor = Color.DKGRAY;
 	private int signColor = Color.RED;
-	private int numberColor = Color.BLACK;
+	private int numberColor = Color.WHITE;
+	private Drawable bkImage = null;
+	private int originalAlpha = 255-30;
+	private int selectedAlpha = 255-150;
+	private int currentAlpha = 255-30;
 	private boolean[] around;
 	private int possibilities;
 	
@@ -39,6 +45,8 @@ public class Cell extends View {
     public Cell(Context context, int r, int c) {
         super(context);
         e = (Equilibrium) getContext();
+        bkImage = e.getResources().getDrawable(com.equilibrium.R.drawable.trans);
+        bkImage.setAlpha(255);
         sign = number = "";
         row = r;
         col = c;
@@ -108,8 +116,7 @@ public class Cell extends View {
         Paint p = new Paint();
         p.setAntiAlias(true);
         
-        if (e.amatriciana[e.lato+1][e.lato+1].equals(this))
-        {
+        if (e.amatriciana[e.lato+1][e.lato+1].equals(this)) {
         	setBkColor(Color.TRANSPARENT);
         	p.setColor((e.turn)? 0xFF9999CC : 0xFFCC9999);
         	canvas.drawCircle(size/2, size/2, size/2-6, p);
@@ -117,35 +124,37 @@ public class Cell extends View {
         	p.setTextSize(size/3);
             p.setColor(numberColor);
             canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (5*getHeight()/8), p);
-        	return;
+        } else {
+	        p.setColor(borderColor);
+	        canvas.drawLine(0, 0, getWidth(), 0, p);
+	        canvas.drawLine(0, 0, 0, getHeight(), p);
+	        canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
+	        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
+	        
+	        //canvas.drawRGB(Color.red(signColor), Color.green(signColor), Color.blue(signColor));
+	        int padding = (int) Math.round(0.17*size);
+	        bkImage.setBounds(padding, padding, size-padding, size-padding);
+	        bkImage.draw(canvas);
+	        canvas.drawARGB(currentAlpha, 255, 255, 255);
+	        
+	        p.setTextSize(size*2/3);
+	        p.setFakeBoldText(true);
+	        p.setShadowLayer(2, 0, 0, signColor);
+	        p.setColor(numberColor);
+	        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (3*size/4), p);
         }
-        
-        p.setColor(borderColor);
-        canvas.drawLine(0, 0, getWidth(), 0, p);
-        canvas.drawLine(0, 0, 0, getHeight(), p);
-        canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
-        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
-        
-        p.setTextSize(size/3);
-        p.setColor(signColor);
-        canvas.drawText(sign, size/8, size/3, p);
-        
-        p.setTextSize(size/3);
-        p.setColor(numberColor);
-        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (5*getHeight()/8), p);
     }
     
     public boolean onTouchEvent(MotionEvent event) {
     	switch (event.getAction()) {
     	case MotionEvent.ACTION_DOWN:
-    		if (e.lastClicked != null)
-				e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
-			e.drawCross(row, col);
+    		if (e.lastClicked != null) {
+				e.lastClicked.currentAlpha = originalAlpha;
+    		}
 			e.lastMoved = this;
     		break;
     	case MotionEvent.ACTION_UP:
-    		e.eraseCross(row, col);
-    		setBkColor(0xFFCC99CC);
+    		currentAlpha = selectedAlpha;
         	if ((row != e.lato+1) && (col != e.lato+1)) {
         		e.selectedRow = row;
         		e.selectedCol = col;
@@ -155,7 +164,7 @@ public class Cell extends View {
         			e.hideNumbers();
         		}
         		if ((e.lastClicked != null) && (e.lastClicked != this)) {
-        			e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
+        			e.lastClicked.currentAlpha = originalAlpha;
         		}
         		e.lastClicked = this;
         	}
@@ -183,6 +192,11 @@ public class Cell extends View {
     
     public void setSign(String txt) {
     	sign = txt;
+    	if (sign == "+") {
+    		bkImage = e.getResources().getDrawable(com.equilibrium.R.drawable.plus);
+    	} else if (sign == "-") {
+    		bkImage = e.getResources().getDrawable(com.equilibrium.R.drawable.minus);
+    	}
     	invalidate();
     }
     

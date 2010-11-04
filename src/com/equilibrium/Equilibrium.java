@@ -5,8 +5,12 @@ import java.util.Vector;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -58,10 +62,8 @@ public class Equilibrium extends Activity implements OnClickListener {
     /* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_NEW_GAME, 0, R.string.menu_new).setIcon(android.R.drawable.ic_menu_add);
-        SubMenu settingsMenu = menu.addSubMenu(0, MENU_SETTINGS, 1, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
+        menu.add(0, MENU_SETTINGS, 1, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
         menu.add(0, MENU_QUIT, 2, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-        settingsMenu.add(R.string.menu_settings_size);
-        settingsMenu.add(R.string.menu_settings_cpu);
         return true;
     }
 
@@ -71,6 +73,9 @@ public class Equilibrium extends Activity implements OnClickListener {
         case MENU_NEW_GAME:
             start();
             return true;
+        case MENU_SETTINGS:
+        	startActivity(new Intent(getBaseContext(), Settings.class));
+        	return true;
         case MENU_QUIT:
             finish();
             return true;
@@ -116,10 +121,10 @@ public class Equilibrium extends Activity implements OnClickListener {
 	        		String sign;
 	        		if ((i+j) % 2 == 0) {
 	        			sign = "+";
-	        			amatriciana[i][j].setSignColor(0xFF0000AA);
+	        			amatriciana[i][j].setSignColor(Color.RED);
 	        		} else {
 	        			sign = "-";
-	        			amatriciana[i][j].setSignColor(0xFFAA0000);
+	        			amatriciana[i][j].setSignColor(Color.BLUE);
 	        		}
 	        		amatriciana[i][j].setSign(sign);
         		} else {
