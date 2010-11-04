@@ -34,9 +34,9 @@ public class Cell extends View {
 	private int originalAlpha = 255-30;
 	private int selectedAlpha = 255-150;
 	private int currentAlpha = 0;
-	private int originalShadow = 0;
-	private int highlightShadow = 0;
-	private int currentShadow = 0;
+	private float originalShadow = 2;
+	private float highlightShadow = 8;
+	private float currentShadow = 0;
 	private boolean[] around;
 	private int possibilities;
 	
@@ -54,6 +54,7 @@ public class Cell extends View {
         row = r;
         col = c;
         currentAlpha = originalAlpha;
+        currentShadow = originalShadow;
         possibilities = e.lato;
         around = new boolean[e.lato+1];
         for (int i = 0; i <= e.lato; i++) {
@@ -143,7 +144,7 @@ public class Cell extends View {
 	        
 	        p.setTextSize(size*2/3);
 	        p.setFakeBoldText(true);
-	        p.setShadowLayer(2, 0, 0, currentShadow);
+	        p.setShadowLayer(currentShadow, 0, 0, signColor);
 	        p.setColor(numberColor);
 	        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (3*size/4), p);
         }
@@ -193,9 +194,6 @@ public class Cell extends View {
     
     public void setSignColor(int color) {
     	signColor = color;
-    	originalShadow = Color.argb(100, Color.red(signColor), Color.green(signColor), Color.blue(signColor));
-    	highlightShadow = Color.argb(255, Color.red(signColor), Color.green(signColor), Color.blue(signColor));
-    	currentShadow = originalShadow;
     	invalidate();
     }
     
