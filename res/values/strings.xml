@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <string name="app_name">Equilibrium</string>
-<string name="menu_new">New</string>
+    
+<string name="menu_new">New game</string>
 <string name="menu_settings">Settings</string>
 <string name="menu_exit">Exit</string>
-<string name="hello">Hello Equilibrium</string>
-<string name="menu_settings_size">Size</string>
-<string name="menu_settings_cpu">CPU Level</string>
-<string name="red_player_win">Red player WINS!</string>
-<string name="blue_player_win">Blue player WINS!</string>
+
+
+
+<string name="red_player_win">Red player wins!</string>
+<string name="blue_player_win">Blue player wins!</string>
 <string name="noone_win">Noone wins...</string>
-<string name="new_game">New Game</string>
+<string name="new_game">New game</string>
 <string name="close_dialog">Close</string>
+<string name="settings">Settings</string>
+<string name="size">Size</string>
+<string name="size_summary">Choose the grid's size</string>
+<string name="app_name">Equilibrium</string>
+<string name="vs_cpu">vs CPU</string>
+<string name="vs_cpu_summary">Second player is controlled by CPU</string>
 </resources>

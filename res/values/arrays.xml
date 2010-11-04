@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<string-array name="list_sizes">
+<item>4x4</item>
+<item>6x6</item>
+<item>8x8</item>
+<item>9x9</item>
+</string-array>
+<string-array name="list_sizes_val">
+<item>4</item>
+<item>6</item>
+<item>8</item>
+<item>9</item>
+</string-array>
+</resources>

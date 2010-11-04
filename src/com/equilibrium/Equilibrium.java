@@ -6,10 +6,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,6 +42,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public Vector<Integer> playerCols;			//Caselle del giocatore
 	public boolean turn = true;
 	public int turnLeft = 0;
+	public boolean cpu = false;
 	
 	public static final int MENU_NEW_GAME = 424;
 	public static final int MENU_SETTINGS = 548;
@@ -53,11 +56,24 @@ public class Equilibrium extends Activity implements OnClickListener {
         
         l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
-        l.setGravity(Gravity.FILL_VERTICAL);        
+        l.setGravity(Gravity.FILL_VERTICAL);
         setContentView(l);
-        
-        start();
     }
+    
+    @Override
+    public void onStart() {
+    	super.onStart();
+    	
+    	getPrefs();
+    	start();
+    }
+    
+    private void getPrefs() {
+        // Get the xml/preferences.xml preferences
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        cpu = prefs.getBoolean("vsCpu", false);
+        lato = Integer.parseInt(prefs.getString("size", "6"));
+	}
     
     /* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {

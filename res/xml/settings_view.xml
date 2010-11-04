@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory
-		android:title="First Category">
   
-		<ListPreference
-			android:title="@string/dimension"
-			android:summary="@string/dimension_summary"
-			android:key="dimension"
-			android:defaultValue="digiGreen"
-			android:entries="@array/list_dimensions"
-			android:entryValues="@array/list_dimensions" />
-  
-		<CheckBoxPreference
-			android:title="Checkbox Preference"
-			android:defaultValue="false"
-			android:summary="This preference can be true or false"
-			android:key="checkboxPref" />
-		
-	</PreferenceCategory>
+	<ListPreference
+		android:title="@string/size"
+		android:summary="@string/size_summary"
+		android:key="size"
+		android:entries="@array/list_sizes"
+		android:entryValues="@array/list_sizes_val" />
+ 
+	<CheckBoxPreference
+		android:title="@string/vs_cpu"
+		android:defaultValue="false"
+		android:summary="@string/vs_cpu_summary"
+		android:key="vsCpu" />
+	
 </PreferenceScreen>

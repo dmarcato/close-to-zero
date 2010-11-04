@@ -8,12 +8,15 @@
 
 
 
-<string name="red_player_win">Vince il giocatore Rosso!</string>
-<string name="blue_player_win">Vince il giocatore Blu!</string>
+<string name="red_player_win">Vince il giocatore rosso!</string>
+<string name="blue_player_win">Vince il giocatore blu!</string>
 <string name="noone_win">Parità, nessun vincitore...</string>
 <string name="new_game">Nuova partita</string>
 <string name="close_dialog">Chiudi</string>
 <string name="settings">Impostazioni</string>
-<string name="dimension">Dimensione</string>
-<string name="dimension_summary">Scegli la dimensione della griglia</string>
+<string name="size">Dimensioni</string>
+<string name="size_summary">Scegli le dimensioni della griglia di gioco</string>
+
+
+<string name="vs_cpu_summary">Il secondo giocatore è controllato dalla CPU</string>
 </resources>
