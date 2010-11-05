@@ -151,27 +151,25 @@ public class Cell extends View {
     	switch (event.getAction()) {
     	case MotionEvent.ACTION_DOWN:
     		if (e.lastClicked != null) {
-				e.lastClicked.currentAlpha = originalAlpha;
+				e.lastClicked.normal();
 				e.eraseCross(e.lastClicked.row, e.lastClicked.col);
     		}
 			e.lastMoved = this;
     		break;
     	case MotionEvent.ACTION_UP:
-    		currentAlpha = selectedAlpha;
-        	if ((row != e.lato+1) && (col != e.lato+1)) {
-        		e.selectedRow = row;
-        		e.selectedCol = col;
-        		if (numberSetted == false) {
-        			e.showNumbers(row, col);
-        		} else {
-        			e.hideNumbers();
-        		}
-        		if ((e.lastClicked != null) && (e.lastClicked != this)) {
-        			e.lastClicked.currentAlpha = originalAlpha;
-        		}
-        		e.lastClicked = this;
-        		e.drawCross(row, col);
-        	}
+    		e.selectedRow = row;
+    		e.selectedCol = col;
+    		if (numberSetted == false) {
+    			e.showNumbers(row, col);
+    			select();
+    		} else {
+    			e.hideNumbers();
+    		}
+    		if ((e.lastClicked != null) && (e.lastClicked != this)) {
+    			e.lastClicked.normal();
+    		}
+    		e.lastClicked = this;
+    		e.drawCross(row, col);
     		break;
     	}
 		return true;
@@ -215,7 +213,6 @@ public class Cell extends View {
     public void setNumber(String txt) {
     	number = txt;
     	numberSetted = true;
-    	this.normal();
     	invalidate();
     }
     
@@ -234,53 +231,18 @@ public class Cell extends View {
     public void highlight() {
     	currentShadow = highlightShadow;
     	currentNumberColor = Color.argb(80, Color.red(signColor), Color.green(signColor), Color.blue(signColor));
+    	invalidate();
+    }
+    
+    public void select() {
+    	currentAlpha = selectedAlpha;
+    	invalidate();
     }
     
     public void normal() {
     	currentShadow = originalShadow;
     	currentAlpha = originalAlpha;
     	currentNumberColor = numberColor;
+    	invalidate();
     }
-        
-	/* public boolean onTouchEvent(MotionEvent event) {
-		//Controllo di non essere nei bordi delle somme o di non aver cliccato la stessa casella
-		if ((row != e.lato+1) && (col != e.lato+1) && (e.lastClicked != this)) {
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-	    		setBkColor(Color.GREEN);
-	    	}
-	    	if (event.getAction() == MotionEvent.ACTION_UP) {
-	    		setBkColor(originalBkColor);
-    			e.selectedRow = row;
-    			e.selectedCol = col;
-    			if (numberSetted == false) {
-    				e.showNumbers(row, col);
-    			} else {
-    				e.hideNumbers();
-    			}
-    			bkColor = Color.GRAY;
-    			if (e.lastClicked != null) {
-    				e.lastClicked.setBkColor(e.lastClicked.originalBkColor);
-    			}
-    			e.lastClicked = this;
-    			invalidate();
-    		}
-    	}
-    	return true;
-	}*/
 }
-
-/*Dialog tmp = new Dialog(getContext());
-GridView gridview = new GridView(getContext());
-
-int[] num = new int[e.lato];
-for (int i = 0; i < e.lato; i++) {
-	//Controllo i lati
-	num[i] = i+1;
-}
-
-gridview.setNumColumns(GridView.AUTO_FIT);
-gridview.setAdapter(new ButtonAdapter(getContext(), num, tmp, this));
-
-tmp.setTitle("Scegli un numero");
-tmp.setContentView(gridview);
-tmp.show();*/

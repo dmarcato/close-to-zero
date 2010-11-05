@@ -42,24 +42,15 @@ import android.widget.Toast;
 
 public class Equilibrium extends Activity implements OnClickListener {
 	
-	Handler threadHandler = new Handler(){
-		// @Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case Equilibrium.AIMOVE:
-				addMove((EQMoves.EQSingleMove) msg.obj);
-				loadingDialog.dismiss();
-				break;
-			}
-			super.handleMessage(msg);
-		}
-	};
-	
+	/**
+	 * Thread per l'esecuzione di mosse da parte dell'AI
+	 * @author dario
+	 */
 	private class AIThread extends Thread {
 		
-		private int gameType = 0;
+		private int gameType = 0;						//Indica il tipo di algoritmo da usare
 		
-		public static final int STANDARD = 1;
+		public static final int STANDARD = 1;			//Indica i tipi di algoritmi disponibili
 		
 		public AIThread(int gt) {
 			this.gameType = gt;
@@ -78,6 +69,28 @@ public class Equilibrium extends Activity implements OnClickListener {
             Equilibrium.this.threadHandler.sendMessage(m);
 		}
 	}
+	
+	/**
+	 * Riceve i messaggi dai thread
+	 */
+	Handler threadHandler = new Handler(){
+		// @Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case Equilibrium.AIMOVE:
+				EQMoves.EQSingleMove move = (EQMoves.EQSingleMove) msg.obj;
+				addMove(move);
+				lastClicked.normal();
+				eraseCross(selectedRow, selectedCol);
+				drawCross(move.getRow(), move.getCol());
+				lastClicked = amatriciana.get(move.getRow()).get(move.getCol());
+				lastClicked.select();
+				loadingDialog.dismiss();
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
 	
 	public int lato = 6;						//Numero di caselle per riga
 	public Vector<Vector<Cell>> amatriciana;	//Matrice delle caselle
@@ -350,6 +363,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void addMove(EQMoves.EQSingleMove move) {
     	try {
+    		amatriciana.get(move.getRow()).get(move.getCol()).select();
     		amatriciana.get(move.getRow()).get(move.getCol()).setNumber(move.getValue());
     		turnLeft--;
     		board.insert(move);
