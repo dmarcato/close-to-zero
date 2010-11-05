@@ -48,7 +48,6 @@ public class Equilibrium extends Activity implements OnClickListener {
 		
 		public AIThread(int gt) {
 			this.gameType = gt;
-			this.e = eq;
 		}
 		
 		public void run() {
