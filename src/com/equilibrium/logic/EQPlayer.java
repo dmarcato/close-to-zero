@@ -53,9 +53,19 @@ public class EQPlayer {
 		return bot;
 	}
 	
+	public boolean isMineRow(int r)
+	{
+		return playerRows.get(r);
+	}
+	
+	public boolean isMineCol(int c)
+	{
+		return playerRows.get(c);
+	}
+	
 	public boolean isMine(EQCell c)
 	{
-		if (playerRows.get(c.getRow()) || playerColumns.get(c.getCol())) {
+		if (playerRows.get(c.getRow()) && playerColumns.get(c.getCol())) {
 			return true;
 		}
 		return false;

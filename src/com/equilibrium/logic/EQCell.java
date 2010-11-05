@@ -43,8 +43,8 @@ public class EQCell implements Cloneable {
 	}
 	
 	public void unsetValue() {
-		if (setted && value != 0)
-			possibilities.add(value);
+		//if (setted && value != 0)
+			//possibilities.add(value);
 		setted = false;
 		value = 0;
 	}
