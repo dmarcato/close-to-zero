@@ -2,6 +2,8 @@ package com.equilibrium;
 
 import java.util.Vector;
 
+import com.equilibrium.logic.EQCell;
+
 import android.R;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,43 +20,45 @@ import android.graphics.drawable.Drawable;
 
 public class Cell extends View {
 
-	private Equilibrium e;
-	private String sign;
-	private String number;
-	private int size;
+	protected Equilibrium e;
+	protected EQCell logic;
+	protected String sign;
+	protected String number;
+	protected int size;
 	public int row;
 	public int col;
 	public boolean numberSetted = false;
 	public int originalBkColor = 0xFFEEEEEE;
 	public int bkColor = 0xFFEEEEEE;
-	private int borderColor = Color.DKGRAY;
-	private int signColor = Color.RED;
-	private int numberColor = Color.WHITE;
-	private int highlightNumberColor = 0;
-	private int currentNumberColor = 0;
-	private Drawable bkImage = null;
-	private int originalAlpha = 255-30;
-	private int selectedAlpha = 255-150;
-	private int currentAlpha = 0;
-	private float originalShadow = 2;
-	private float highlightShadow = 0.5f;
-	private float currentShadow = 0;
-	private boolean[] around;
-	private int possibilities;
+	protected int borderColor = Color.DKGRAY;
+	protected int signColor = Color.RED;
+	protected int numberColor = Color.WHITE;
+	protected int highlightNumberColor = 0;
+	protected int currentNumberColor = 0;
+	protected Drawable bkImage = null;
+	protected int originalAlpha = 255-30;
+	protected int selectedAlpha = 255-150;
+	protected int currentAlpha = 0;
+	protected float originalShadow = 2;
+	protected float highlightShadow = 0.5f;
+	protected float currentShadow = 0;
+	protected boolean[] around;
+	protected int possibilities;
 	
 	 /**
      * Constructor.  This version is only needed if you will be instantiating
      * the object manually (not from a layout XML file).
      * @param context
      */
-    public Cell(Context context, int r, int c) {
+    public Cell(Context context, EQCell l) {
         super(context);
         e = (Equilibrium) getContext();
+        logic = l;
         bkImage = e.getResources().getDrawable(com.equilibrium.R.drawable.trans);
         bkImage.setAlpha(255);
         sign = number = "";
-        row = r;
-        col = c;
+        row = logic.getRow();
+        col = logic.getCol();
         currentAlpha = originalAlpha;
         currentShadow = originalShadow;
         currentNumberColor = numberColor;
@@ -124,7 +128,7 @@ public class Cell extends View {
         Paint p = new Paint();
         p.setAntiAlias(true);
         
-        if (e.amatriciana[e.lato+1][e.lato+1].equals(this)) {
+        /*if (e.amatriciana[e.lato+1][e.lato+1].equals(this)) {
         	setBkColor(Color.TRANSPARENT);
         	p.setColor((e.turn)? 0xFF9999CC : 0xFFCC9999);
         	canvas.drawCircle(size/2, size/2, size/2-6, p);
@@ -132,25 +136,24 @@ public class Cell extends View {
         	p.setTextSize(size/3);
             p.setColor(numberColor);
             canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (3*size/4), p);
-        } else {
-	        p.setColor(borderColor);
-	        canvas.drawLine(0, 0, getWidth(), 0, p);
-	        canvas.drawLine(0, 0, 0, getHeight(), p);
-	        canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
-	        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
-	        
-	        //canvas.drawRGB(Color.red(signColor), Color.green(signColor), Color.blue(signColor));
-	        int padding = (int) Math.round(0.17*size);
-	        bkImage.setBounds(padding, padding, size-padding, size-padding);
-	        bkImage.draw(canvas);
-	        canvas.drawARGB(currentAlpha, 255, 255, 255);
-	        
-	        p.setTextSize(size*2/3);
-	        p.setFakeBoldText(true);
-	        p.setShadowLayer(currentShadow, 0, 0, signColor);
-	        p.setColor(currentNumberColor);
-	        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (3*size/4), p);
-        }
+        } else {*/
+        p.setColor(borderColor);
+        canvas.drawLine(0, 0, getWidth(), 0, p);
+        canvas.drawLine(0, 0, 0, getHeight(), p);
+        canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
+        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
+        
+        //canvas.drawRGB(Color.red(signColor), Color.green(signColor), Color.blue(signColor));
+        int padding = (int) Math.round(0.17*size);
+        bkImage.setBounds(padding, padding, size-padding, size-padding);
+        bkImage.draw(canvas);
+        canvas.drawARGB(currentAlpha, 255, 255, 255);
+        
+        p.setTextSize(size*2/3);
+        p.setFakeBoldText(true);
+        p.setShadowLayer(currentShadow, 0, 0, signColor);
+        p.setColor(currentNumberColor);
+        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (3*size/4), p);
     }
     
     public boolean onTouchEvent(MotionEvent event) {
@@ -202,11 +205,6 @@ public class Cell extends View {
     
     public void setSign(String txt) {
     	sign = txt;
-    	if (sign == "+") {
-    		bkImage = e.getResources().getDrawable(com.equilibrium.R.drawable.plus);
-    	} else if (sign == "-") {
-    		bkImage = e.getResources().getDrawable(com.equilibrium.R.drawable.minus);
-    	}
     	invalidate();
     }
     

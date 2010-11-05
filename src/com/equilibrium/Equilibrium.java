@@ -2,8 +2,13 @@ package com.equilibrium;
 
 import java.util.Vector;
 
+import com.equilibrium.logic.EQBoard;
+import com.equilibrium.logic.EQCell;
+import com.equilibrium.logic.EQPlayer;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,7 +37,7 @@ import android.widget.Toast;
 public class Equilibrium extends Activity implements OnClickListener {
 	
 	public int lato = 6;						//Numero di caselle per riga
-	public Cell[][] amatriciana;				//Matrice delle caselle
+	public Vector<Vector<Cell>> amatriciana;	//Matrice delle caselle
 	public int selectedRow = 0;					//Indice di riga della casella selezionata
 	public int selectedCol = 0;					//Indice di colonna della casella selezionata
 	public LinearLayout l;						//Layout principale
@@ -45,9 +50,16 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public boolean showPartialSum = true;
 	public boolean cpu = false;
 	
+	private EQBoard board = null;
+	private EQPlayer p1 = null;
+	private EQPlayer p2 = null;
+	
 	public static final int MENU_NEW_GAME = 424;
 	public static final int MENU_SETTINGS = 548;
+	public static final int MENU_HELP = 362;
 	public static final int MENU_QUIT = 189;
+	
+	public static final int DIALOG_HELP = 165;
 	
     /** Called when the activity is first created. */
     @Override
@@ -81,7 +93,8 @@ public class Equilibrium extends Activity implements OnClickListener {
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_NEW_GAME, 0, R.string.menu_new).setIcon(android.R.drawable.ic_menu_add);
         menu.add(0, MENU_SETTINGS, 1, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
-        menu.add(0, MENU_QUIT, 2, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+        menu.add(0, MENU_HELP, 2, R.string.menu_help).setIcon(android.R.drawable.ic_menu_help);
+        menu.add(0, MENU_QUIT, 3, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
         return true;
     }
 
@@ -94,6 +107,9 @@ public class Equilibrium extends Activity implements OnClickListener {
         case MENU_SETTINGS:
         	startActivity(new Intent(getBaseContext(), Settings.class));
         	return true;
+        case MENU_HELP:
+        	this.showDialog(DIALOG_HELP); //No funsia :/
+        	return true;
         case MENU_QUIT:
             finish();
             return true;
@@ -101,7 +117,26 @@ public class Equilibrium extends Activity implements OnClickListener {
         return false;
     }
     
+    protected Dialog onCreateDialog(int id) {
+    	Dialog dialog = null;
+    	switch (id) {
+    	case DIALOG_HELP:
+    		dialog = new Dialog(this.getApplicationContext());
+
+        	dialog.setContentView(R.layout.help);
+        	dialog.setTitle(R.string.help);
+        	/*TextView text = (TextView) dialog.findViewById(R.id.text);
+        	text.setText("Hello, this is a custom dialog!");
+        	ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        	image.setImageResource(R.drawable.android);*/
+        	break;
+    	}
+    	return dialog;
+    }
+    
     public void start() {
+    	
+    	board = new EQBoard(lato);    	
     	turnLeft = lato*lato;
         
         //Scelto righe e colonne random
@@ -109,21 +144,55 @@ public class Equilibrium extends Activity implements OnClickListener {
         int totCols = lato - totRows;
         playerRows = new Vector<Integer>();
         playerCols = new Vector<Integer>();
-        while ((totRows > 0) || (totCols > 0)) {
-        	int tmp = (int)(lato*Math.random())+1;
-        	if ((totRows > 0) && (!playerRows.contains(tmp))) {
-        		playerRows.add(tmp);
-        		totRows--;
-        	} else if (playerCols.contains(tmp) == false) {
-        		playerCols.add(tmp);
-        		totCols--;
-        	}
+        /*while ((totRows > 0) || (totCols > 0)) {
+    	int tmp = (int)(lato*Math.random())+1;
+    	if ((totRows > 0) && (!playerRows.contains(tmp))) {
+    		playerRows.add(tmp);
+    		totRows--;
+    	} else if (playerCols.contains(tmp) == false) {
+    		playerCols.add(tmp);
+    		totCols--;
+    	}
+    	}*/
+        
+        Vector<Boolean> p1Rows = new Vector<Boolean>();
+        Vector<Boolean> p1Cols = new Vector<Boolean>();
+        Vector<Boolean> p2Rows = new Vector<Boolean>();
+        Vector<Boolean> p2Cols = new Vector<Boolean>();
+        for (int i = 0; i < lato; i++) {
+        	int tmp = (int)(2*Math.random());
+    		p1Rows.add(tmp == 0);
+    		p2Rows.add(tmp == 1);
+    		p1Cols.add(tmp == 0);
+    		p2Cols.add(tmp == 1);
         }
+        
+        p1 = new EQPlayer(p1Rows, p1Cols);
+    	p2 = new EQPlayer(p2Rows, p2Cols);
         
         TableLayout a = new TableLayout(this);
         a.setStretchAllColumns(true);
         
-        amatriciana = new Cell[lato+2][];
+        
+        amatriciana = new Vector<Vector<Cell>>();
+        for (int i = 0; i < lato; i++) {
+        	TableRow r = new TableRow(this);
+        	amatriciana.add(new Vector<Cell>());
+        	for (int j = 0; j < lato; j++) {
+        		EQCell eqc = board.get(i, j);
+        		Cell c = null;
+        		if (eqc.getSign()) {
+        			c = new CellPlus(this, eqc);
+        		} else {
+        			c = new CellMinus(this, eqc);
+        		}
+        		amatriciana.get(i).add(c);
+        		r.addView(c);
+        	}
+        	a.addView(r);
+        }
+        
+        /*amatriciana = new Cell[lato+2][];
         boolean isPlayer = false;
         for (int i = 0; i < lato+2; i++) {
         	if (playerRows.contains(i)) {
@@ -165,7 +234,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         		}
         	}
         	a.addView(r);
-        }
+        }*/
         
         if (l.getChildCount() > 0) {
         	l.removeViewAt(0);
@@ -176,7 +245,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     public void updateSum(int row, int col) {
     	int sumX = 0;
     	int sumY = 0;
-    	for (int i = 1; i < lato+1; i++) {
+    	/*for (int i = 1; i < lato+1; i++) {
     		if (amatriciana[row][i].getSign() == "-") {
     			sumX -= amatriciana[row][i].getNumber();
     		} else {
@@ -190,29 +259,30 @@ public class Equilibrium extends Activity implements OnClickListener {
     		}
     	}
     	amatriciana[row][lato+1].setNumber(Integer.toString(sumX));
-    	amatriciana[lato+1][col].setNumber(Integer.toString(sumY));
+    	amatriciana[lato+1][col].setNumber(Integer.toString(sumY));*/
     }
     
     public void setAround(int row, int col, int number) {
-    	amatriciana[row-1][col-1].setAround(number);
+    	/*amatriciana[row-1][col-1].setAround(number);
     	amatriciana[row-1][col].setAround(number);
     	amatriciana[row-1][col+1].setAround(number);
     	amatriciana[row][col-1].setAround(number);
     	amatriciana[row][col+1].setAround(number);
     	amatriciana[row+1][col-1].setAround(number);
     	amatriciana[row+1][col+1].setAround(number);
-    	amatriciana[row+1][col].setAround(number);
+    	amatriciana[row+1][col].setAround(number);*/
     }
     
     public void showNumbers(int row, int col) {
     	TableLayout b = new TableLayout(this);
     	TableRow c = new TableRow(this);
-    	Vector<Integer> around = amatriciana[row][col].getAvailableAround();
+    	EQCell cell = board.get(row, col);
+    	Vector<Integer> around = cell.getPsb();
     	Button btn;
     	for (int i = 0; i < around.size(); i++) {
     		btn = new Button(this);
-    		btn.setHeight(amatriciana[row][col].getSize());
-    		btn.setWidth(amatriciana[row][col].getSize());
+    		btn.setHeight(amatriciana.get(0).get(0).getSize());
+    		btn.setWidth(amatriciana.get(0).get(0).getSize());
             btn.setText(Integer.toString(around.elementAt(i)));
             btn.setOnClickListener(this);
             c.addView(btn);
@@ -231,7 +301,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     }
     
     public void finishGame() {
-    	int totPlayer = 0;
+    	/*int totPlayer = 0;
     	int totOther = 0;
     	for (int i = 1; i <= lato; i++) {
     		if (playerRows.contains(i) == true) {
@@ -277,12 +347,13 @@ public class Equilibrium extends Activity implements OnClickListener {
 		           }
 		       });
     	AlertDialog alert = builder.create();
-    	alert.show();
+    	alert.show();*/
     }
     
     public void onClick(View v) {
 		Button b = (Button) v;
-		amatriciana[selectedRow][selectedCol].setNumber((String) b.getText());
+		board.insert(Integer.parseInt((String)b.getText()), selectedRow, selectedCol);
+		amatriciana.get(selectedRow).get(selectedCol).setNumber((String) b.getText());
 		eraseCross(selectedRow, selectedCol);
 		hideNumbers();
 		turn = !turn;
@@ -292,16 +363,16 @@ public class Equilibrium extends Activity implements OnClickListener {
 	}
     
     public void drawCross(int row, int col) {
-    	for (int i = 1; i <= lato; i++) {
-    		amatriciana[row][i].highlight();
-    		amatriciana[i][col].highlight();
+    	for (int i = 0; i < lato; i++) {
+    		amatriciana.get(row).get(i).highlight();
+    		amatriciana.get(i).get(col).highlight();
     	}
     }
     
     public void eraseCross(int row, int col) {
-    	for (int i = 1; i <= lato; i++) {
-    		amatriciana[row][i].normal();
-    		amatriciana[i][col].normal();
+    	for (int i = 0; i < lato; i++) {
+    		amatriciana.get(row).get(i).normal();
+    		amatriciana.get(i).get(col).normal();
     	}
     }
 }
