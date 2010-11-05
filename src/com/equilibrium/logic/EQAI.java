@@ -5,13 +5,13 @@ import java.util.Vector;
 
 import com.equilibrium.logic.*;
 
-public final class EQAI {
+public final class EQAI extends Thread {
 	
-	static public EQBoard greedyAlg(EQBoard board, EQPlayer player, EQPlayer opp)
+	static public EQMoves.EQSingleMove greedyAlg(EQBoard board, EQPlayer player, EQPlayer opp)
 	{
 		int best = -1000, diff;
 		EQBoard brd = null;
-		Vector<EQBoard> bestbrd = new Vector<EQBoard>();
+		EQMoves bestMoves = new EQMoves();
 		EQCell cell = null;
 		for (int i = 0; i < board.getDimension(); i++)
 			for (int j = 0; j < board.getDimension(); j++)
@@ -22,23 +22,28 @@ public final class EQAI {
 					for (int k = 0; k < cell.getPsb().size(); k++)
 					{
 						brd = ((EQBoard)board.clone());
-						brd.insert(cell.getPsb().get(k), i, j);
+						EQMoves.EQSingleMove move = new EQMoves.EQSingleMove(cell.getPsb().get(k), i, j);
+						try {
+							brd.insert(move);
+						} catch (EQMoves m) {}
 					
 						diff = opp.getScore(brd) - player.getScore(brd);
 						if (diff >= best)
 						{
-							if (diff > best)
-								bestbrd.clear();
+							if (diff > best) {
+								bestMoves.clear();
+							}
 							best = diff;
-							bestbrd.add((EQBoard) brd.clone());
+							bestMoves.add(move);
 						}
 					}
 				}
 			}
 		
-		if (bestbrd.size() == 0)
-			return board;
+		if (bestMoves.size() == 0) {
+			return null;
+		}
 
-		return bestbrd.get(new Random().nextInt(bestbrd.size()));
+		return bestMoves.get(new Random().nextInt(bestMoves.size()));
 	}
 }

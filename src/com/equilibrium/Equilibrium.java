@@ -2,13 +2,16 @@ package com.equilibrium;
 
 import java.util.Vector;
 
+import com.equilibrium.logic.EQAI;
 import com.equilibrium.logic.EQBoard;
 import com.equilibrium.logic.EQCell;
+import com.equilibrium.logic.EQMoves;
 import com.equilibrium.logic.EQPlayer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,9 +35,33 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Equilibrium extends Activity implements OnClickListener {
+	
+	private class AIThread extends Thread {
+		
+		private int gameType = 0;
+		
+		public static final int STANDARD = 1;
+		
+		public AIThread(int gt) {
+			this.gameType = gt;
+			this.e = eq;
+		}
+		
+		public void run() {
+			EQMoves.EQSingleMove move = null;
+			switch (this.gameType) {
+			case AIThread.STANDARD:
+				move = EQAI.greedyAlg(board, p2, p1);
+				break;
+			}
+			addMove(move);
+			loadingDialog.dismiss();
+		}
+	}
 	
 	public int lato = 6;						//Numero di caselle per riga
 	public Vector<Vector<Cell>> amatriciana;	//Matrice delle caselle
@@ -49,10 +76,13 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public int turnLeft = 0;
 	public boolean showPartialSum = true;
 	public boolean cpu = false;
+	private LinearLayout scoreLayout;
+	protected ProgressDialog loadingDialog;
 	
 	private EQBoard board = null;
-	private EQPlayer p1 = null;
-	private EQPlayer p2 = null;
+	public EQPlayer p1 = null;
+	public EQPlayer p2 = null;
+	public EQPlayer currentPlayer = null;
 	
 	public static final int MENU_NEW_GAME = 424;
 	public static final int MENU_SETTINGS = 548;
@@ -136,43 +166,48 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void start() {
     	
-    	board = new EQBoard(lato);    	
+    	//Creo la board
+    	board = new EQBoard(lato);
+    	
+    	//Turni da giocare
     	turnLeft = lato*lato;
         
         //Scelto righe e colonne random
         int totRows = (int) Math.floor(lato / 2);
         int totCols = lato - totRows;
-        playerRows = new Vector<Integer>();
-        playerCols = new Vector<Integer>();
-        /*while ((totRows > 0) || (totCols > 0)) {
-    	int tmp = (int)(lato*Math.random())+1;
-    	if ((totRows > 0) && (!playerRows.contains(tmp))) {
-    		playerRows.add(tmp);
-    		totRows--;
-    	} else if (playerCols.contains(tmp) == false) {
-    		playerCols.add(tmp);
-    		totCols--;
-    	}
-    	}*/
-        
-        Vector<Boolean> p1Rows = new Vector<Boolean>();
-        Vector<Boolean> p1Cols = new Vector<Boolean>();
-        Vector<Boolean> p2Rows = new Vector<Boolean>();
-        Vector<Boolean> p2Cols = new Vector<Boolean>();
+        Vector<Boolean> pRows = new Vector<Boolean>();
+        Vector<Boolean> pCols = new Vector<Boolean>();
         for (int i = 0; i < lato; i++) {
-        	int tmp = (int)(2*Math.random());
-    		p1Rows.add(tmp == 0);
-    		p2Rows.add(tmp == 1);
-    		p1Cols.add(tmp == 0);
-    		p2Cols.add(tmp == 1);
+        	pRows.add(false);
+        	pCols.add(false);
         }
-        
-        p1 = new EQPlayer(p1Rows, p1Cols);
-    	p2 = new EQPlayer(p2Rows, p2Cols);
+        Vector<Integer> pos = new Vector<Integer>();
+        while (pos.size() < totRows) {
+        	int tmp = (int)(lato*Math.random());
+        	if (!pos.contains(tmp)) {
+        		pos.add(tmp);
+        		pRows.set(tmp, true);
+        	}
+        }
+        pos.clear();
+        while (pos.size() < totCols) {
+        	int tmp = (int)(lato*Math.random());
+        	if (!pos.contains(tmp)) {
+        		pos.add(tmp);
+        		pCols.set(tmp, true);
+        	}
+        }
+        p1 = new EQPlayer(pRows, pCols, false);
+        for (int i = 0; i < lato; i++) {
+        	pRows.set(i, !pRows.get(i));
+        	pCols.set(i, !pCols.get(i));
+        }
+    	p2 = new EQPlayer(pRows, pCols, cpu);
+    	
+    	currentPlayer = p1;
         
         TableLayout a = new TableLayout(this);
         a.setStretchAllColumns(true);
-        
         
         amatriciana = new Vector<Vector<Cell>>();
         for (int i = 0; i < lato; i++) {
@@ -192,85 +227,35 @@ public class Equilibrium extends Activity implements OnClickListener {
         	a.addView(r);
         }
         
-        /*amatriciana = new Cell[lato+2][];
-        boolean isPlayer = false;
-        for (int i = 0; i < lato+2; i++) {
-        	if (playerRows.contains(i)) {
-        		isPlayer = true;
-        	} else {
-        		isPlayer = false;
-        	}
-        	amatriciana[i] = new Cell[lato+2];
-        	TableRow r = new TableRow(this);
-        	for (int j = 0; j < lato+2; j++) {
-        		amatriciana[i][j] = new Cell(this, i, j);
-        		if ((j < lato+1) && (i < lato+1)) {
-	        		String sign;
-	        		if ((i+j) % 2 == 0) {
-	        			sign = "+";
-	        			amatriciana[i][j].setSignColor(Color.RED);
-	        		} else {
-	        			sign = "-";
-	        			amatriciana[i][j].setSignColor(Color.BLUE);
-	        		}
-	        		amatriciana[i][j].setSign(sign);
-        		} else {
-        			if (((i != lato+1) || (j != lato+1))) {
-        				amatriciana[i][j].setNumber("0");
-        			}
-        			if ((isPlayer == true) || (playerCols.contains(j) == true)) {
-        				amatriciana[i][j].setBkColor(0xFF9999CC, true);
-        				amatriciana[i][j].setNumberColor(Color.BLUE);
-            		} else {
-            			amatriciana[i][j].setBkColor(0xFFCC9999, true);
-            			amatriciana[i][j].setNumberColor(Color.RED);
-            		}
-        		}
-
-        		if ((j != 0) && (i != 0)) {
-        			if ((showPartialSum == true) || ((showPartialSum == false) && ((i != lato+1) && (j != lato+1)))) {
-        				r.addView(amatriciana[i][j]);
-        			}
-        		}
-        	}
-        	a.addView(r);
-        }*/
-        
         if (l.getChildCount() > 0) {
         	l.removeViewAt(0);
         }
         l.addView(a, 0);
+        
+        scoreLayout = new LinearLayout(this);
+        l.addView(scoreLayout, 1);
+        
+        updateScore();
+        
+        if (currentPlayer.isBot()) {
+        	doAIMove();
+        }
     }
     
-    public void updateSum(int row, int col) {
-    	int sumX = 0;
-    	int sumY = 0;
-    	/*for (int i = 1; i < lato+1; i++) {
-    		if (amatriciana[row][i].getSign() == "-") {
-    			sumX -= amatriciana[row][i].getNumber();
-    		} else {
-    			sumX += amatriciana[row][i].getNumber();
-    		}
-    		
-    		if (amatriciana[i][col].getSign() == "-") {
-    			sumY -= amatriciana[i][col].getNumber();
-    		} else {
-    			sumY += amatriciana[i][col].getNumber();
-    		}
+    public void doAIMove() {
+    	loadingDialog = ProgressDialog.show(this, "", getResources().getText(R.string.loading), true);
+    	new AIThread(AIThread.STANDARD).start();
+    }
+    
+    public void nextPlayer() {
+    	if (currentPlayer.equals(p1)) {
+    		currentPlayer = p2;
+    	} else {
+    		currentPlayer = p1;
     	}
-    	amatriciana[row][lato+1].setNumber(Integer.toString(sumX));
-    	amatriciana[lato+1][col].setNumber(Integer.toString(sumY));*/
-    }
-    
-    public void setAround(int row, int col, int number) {
-    	/*amatriciana[row-1][col-1].setAround(number);
-    	amatriciana[row-1][col].setAround(number);
-    	amatriciana[row-1][col+1].setAround(number);
-    	amatriciana[row][col-1].setAround(number);
-    	amatriciana[row][col+1].setAround(number);
-    	amatriciana[row+1][col-1].setAround(number);
-    	amatriciana[row+1][col+1].setAround(number);
-    	amatriciana[row+1][col].setAround(number);*/
+    	if (currentPlayer.isBot()) {
+    		doAIMove();
+    	}
     }
     
     public void showNumbers(int row, int col) {
@@ -281,40 +266,28 @@ public class Equilibrium extends Activity implements OnClickListener {
     	Button btn;
     	for (int i = 0; i < around.size(); i++) {
     		btn = new Button(this);
-    		btn.setHeight(amatriciana.get(0).get(0).getSize());
-    		btn.setWidth(amatriciana.get(0).get(0).getSize());
+    		btn.setHeight(amatriciana.get(row).get(col).getSize());
+    		btn.setWidth(amatriciana.get(row).get(col).getSize());
             btn.setText(Integer.toString(around.elementAt(i)));
             btn.setOnClickListener(this);
             c.addView(btn);
     	}
     	b.addView(c);
-    	if (l.getChildCount() > 1) {
-    		l.removeViewAt(1);
+    	if (l.getChildCount() > 2) {
+    		l.removeViewAt(2);
     	}
-    	l.addView(b, 1);
+    	l.addView(b, 2);
     }
     
     public void hideNumbers() {
-    	if (l.getChildCount() > 1) {
-    		l.removeViewAt(1);
+    	if (l.getChildCount() > 2) {
+    		l.removeViewAt(2);
     	}
     }
     
     public void finishGame() {
-    	/*int totPlayer = 0;
-    	int totOther = 0;
-    	for (int i = 1; i <= lato; i++) {
-    		if (playerRows.contains(i) == true) {
-    			totPlayer += amatriciana[i][lato+1].getNumber();
-    		} else {
-    			totOther += amatriciana[i][lato+1].getNumber();
-    		}
-    		if (playerCols.contains(i) == true) {
-    			totPlayer += amatriciana[lato+1][i].getNumber();
-    		} else {
-    			totOther += amatriciana[lato+1][i].getNumber();
-    		}
-    	}
+    	/*int p1Score = p1.getScore(board);
+    	int p2Score = p2.getScore(board);
     	int winnerText;
     	if (Math.abs(totPlayer) < Math.abs(totOther)) {
     		turn = true;
@@ -352,15 +325,42 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void onClick(View v) {
 		Button b = (Button) v;
-		board.insert(Integer.parseInt((String)b.getText()), selectedRow, selectedCol);
-		amatriciana.get(selectedRow).get(selectedCol).setNumber((String) b.getText());
-		eraseCross(selectedRow, selectedCol);
+		EQMoves.EQSingleMove mv = new EQMoves.EQSingleMove(Integer.parseInt((String)b.getText()), selectedRow, selectedCol);
+		addMove(mv);
 		hideNumbers();
-		turn = !turn;
-		if (turnLeft == 0) {
-			finishGame();
-		}
 	}
+    
+    public void addMove(EQMoves.EQSingleMove move) {
+    	try {
+    		amatriciana.get(move.getRow()).get(move.getCol()).setNumber(move.getValue());
+    		turnLeft--;
+    		board.insert(move);
+    	} catch (EQMoves zeroMove) {
+    		try {
+				for (int i = 0; i < zeroMove.size(); i++) {
+					amatriciana.get(zeroMove.get(i).getRow()).get(zeroMove.get(i).getCol()).setNumber(zeroMove.get(i).getValue());
+					turnLeft--;
+					board.insert(zeroMove.get(i));
+				}
+			} catch (EQMoves m) {}
+    	}
+    	updateScore();
+    	if (turnLeft == 0) {
+			finishGame();
+		} else {
+			nextPlayer();
+		}
+    }
+    
+    public void updateScore() {
+    	scoreLayout.removeAllViewsInLayout();
+        TextView tw = new TextView(this);
+        tw.setText("Player 1: "+p1.getScore(board));
+        scoreLayout.addView(tw);
+        tw = new TextView(this);
+        tw.setText("Player 2: "+p2.getScore(board));
+        scoreLayout.addView(tw);
+    }
     
     public void drawCross(int row, int col) {
     	for (int i = 0; i < lato; i++) {

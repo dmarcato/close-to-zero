@@ -128,15 +128,6 @@ public class Cell extends View {
         Paint p = new Paint();
         p.setAntiAlias(true);
         
-        /*if (e.amatriciana[e.lato+1][e.lato+1].equals(this)) {
-        	setBkColor(Color.TRANSPARENT);
-        	p.setColor((e.turn)? 0xFF9999CC : 0xFFCC9999);
-        	canvas.drawCircle(size/2, size/2, size/2-6, p);
-
-        	p.setTextSize(size/3);
-            p.setColor(numberColor);
-            canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (3*size/4), p);
-        } else {*/
         p.setColor(borderColor);
         canvas.drawLine(0, 0, getWidth(), 0, p);
         canvas.drawLine(0, 0, 0, getHeight(), p);
@@ -217,16 +208,14 @@ public class Cell extends View {
     	invalidate();
     }
     
+    public void setNumber(int num) {
+    	setNumber(String.valueOf(num));
+    }
+    
     public void setNumber(String txt) {
     	number = txt;
     	numberSetted = true;
     	this.normal();
-    	//Aggiorno il punteggio totale
-    	if ((row != e.lato+1) && (col != e.lato+1)) {
-    		e.updateSum(row, col);
-    		e.setAround(row, col, Integer.parseInt(number));
-    		e.turnLeft--;
-    	}
     	invalidate();
     }
     
@@ -236,26 +225,6 @@ public class Cell extends View {
     	} else {
     		return 0;
     	}
-    }
-    
-    public void setAround(int num) {
-    	if ((num != 0) && (around[num] == false)) {
-    		--possibilities;
-    		around[num] = true;
-    	}
-    	if ((possibilities == 0) && (numberSetted == false)) {
-    		setNumber("0");
-    	}
-    }
-    
-    public Vector<Integer> getAvailableAround() {
-    	Vector<Integer> a = new Vector<Integer>();
-    	for (int i = 1; i <= e.lato; i++) {
-    		if (around[i] == false) {
-    			a.add(i);
-    		}
-    	}
-    	return a;
     }
     
     public int getSize() {

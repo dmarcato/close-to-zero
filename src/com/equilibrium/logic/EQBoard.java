@@ -1,5 +1,7 @@
 package com.equilibrium.logic;
 
+import java.util.Vector;
+
 import com.equilibrium.logic.EQCell;
 
 public class EQBoard implements Cloneable{
@@ -42,7 +44,7 @@ public class EQBoard implements Cloneable{
 	
 	public int getDimension() { return dimension; }
 	
-	public void insert(int v, int i, int j) {
+	public void insert(int v, int i, int j) throws EQMoves {
 		if (i < 0 || i > dimension || j < 0 || j > dimension)
 			return;
 		if (board[i][j].setValue(v)) {
@@ -68,8 +70,15 @@ public class EQBoard implements Cloneable{
 			rowsSum[i] += board[i][j].getValue();
 			columnsSum[j] += board[i][j].getValue();
 			
-			checkBoard();
+			EQMoves moves = checkBoard();
+			if (moves.size() > 0) {
+				throw moves;
+			}
 		}
+	}
+	
+	public void insert(EQMoves.EQSingleMove mv) throws EQMoves {
+		insert(mv.getValue(), mv.getRow(), mv.getCol());
 	}
 	
 	// Manca la propagazione
@@ -78,14 +87,17 @@ public class EQBoard implements Cloneable{
 		board[i][j].unsetValue();
 	}
 	
-	private void checkBoard() {
+	private EQMoves checkBoard() {
+		EQMoves moves = new EQMoves(); 
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
 				if (!board[i][j].isSet() && board[i][j].getPsb().size() == 0) {
-					board[i][j].setValue(0);
+					moves.add(new EQMoves.EQSingleMove(0, i, j));
+					//board[i][j].setValue(0);
 				}
 			}
 		}
+		return moves;
 	}
 
 	public Object clone() 
@@ -94,7 +106,15 @@ public class EQBoard implements Cloneable{
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
 				if (board[i][j].isSet())
-					newb.insert(Math.abs(board[i][j].getValue()), i, j);
+					try {
+						newb.insert(Math.abs(board[i][j].getValue()), i, j);
+					} catch (EQMoves e) {
+						try {
+							for (int k = 0; k < e.size(); k++) {
+								newb.insert(e.get(k));
+							}
+						} catch (EQMoves m) {}
+					}
 			}
 		}
 		return newb;
