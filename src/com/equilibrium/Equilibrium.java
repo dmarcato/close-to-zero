@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -40,6 +42,19 @@ import android.widget.Toast;
 
 public class Equilibrium extends Activity implements OnClickListener {
 	
+	Handler threadHandler = new Handler(){
+		// @Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case Equilibrium.AIMOVE:
+				addMove((EQMoves.EQSingleMove) msg.obj);
+				loadingDialog.dismiss();
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	};
+	
 	private class AIThread extends Thread {
 		
 		private int gameType = 0;
@@ -57,8 +72,10 @@ public class Equilibrium extends Activity implements OnClickListener {
 				move = EQAI.greedyAlg(board, p2, p1);
 				break;
 			}
-			addMove(move);
-			loadingDialog.dismiss();
+			Message m = new Message();
+            m.what = Equilibrium.AIMOVE;
+            m.obj = move;
+            Equilibrium.this.threadHandler.sendMessage(m);
 		}
 	}
 	
@@ -89,6 +106,8 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public static final int MENU_QUIT = 189;
 	
 	public static final int DIALOG_HELP = 165;
+	
+	public static final int AIMOVE = 875;
 	
     /** Called when the activity is first created. */
     @Override
