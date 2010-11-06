@@ -54,11 +54,13 @@ public class Cell extends View {
         super(context);
         e = (Equilibrium) getContext();
         logic = l;
+        if (logic != null) {
+        	row = logic.getRow();
+            col = logic.getCol();
+        }
         bkImage = e.getResources().getDrawable(com.equilibrium.R.drawable.trans);
         bkImage.setAlpha(255);
         sign = number = "";
-        row = logic.getRow();
-        col = logic.getCol();
         currentAlpha = originalAlpha;
         currentShadow = originalShadow;
         currentNumberColor = numberColor;
@@ -74,7 +76,7 @@ public class Cell extends View {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(measureWidth(widthMeasureSpec),
+    	setMeasuredDimension(measureWidth(widthMeasureSpec),
                 measureHeight(heightMeasureSpec));
     }
 
@@ -83,7 +85,7 @@ public class Cell extends View {
      * @param measureSpec A measureSpec packed into an int
      * @return The width of the view, honoring constraints from measureSpec
      */
-    private int measureWidth(int measureSpec) {
+    protected int measureWidth(int measureSpec) {
         int result = 0;
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
@@ -110,7 +112,7 @@ public class Cell extends View {
      * @param measureSpec A measureSpec packed into an int
      * @return The height of the view, honoring constraints from measureSpec
      */
-    private int measureHeight(int measureSpec) {
+    protected int measureHeight(int measureSpec) {
     	return size;
     }
     

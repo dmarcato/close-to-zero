@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,6 +34,7 @@ import android.view.TouchDelegate;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -106,6 +108,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public boolean showPartialSum = true;
 	public boolean cpu = false;
 	private LinearLayout scoreLayout;
+	private TableLayout numbersLayout;
 	protected ProgressDialog loadingDialog;
 	
 	private EQBoard board = null;
@@ -128,6 +131,8 @@ public class Equilibrium extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.main);
         
+        this.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        
         l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
         l.setGravity(Gravity.FILL_VERTICAL);
@@ -147,6 +152,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         cpu = prefs.getBoolean("vsCpu", false);
         showPartialSum = prefs.getBoolean("partialSum", true);
+        CellSum.SHOW_SUM = showPartialSum;
         lato = Integer.parseInt(prefs.getString("size", "6"));
 	}
     
@@ -197,6 +203,8 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void start() {
     	
+    	l.removeAllViews();
+    	
     	//Creo la board
     	board = new EQBoard(lato);
     	
@@ -229,44 +237,59 @@ public class Equilibrium extends Activity implements OnClickListener {
         	}
         }
         p1 = new EQPlayer(pRows, pCols, false);
+        p1.setColor(Color.GREEN);
         for (int i = 0; i < lato; i++) {
         	pRows.set(i, !pRows.get(i));
         	pCols.set(i, !pCols.get(i));
         }
     	p2 = new EQPlayer(pRows, pCols, cpu);
+    	p2.setColor(Color.MAGENTA);
     	
     	currentPlayer = p1;
-        
+    	
         TableLayout a = new TableLayout(this);
         a.setStretchAllColumns(true);
         
         amatriciana = new Vector<Vector<Cell>>();
-        for (int i = 0; i < lato; i++) {
+        for (int i = 0; i <= lato; i++) {
         	TableRow r = new TableRow(this);
         	amatriciana.add(new Vector<Cell>());
-        	for (int j = 0; j < lato; j++) {
-        		EQCell eqc = board.get(i, j);
+        	for (int j = 0; j <= lato; j++) {
         		Cell c = null;
-        		if (eqc.getSign()) {
-        			c = new CellPlus(this, eqc);
+        		if (i == lato || j == lato) {
+        			if (i != j) {
+        				c = new CellSum(this, i, j);
+        			}
         		} else {
-        			c = new CellMinus(this, eqc);
+	        		EQCell eqc = board.get(i, j);
+	        		if (eqc.getSign()) {
+	        			c = new CellPlus(this, eqc);
+	        		} else {
+	        			c = new CellMinus(this, eqc);
+	        		}
         		}
-        		amatriciana.get(i).add(c);
-        		r.addView(c);
+        		if (c != null) {
+        			amatriciana.get(i).add(c);
+        			r.addView(c);
+        		}
         	}
         	a.addView(r);
-        }
-        
+        }        
         if (l.getChildCount() > 0) {
         	l.removeViewAt(0);
         }
-        l.addView(a, 0);
         
         scoreLayout = new LinearLayout(this);
-        l.addView(scoreLayout, 1);
-        
-        updateScore();
+        scoreLayout.setHorizontalGravity(Gravity.CENTER);
+        scoreLayout.setPadding(2, 2, 2, 2);
+    	updateScore();
+    	
+    	numbersLayout = new TableLayout(this);
+    	
+        //Aggiungo gli elementi alla finestra
+    	l.addView(scoreLayout);
+        l.addView(a);
+        l.addView(numbersLayout);
         
         if (currentPlayer.isBot()) {
         	doAIMove();
@@ -290,7 +313,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     }
     
     public void showNumbers(int row, int col) {
-    	TableLayout b = new TableLayout(this);
+    	numbersLayout.removeAllViews();
     	TableRow c = new TableRow(this);
     	EQCell cell = board.get(row, col);
     	Vector<Integer> around = cell.getPsb();
@@ -303,17 +326,11 @@ public class Equilibrium extends Activity implements OnClickListener {
             btn.setOnClickListener(this);
             c.addView(btn);
     	}
-    	b.addView(c);
-    	if (l.getChildCount() > 2) {
-    		l.removeViewAt(2);
-    	}
-    	l.addView(b, 2);
+    	numbersLayout.addView(c);
     }
     
     public void hideNumbers() {
-    	if (l.getChildCount() > 2) {
-    		l.removeViewAt(2);
-    	}
+    	numbersLayout.removeAllViews();
     }
     
     public void finishGame() {
@@ -376,22 +393,38 @@ public class Equilibrium extends Activity implements OnClickListener {
 				}
 			} catch (EQMoves m) {}
     	}
-    	updateScore();
     	if (turnLeft == 0) {
+    		updateScore();
 			finishGame();
 		} else {
 			nextPlayer();
+			updateScore();
 		}
     }
     
     public void updateScore() {
-    	scoreLayout.removeAllViewsInLayout();
-        TextView tw = new TextView(this);
-        tw.setText("Player 1: "+p1.getScore(board));
-        scoreLayout.addView(tw);
-        tw = new TextView(this);
-        tw.setText("Player 2: "+p2.getScore(board));
-        scoreLayout.addView(tw);
+    	String current = "";
+    	scoreLayout.removeAllViews();
+    	TextView t = new TextView(this);
+    	t.setTextColor(p1.getColor());
+    	t.setTypeface(Typeface.DEFAULT_BOLD);
+    	if (p1 == currentPlayer) {
+    		current = "» ";
+    	}
+    	t.setText(current+p1.toString() + ": " + p1.getScore(board));
+    	scoreLayout.addView(t);
+    	t = new TextView(this);
+    	t.setText("     ");
+    	scoreLayout.addView(t);
+    	t = new TextView(this);
+    	t.setTextColor(p2.getColor());
+    	t.setTypeface(Typeface.DEFAULT_BOLD);
+    	current = "";
+    	if (p2 == currentPlayer) {
+    		current = "» ";
+    	}
+    	t.setText(current+p2.toString() + ": " + p2.getScore(board));
+    	scoreLayout.addView(t);
     }
     
     public void drawCross(int row, int col) {

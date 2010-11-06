@@ -25,4 +25,6 @@
 <string name="help">Aiuto</string>
 <string name="help_content">Istruzioni per l'uso =)</string>
 <string name="loading">Caricamento, attendere...</string>
+<string name="human">Umano</string>
+<string name="cpu">CPU</string>
 </resources>

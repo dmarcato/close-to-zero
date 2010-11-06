@@ -25,4 +25,6 @@
 <string name="help">Help</string>
 <string name="help_content">This is how it works: bla bla bla =)</string>
 <string name="loading">Loading, please wait...</string>
+<string name="human">Human</string>
+<string name="cpu">CPU</string>
 </resources>

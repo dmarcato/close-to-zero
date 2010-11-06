@@ -8,7 +8,8 @@ public class EQPlayer {
 	//private EQBoard board;
 	private Vector<Boolean> playerRows;
 	private Vector<Boolean> playerColumns;
-	private boolean bot = false; 
+	private boolean bot = false;
+	private int color = 0;
 	
 	public EQPlayer(Vector<Boolean> rows, Vector<Boolean> cols, boolean b) 
 	{
@@ -69,5 +70,23 @@ public class EQPlayer {
 			return true;
 		}
 		return false;
+	}
+	
+	public String toString() {
+		String out = "";
+		if (isBot()) {
+			out += "AI";
+		} else {
+			out += "Human";
+		}
+		return out;
+	}
+
+	public void setColor(int color) {
+		this.color = color;
+	}
+
+	public int getColor() {
+		return color;
 	}
 }
