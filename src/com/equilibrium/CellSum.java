@@ -138,6 +138,22 @@ public class CellSum extends Cell {
     }
 	
 	public boolean onTouchEvent(MotionEvent event) {
+		switch (event.getAction()) {
+    	case MotionEvent.ACTION_DOWN:
+    		if (e.lastClicked != null) {
+				e.lastClicked.normal();
+				e.eraseCross(e.lastClicked.row, e.lastClicked.col);
+    		}
+			e.lastMoved = this;
+    		break;
+    	case MotionEvent.ACTION_UP:
+    		if ((e.lastClicked != null) && (e.lastClicked != this)) {
+    			e.lastClicked.normal();
+    		}
+    		e.lastClicked = this;
+    		e.drawCross(row, col);
+    		break;
+    	}
 		return true;
     }
 

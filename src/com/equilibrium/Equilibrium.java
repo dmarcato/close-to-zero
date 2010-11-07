@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -91,17 +92,17 @@ public class Equilibrium extends Activity implements OnClickListener {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case Equilibrium.AIMOVE:
+				stopLoading();
 				EQMoves.EQSingleMove move = (EQMoves.EQSingleMove) msg.obj;
 				addMove(move);
 				if (lastClicked != null) {
 					lastClicked.normal();
-					eraseCross(selectedRow, selectedCol);
+					eraseCross(lastClicked.logic.getRow(), lastClicked.logic.getCol());
 				}
 				drawCross(move.getRow(), move.getCol());
 				lastClicked = amatriciana.get(move.getRow()).get(move.getCol());
 				lastClicked.select();
 				//loadingDialog.dismiss();
-				stopLoading();
 				break;
 			}
 			super.handleMessage(msg);
@@ -242,7 +243,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     	Dialog dialog = null;
     	switch (id) {
     	case DIALOG_HELP:
-    		dialog = new Dialog(this.getApplicationContext());
+    		dialog = new Dialog(this);
 
         	dialog.setContentView(R.layout.help);
         	dialog.setTitle(R.string.help);
@@ -516,15 +517,61 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void drawCross(int row, int col) {
     	for (int i = 0; i < lato; i++) {
-    		amatriciana.get(row).get(i).highlight();
-    		amatriciana.get(i).get(col).highlight();
+    		if (row != lato) {
+    			amatriciana.get(row).get(i).highlight();
+    		}
+    		if (col != lato) {
+    			amatriciana.get(i).get(col).highlight();
+    		}
     	}
     }
     
     public void eraseCross(int row, int col) {
     	for (int i = 0; i < lato; i++) {
-    		amatriciana.get(row).get(i).normal();
-    		amatriciana.get(i).get(col).normal();
+    		if (row != lato) {
+    			amatriciana.get(row).get(i).normal();
+    		}
+    		if (col != lato) {
+    			amatriciana.get(i).get(col).normal();
+    		}
     	}
     }
+    
+    /*public boolean onTouchEvent(MotionEvent event) {
+    	int x = (int) event.getX();
+    	int y = (int) event.getY();
+    	Cell theCell = null;
+    	for (int i = 0; i < lato; i++) {
+    		for (int j = 0; j < lato; j++) {
+    			Rect r = new Rect();
+    			Cell c = amatriciana.get(i).get(j);
+    			r.left = c.getLeft();
+    			r.top = c.getTop();
+    			r.right = c.getRight();
+    			r.bottom = c.getBottom();
+    			if (r.contains(x, y)) {
+    				theCell = amatriciana.get(i).get(j);
+    			}
+    		}
+    	}
+    	if (theCell != null) {
+			switch (event.getAction()) {
+	    	case MotionEvent.ACTION_DOWN:
+	    		if (lastClicked != null) {
+					lastClicked.normal();
+					eraseCross(lastClicked.row, lastClicked.col);
+	    		}
+				lastMoved = theCell;
+	    		break;
+	    	case MotionEvent.ACTION_UP:
+	    		if ((lastClicked != null) && (lastClicked != theCell)) {
+	    			lastClicked.normal();
+	    		}
+	    		lastClicked = theCell;
+	    		drawCross(theCell.logic.getRow(), theCell.logic.getCol());
+	    		break;
+	    	}
+    	}
+		return true;
+    }*/
 }
