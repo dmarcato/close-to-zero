@@ -37,14 +37,14 @@ public class EQPlayer {
 	{
 		int score = 0;
 		for (int i = 0; i < board.getDimension(); i++) {
-			if (playerRows.get(i)) {
+			//if (playerRows.get(i)) {
 				score += getRowSum(board, i);
-			}
+			//}
 		}
 		for (int i = 0; i < board.getDimension(); i++) {
-			if (playerColumns.get(i)) {
+			//if (playerColumns.get(i)) {
 				score += getColumnSum(board, i);
-			}
+			//}
 		}
 		return score;
 	}
@@ -61,7 +61,7 @@ public class EQPlayer {
 	
 	public boolean isMineCol(int c)
 	{
-		return playerRows.get(c);
+		return playerColumns.get(c);
 	}
 	
 	public boolean isMine(EQCell c)

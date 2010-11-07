@@ -20,13 +20,19 @@ public class EQCell implements Cloneable {
 		column = j;
 		plus = ((i+j)%2 == 0);
 		for (int k = 1; k <= max; k++)
-			possibilities.add(k);
+			possibilities.add(0);
 	}
 	
 	public int getRow() { return row; }
 	public int getCol() { return column; }
 	
-	public Vector<Integer> getPsb() { return possibilities; }
+	public Vector<Integer> getPsb() {
+		Vector<Integer> psb = new Vector<Integer>();
+		for (int i = 0; i < possibilities.size(); i++)
+			if (possibilities.get(i) == 0)
+				psb.add(i+1);
+		return psb; 
+	}
 	
 	public boolean isSet() { return setted; }
 	
@@ -34,12 +40,12 @@ public class EQCell implements Cloneable {
 	public int getValue() { return value; }
 	
 	public boolean setValue(Integer v) { 
-		if (setted || (v > 0 && !possibilities.contains(v))) 
+		if (setted || (v > 0 && possibilities.get(v-1) > 0)) 
 			return false;
 		value = v;
 		if (!plus) value *= -1;
 		setted = true;
-		return true;
+		return v != 0;
 	}
 	
 	public void unsetValue() {
@@ -56,6 +62,16 @@ public class EQCell implements Cloneable {
 		if (setted)
 			cell.setValue(value);
 		return cell;
+	}
+	
+	public void addPsb(int v)
+	{
+		possibilities.set(v-1, possibilities.get(v-1)-1);
+	}
+	
+	public void removePsb(int v)
+	{
+		possibilities.set(v-1, possibilities.get(v-1)+1);
 	}
 	
 	public String toString() {

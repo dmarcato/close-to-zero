@@ -49,23 +49,23 @@ public class EQBoard implements Cloneable{
 			return;
 		if (board[i][j].setValue(v)) {
 			if (j-1 >= 0) {
-				board[i][j-1].getPsb().removeElement(v);
+				board[i][j-1].removePsb(v);
 				if (i-1 >= 0)
-					board[i-1][j-1].getPsb().removeElement(v);
+					board[i-1][j-1].removePsb(v);
 				if (i+1 < dimension)
-					board[i+1][j-1].getPsb().removeElement(v);
+					board[i+1][j-1].removePsb(v);
 			}
 			if (j+1 < dimension) {
-				board[i][j+1].getPsb().removeElement(v);
+				board[i][j+1].removePsb(v);
 				if (i-1 >= 0)
-					board[i-1][j+1].getPsb().removeElement(v);
+					board[i-1][j+1].removePsb(v);
 				if (i+1 < dimension)
-					board[i+1][j+1].getPsb().removeElement(v);
+					board[i+1][j+1].removePsb(v);
 			}
 			if (i-1 >= 0)
-				board[i-1][j].getPsb().removeElement(v);
+				board[i-1][j].removePsb(v);
 			if (i+1 < dimension)
-				board[i+1][j].getPsb().removeElement(v);
+				board[i+1][j].removePsb(v);
 			
 			rowsSum[i] += board[i][j].getValue();
 			columnsSum[j] += board[i][j].getValue();
@@ -84,7 +84,32 @@ public class EQBoard implements Cloneable{
 	// Manca la propagazione
 	public void delete(int i, int j)
 	{
-		board[i][j].unsetValue();
+		int v = Math.abs(board[i][j].getValue());
+		if (v > 0){
+			if (j-1 >= 0) {
+				board[i][j-1].addPsb(v);
+				if (i-1 >= 0)
+					board[i-1][j-1].addPsb(v);
+				if (i+1 < dimension)
+					board[i+1][j-1].addPsb(v);
+			}
+			if (j+1 < dimension) {
+				board[i][j+1].addPsb(v);
+				if (i-1 >= 0)
+					board[i-1][j+1].addPsb(v);
+				if (i+1 < dimension)
+					board[i+1][j+1].addPsb(v);
+			}
+			if (i-1 >= 0)
+				board[i-1][j].addPsb(v);
+			if (i+1 < dimension)
+				board[i+1][j].addPsb(v);
+			
+			rowsSum[i] -= board[i][j].getValue();
+			columnsSum[j] -= board[i][j].getValue();
+			
+			board[i][j].unsetValue();
+		}
 	}
 	
 	private EQMoves checkBoard() {
