@@ -10,11 +10,21 @@
 		android:entries="@array/list_sizes"
 		android:entryValues="@array/list_sizes_val" />
  
-	<CheckBoxPreference
-		android:title="@string/vs_cpu"
-		android:defaultValue="false"
-		android:summary="@string/vs_cpu_summary"
-		android:key="vsCpu" />
+	<ListPreference
+		android:title="@string/p1"
+		android:summary="@string/p1_summary"
+		android:key="p1Cpu"
+		android:defaultValue="human"
+		android:entries="@array/list_player_type"
+		android:entryValues="@array/list_player_type_val" />
+		
+	<ListPreference
+		android:title="@string/p2"
+		android:summary="@string/p2_summary"
+		android:key="p2Cpu"
+		android:defaultValue="human"
+		android:entries="@array/list_player_type"
+		android:entryValues="@array/list_player_type_val" />
 		
 	<CheckBoxPreference
 		android:title="@string/partial_sum"

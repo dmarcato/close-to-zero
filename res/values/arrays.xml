@@ -13,4 +13,10 @@
 <item>8</item>
 <item>9</item>
 </string-array>
+<string-array name="list_player_type"><item>Human</item>
+<item>CPU</item>
+</string-array>
+<string-array name="list_player_type_val"><item>human</item>
+<item>cpu</item>
+</string-array>
 </resources>

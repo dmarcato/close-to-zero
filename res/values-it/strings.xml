@@ -8,8 +8,8 @@
 
 
 
-<string name="red_player_win">Vince il giocatore rosso!</string>
-<string name="blue_player_win">Vince il giocatore blu!</string>
+<string name="player1_win">Vince il giocatore 1!</string>
+<string name="player2_win">Vince il giocatore 2!</string>
 <string name="noone_win">Parità, nessun vincitore...</string>
 <string name="new_game">Nuova partita</string>
 <string name="close_dialog">Chiudi</string>
@@ -27,4 +27,8 @@
 <string name="loading">Caricamento, attendere...</string>
 <string name="human">Umano</string>
 <string name="cpu">CPU</string>
+<string name="p1">Giocatore 1</string>
+<string name="p1_summary">Scegli il tipo del Giocatore 1</string>
+<string name="p2">Giocatore 2</string>
+<string name="p2_summary">Scegli il tipo del Giocatore 2</string>
 </resources>

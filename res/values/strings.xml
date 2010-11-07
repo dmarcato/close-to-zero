@@ -8,8 +8,8 @@
 
 
 
-<string name="red_player_win">Red player wins!</string>
-<string name="blue_player_win">Blue player wins!</string>
+<string name="player1_win">Player 1 wins!</string>
+<string name="player2_win">Player 2 wins!</string>
 <string name="noone_win">Noone wins...</string>
 <string name="new_game">New game</string>
 <string name="close_dialog">Close</string>
@@ -27,4 +27,8 @@
 <string name="loading">Loading, please wait...</string>
 <string name="human">Human</string>
 <string name="cpu">CPU</string>
+<string name="p1">Player 1</string>
+<string name="p1_summary">Choose the type for Player 1</string>
+<string name="p2">Player 2</string>
+<string name="p2_summary">Choose the type for Player 2</string>
 </resources>

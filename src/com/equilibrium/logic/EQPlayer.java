@@ -71,16 +71,6 @@ public class EQPlayer {
 		}
 		return false;
 	}
-	
-	public String toString() {
-		String out = "";
-		if (isBot()) {
-			out += "AI";
-		} else {
-			out += "Human";
-		}
-		return out;
-	}
 
 	public void setColor(int color) {
 		this.color = color;
