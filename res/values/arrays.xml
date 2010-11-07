@@ -19,4 +19,32 @@
 <string-array name="list_player_type_val"><item>human</item>
 <item>cpu</item>
 </string-array>
+
+
+<string-array name="list_player_color"><item>Red</item>
+<item>Blue</item>
+<item>Green</item>
+<item>White</item>
+<item>Gray</item>
+<item>Cyan</item>
+<item>Magenta</item>
+<item>Yellow</item>
+</string-array>
+<string-array name="list_player_color_val"><item>red</item>
+<item>blue</item>
+<item>green</item>
+<item>white</item>
+<item>gray</item>
+<item>cyan</item>
+<item>magenta</item>
+<item>yellow</item>
+</string-array>
+<string-array name="list_cpu_level"><item>Easy</item>
+<item>Normal</item>
+<item>Hard</item>
+</string-array>
+<string-array name="list_cpu_level_val"><item>1</item>
+<item>2</item>
+<item>3</item>
+</string-array>
 </resources>

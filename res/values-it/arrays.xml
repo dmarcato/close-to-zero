@@ -4,4 +4,18 @@
 <string-array name="list_player_type"><item>Umano</item>
 <item>CPU</item>
 </string-array>
+
+<string-array name="list_player_color"><item>Rosso</item>
+<item>Blu</item>
+<item>Verde</item>
+<item>Bianco</item>
+<item>Grigio</item>
+<item>Azzurro</item>
+<item>Magenta</item>
+<item>Giallo</item>
+</string-array>
+<string-array name="list_cpu_level"><item>Facile</item>
+<item>Normale</item>
+<item>Difficile</item>
+</string-array>
 </resources>

@@ -18,20 +18,8 @@ public class CellSum extends Cell {
 		super(context, null);
 		this.row = r;
 		this.col = c;
+		this.number = "0";
 		this.signColor = Color.BLACK;
-		if (col == e.lato && row != e.lato) {
-			if (e.players.get().isMineRow(row)) {
-				this.bkColor = e.players.get().getColor();
-			} else {
-				this.bkColor = e.players.getOther().getColor();
-			}
-		} else if (row == e.lato && col != e.lato) {
-			if (e.players.get().isMineCol(col)) {
-				this.bkColor = e.players.get().getColor();
-			} else {
-				this.bkColor = e.players.getOther().getColor();
-			}
-		}
 	}
 	
 	
@@ -107,7 +95,21 @@ public class CellSum extends Cell {
     protected void onDraw(Canvas canvas) {
         //super.onDraw(canvas);
         
-    	canvas.drawColor(Color.argb(100, Color.red(bkColor), Color.green(bkColor), Color.blue(bkColor)));
+    	if (col == e.lato && row != e.lato) {
+			if (e.players.get().isMineRow(row)) {
+				this.bkColor = e.players.get().getColor();
+			} else {
+				this.bkColor = e.players.getOther().getColor();
+			}
+		} else if (row == e.lato && col != e.lato) {
+			if (e.players.get().isMineCol(col)) {
+				this.bkColor = e.players.get().getColor();
+			} else {
+				this.bkColor = e.players.getOther().getColor();
+			}
+		}
+    	//canvas.drawColor(Color.argb(100, Color.red(bkColor), Color.green(bkColor), Color.blue(bkColor)));
+    	canvas.drawColor(bkColor);
         
         Paint p = new Paint();
         p.setAntiAlias(true);
@@ -122,8 +124,8 @@ public class CellSum extends Cell {
         //canvas.drawRGB(Color.red(signColor), Color.green(signColor), Color.blue(signColor));
         /*int padding = (int) Math.round(0.17*size);
         bkImage.setBounds(padding, padding, size-padding, size-padding);
-        bkImage.draw(canvas);
-        canvas.drawARGB(currentAlpha, 255, 255, 255);*/
+        bkImage.draw(canvas);*/
+        canvas.drawARGB(selectedAlpha, 255, 255, 255);
         
         if (CellSum.SHOW_SUM) {
         	p.setAlpha(255);

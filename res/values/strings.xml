@@ -28,7 +28,14 @@
 <string name="human">Human</string>
 <string name="cpu">CPU</string>
 <string name="p1">Player 1</string>
-<string name="p1_summary">Choose the type for Player 1</string>
+<string name="p1_summary">Set-up Player 1</string>
 <string name="p2">Player 2</string>
-<string name="p2_summary">Choose the type for Player 2</string>
+<string name="p2_summary">Set-up Player 2</string>
+<string name="player_type">Type</string>
+<string name="player_type_summary">Choose between human and CPU</string>
+<string name="player_color">Color</string>
+<string name="player_color_summary">Choose the color for the player</string>
+<string name="cpu_level">CPU level</string>
+<string name="cpu_level_summary">Choose how much smart is the CPU</string>
+<string name="thinking">Thinking...</string>
 </resources>

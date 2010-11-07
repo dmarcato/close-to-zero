@@ -9,22 +9,58 @@
 		android:defaultValue="6"
 		android:entries="@array/list_sizes"
 		android:entryValues="@array/list_sizes_val" />
- 
-	<ListPreference
+
+	<PreferenceScreen
 		android:title="@string/p1"
-		android:summary="@string/p1_summary"
-		android:key="p1Cpu"
-		android:defaultValue="human"
-		android:entries="@array/list_player_type"
-		android:entryValues="@array/list_player_type_val" />
+		android:summary="@string/p1_summary">
 		
-	<ListPreference
+		<ListPreference
+			android:title="@string/player_type"
+			android:summary="@string/player_type_summary"
+			android:key="p1Cpu"
+			android:defaultValue="human"
+			android:entries="@array/list_player_type"
+			android:entryValues="@array/list_player_type_val" />
+		
+		<ListPreference
+			android:title="@string/player_color"
+			android:summary="@string/player_color_summary"
+			android:key="p1Color"
+			android:defaultValue="green"
+			android:entries="@array/list_player_color"
+			android:entryValues="@array/list_player_color_val" />
+		
+	</PreferenceScreen>
+		
+	<PreferenceScreen
 		android:title="@string/p2"
-		android:summary="@string/p2_summary"
-		android:key="p2Cpu"
-		android:defaultValue="human"
-		android:entries="@array/list_player_type"
-		android:entryValues="@array/list_player_type_val" />
+		android:summary="@string/p2_summary">
+		
+		<ListPreference
+			android:title="@string/player_type"
+			android:summary="@string/player_type_summary"
+			android:key="p2Cpu"
+			android:defaultValue="human"
+			android:entries="@array/list_player_type"
+			android:entryValues="@array/list_player_type_val" />
+			
+		<ListPreference
+			android:title="@string/player_color"
+			android:summary="@string/player_color_summary"
+			android:key="p2Color"
+			android:defaultValue="magenta"
+			android:entries="@array/list_player_color"
+			android:entryValues="@array/list_player_color_val" />
+		
+	</PreferenceScreen>
+	
+	<ListPreference
+		android:title="@string/cpu_level"
+		android:summary="@string/cpu_level_summary"
+		android:key="cpuLevel"
+		android:defaultValue="1"
+		android:entries="@array/list_cpu_level"
+		android:entryValues="@array/list_cpu_level_val" />
 		
 	<CheckBoxPreference
 		android:title="@string/partial_sum"

@@ -28,7 +28,14 @@
 <string name="human">Umano</string>
 <string name="cpu">CPU</string>
 <string name="p1">Giocatore 1</string>
-<string name="p1_summary">Scegli il tipo del Giocatore 1</string>
+<string name="p1_summary">Configura il Giocatore 1</string>
 <string name="p2">Giocatore 2</string>
-<string name="p2_summary">Scegli il tipo del Giocatore 2</string>
+<string name="p2_summary">Configura il Giocatore 2</string>
+<string name="player_type">Tipo</string>
+<string name="player_type_summary">Scegli tra umano e CPU</string>
+<string name="player_color">Colore</string>
+<string name="player_color_summary">Scegli il colore per il giocatore</string>
+<string name="cpu_level">Livello CPU</string>
+<string name="cpu_level_summary">Scegli il livello di difficoltà della CPU</string>
+<string name="thinking">Sto pensando...</string>
 </resources>

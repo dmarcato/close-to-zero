@@ -54,7 +54,10 @@ public class Equilibrium extends Activity implements OnClickListener {
 		
 		private int gameType = 0;						//Indica il tipo di algoritmo da usare
 		
-		public static final int STANDARD = 1;			//Indica i tipi di algoritmi disponibili
+		//Indica i tipi di algoritmi disponibili
+		public static final int EASY = 1;
+		public static final int STANDARD = 2;
+		public static final int HARD = 3;
 		
 		public AIThread(int gt) {
 			this.gameType = gt;
@@ -63,7 +66,13 @@ public class Equilibrium extends Activity implements OnClickListener {
 		public void run() {
 			EQMoves.EQSingleMove move = null;
 			switch (this.gameType) {
+			case AIThread.EASY:
+				move = EQAI.simpleAlg(board, players.get(), players.getOther());
+				break;
 			case AIThread.STANDARD:
+				move = EQAI.greedyAlg(board, players.get(), players.getOther());
+				break;
+			case AIThread.HARD:
 				move = EQAI.greedyAlg(board, players.get(), players.getOther());
 				break;
 			}
@@ -113,6 +122,9 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public boolean showPartialSum = true;
 	public boolean p1Cpu = false;
 	public boolean p2Cpu = false;
+	public String p1Color = "green";
+	public String p2Color = "magenta";
+	public int cpuLevel = AIThread.EASY;
 	private LinearLayout scoreLayout;
 	private TableLayout numbersLayout;
 	protected ProgressDialog loadingDialog;
@@ -153,6 +165,9 @@ public class Equilibrium extends Activity implements OnClickListener {
     		firstRun = false;
     		start();
     	}
+    	if (scoreLayout != null) {
+			scoreLayout.invalidate();
+		}
     }
     
     private boolean getPrefs() {
@@ -170,6 +185,19 @@ public class Equilibrium extends Activity implements OnClickListener {
         if (newP2Cpu != p2Cpu) {
         	p2Cpu = newP2Cpu;
         	ris = true;
+        }
+        
+        int newCpuLevel = Integer.parseInt(prefs.getString("cpuLevel", String.valueOf(AIThread.EASY)));
+        if (newCpuLevel != cpuLevel) {
+        	cpuLevel = newCpuLevel;
+        	ris = true;
+        }
+        
+        p1Color = prefs.getString("p1Color", "green");
+        p2Color = prefs.getString("p2Color", "magenta");
+        if (players != null) {
+        	players.get(1).setColor(Color.parseColor(p1Color));
+        	players.get(2).setColor(Color.parseColor(p2Color));
         }
         
         showPartialSum = prefs.getBoolean("partialSum", true);
@@ -263,13 +291,13 @@ public class Equilibrium extends Activity implements OnClickListener {
         	}
         }
         EQPlayer p1 = new EQPlayer(pRows, pCols, p1Cpu);
-        p1.setColor(Color.GREEN);
+        p1.setColor(Color.parseColor(p1Color));
         for (int i = 0; i < lato; i++) {
         	pRows.set(i, !pRows.get(i));
         	pCols.set(i, !pCols.get(i));
         }
     	EQPlayer p2 = new EQPlayer(pRows, pCols, p2Cpu);
-    	p2.setColor(Color.MAGENTA);
+    	p2.setColor(Color.parseColor(p2Color));
     	
     	players = new Players(p1, p2);
     	
@@ -325,7 +353,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     public void doAIMove() {
     	//loadingDialog = ProgressDialog.show(this, "", getResources().getText(R.string.loading), true);
     	startLoading();
-    	new AIThread(AIThread.STANDARD).start();
+    	new AIThread(cpuLevel).start();
     }
     
     public void nextPlayer() {
@@ -337,10 +365,20 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void startLoading() {
     	this.blockInteraction = true;
+    	numbersLayout.removeAllViews();
+    	TextView t = new TextView(this);
+    	t.setTextColor(players.get().getColor());
+    	t.setTextSize(20);
+    	t.setTypeface(Typeface.DEFAULT_BOLD);
+    	t.setText(R.string.thinking);
+    	t.setGravity(Gravity.CENTER);
+    	t.setPadding(5, 5, 5, 5);
+    	numbersLayout.addView(t);
     }
     
     public void stopLoading() {
     	this.blockInteraction = false;
+    	numbersLayout.removeAllViews();
     }
     
     public void showNumbers(int row, int col) {
@@ -364,6 +402,9 @@ public class Equilibrium extends Activity implements OnClickListener {
     }
     
     public void hideNumbers() {
+    	if (blockInteraction) {
+    		return;
+    	}
     	numbersLayout.removeAllViews();
     }
     
@@ -372,9 +413,9 @@ public class Equilibrium extends Activity implements OnClickListener {
     	int p2Score = players.get(2).getScore(board);
     	int winnerText;
     	if (p1Score < p2Score) {
-    		winnerText = R.string.player2_win;
-    	} else if (p1Score > p2Score) {
     		winnerText = R.string.player1_win;
+    	} else if (p1Score > p2Score) {
+    		winnerText = R.string.player2_win;
     	} else {
     		winnerText = R.string.noone_win;
     	}
