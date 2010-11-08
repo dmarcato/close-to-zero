@@ -3,7 +3,11 @@ package com.equilibrium;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Shader;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View.MeasureSpec;
@@ -109,15 +113,30 @@ public class CellSum extends Cell {
 			}
 		}
     	//canvas.drawColor(Color.argb(100, Color.red(bkColor), Color.green(bkColor), Color.blue(bkColor)));
-    	canvas.drawColor(bkColor);
-        
+    	//canvas.drawColor(bkColor);
+    	
         Paint p = new Paint();
         p.setAntiAlias(true);
         
+        p.setColor(bkColor);
+        if (row == e.lato) {
+        	p.setShader(new LinearGradient(size / 2, 0, size / 2, size, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
+        	canvas.drawRect(new Rect(0, 0, size, size / 2), p);
+        	canvas.drawArc(new RectF(0, 0, size, size), 0, 180, false, p);
+        } else {
+        	p.setShader(new LinearGradient(0, size / 2, size, size / 2, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
+        	canvas.drawRect(new Rect(0, 0, size / 2, size), p);
+        	canvas.drawArc(new RectF(0, 0, size, size), -90, 180, false, p);
+        }
+        p.setShader(null);
         p.setColor(borderColor);
         p.setAlpha(100);
-        canvas.drawLine(0, 0, getWidth(), 0, p);
-        canvas.drawLine(0, 0, 0, getHeight(), p);
+        if (row != e.lato) {
+        	canvas.drawLine(0, 0, getWidth(), 0, p);
+        }
+        if (col != e.lato) {
+        	canvas.drawLine(0, 0, 0, getHeight(), p);
+        }
         canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
         canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
         
@@ -125,7 +144,7 @@ public class CellSum extends Cell {
         /*int padding = (int) Math.round(0.17*size);
         bkImage.setBounds(padding, padding, size-padding, size-padding);
         bkImage.draw(canvas);*/
-        canvas.drawARGB(selectedAlpha, 255, 255, 255);
+        //canvas.drawARGB(selectedAlpha, 255, 255, 255);
         
         if (CellSum.SHOW_SUM) {
         	p.setAlpha(255);
