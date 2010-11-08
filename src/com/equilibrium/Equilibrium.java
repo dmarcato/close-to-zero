@@ -195,7 +195,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         }
         
         p1Color = prefs.getString("p1Color", "green");
-        p2Color = prefs.getString("p2Color", "magenta");
+        p2Color = prefs.getString("p2Color", "yellow");
         if (players != null) {
         	players.get(1).setColor(Color.parseColor(p1Color));
         	players.get(2).setColor(Color.parseColor(p2Color));

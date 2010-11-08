@@ -11,6 +11,7 @@
 		android:entryValues="@array/list_sizes_val" />
 
 	<PreferenceScreen
+		android:key="p1"
 		android:title="@string/p1"
 		android:summary="@string/p1_summary">
 		
@@ -33,6 +34,7 @@
 	</PreferenceScreen>
 		
 	<PreferenceScreen
+		android:key="p2"
 		android:title="@string/p2"
 		android:summary="@string/p2_summary">
 		
@@ -48,7 +50,7 @@
 			android:title="@string/player_color"
 			android:summary="@string/player_color_summary"
 			android:key="p2Color"
-			android:defaultValue="magenta"
+			android:defaultValue="yellow"
 			android:entries="@array/list_player_color"
 			android:entryValues="@array/list_player_color_val" />
 		
