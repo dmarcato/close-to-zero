@@ -70,4 +70,10 @@
 		android:summary="@string/partial_sum_summary"
 		android:key="partialSum" />
 	
+	<CheckBoxPreference
+		android:title="@string/vibration"
+		android:defaultValue="true"
+		android:summary="@string/vibration_summary"
+		android:key="canVibrate" />
+	
 </PreferenceScreen>

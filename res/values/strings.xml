@@ -38,4 +38,6 @@
 <string name="cpu_level">CPU level</string>
 <string name="cpu_level_summary">Choose how much smart is the CPU</string>
 <string name="thinking">Thinking...</string>
+<string name="vibration">Haptic feedback</string>
+<string name="vibration_summary">Haptic feedback for moves</string>
 </resources>

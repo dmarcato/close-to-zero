@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -38,6 +40,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -93,6 +96,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 			switch (msg.what) {
 			case Equilibrium.AIMOVE:
 				stopLoading();
+				doVibration();
 				EQMoves.EQSingleMove move = (EQMoves.EQSingleMove) msg.obj;
 				addMove(move);
 				if (lastClicked != null) {
@@ -127,10 +131,12 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public String p2Color = "magenta";
 	public int cpuLevel = AIThread.EASY;
 	private LinearLayout scoreLayout;
-	private TableLayout numbersLayout;
+	private HorizontalScrollView numbersLayout;
 	protected ProgressDialog loadingDialog;
 	private boolean firstRun = true;
 	private boolean blockInteraction = false;
+	private boolean canVibrate = true;
+	private Vibrator vibro;
 	
 	private EQBoard board = null;
 	public Players players = null;
@@ -151,6 +157,8 @@ public class Equilibrium extends Activity implements OnClickListener {
         //setContentView(R.layout.main);
         
         this.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        
+        vibro = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         
         l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
@@ -203,6 +211,9 @@ public class Equilibrium extends Activity implements OnClickListener {
         
         showPartialSum = prefs.getBoolean("partialSum", true);
         CellSum.SHOW_SUM = showPartialSum;
+        
+        canVibrate = prefs.getBoolean("canVibrate", true);
+        
         int newLato = Integer.parseInt(prefs.getString("size", "6"));
         if (newLato != lato) {
         	lato = newLato;
@@ -339,7 +350,11 @@ public class Equilibrium extends Activity implements OnClickListener {
         scoreLayout.setPadding(2, 2, 2, 2);
     	updateScore();
     	
-    	numbersLayout = new TableLayout(this);
+    	numbersLayout = new HorizontalScrollView(this);
+    	numbersLayout.setHorizontalFadingEdgeEnabled(true);
+    	numbersLayout.setFadingEdgeLength(30);
+    	numbersLayout.setFillViewport(true);
+    	numbersLayout.setSmoothScrollingEnabled(true);
     	
         //Aggiungo gli elementi alla finestra
     	l.addView(scoreLayout);
@@ -387,6 +402,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     		return;
     	}
     	numbersLayout.removeAllViews();
+    	TableLayout table = new TableLayout(this);
     	TableRow c = new TableRow(this);
     	EQCell cell = board.get(row, col);
     	Vector<Integer> around = cell.getPsb();
@@ -399,7 +415,8 @@ public class Equilibrium extends Activity implements OnClickListener {
             btn.setOnClickListener(this);
             c.addView(btn);
     	}
-    	numbersLayout.addView(c);
+    	table.addView(c);
+    	numbersLayout.addView(table);
     }
     
     public void hideNumbers() {
@@ -443,8 +460,15 @@ public class Equilibrium extends Activity implements OnClickListener {
 		Button b = (Button) v;
 		EQMoves.EQSingleMove mv = new EQMoves.EQSingleMove(Integer.parseInt((String)b.getText()), selectedRow, selectedCol);
 		addMove(mv);
+		doVibration();
 		hideNumbers();
 	}
+    
+    public void doVibration() {
+    	if (this.canVibrate) {
+    		vibro.vibrate(100);
+    	}
+    }
     
     public void addMove(EQMoves.EQSingleMove move) {
     	try {

@@ -38,4 +38,6 @@
 <string name="cpu_level">Livello CPU</string>
 <string name="cpu_level_summary">Scegli il livello di difficoltà della CPU</string>
 <string name="thinking">Sto pensando...</string>
+<string name="vibration">Feedback tattile</string>
+<string name="vibration_summary">Feedback tattile per le mosse</string>
 </resources>
