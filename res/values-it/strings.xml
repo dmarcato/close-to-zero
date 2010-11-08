@@ -23,7 +23,7 @@
 <string name="partial_sum_summary">Mostra una riga e una colonna con le somme parziali</string>
 <string name="menu_help">Aiuto</string>
 <string name="help">Aiuto</string>
-<string name="help_content">Istruzioni per l'uso =)</string>
+<string name="help_content">Istruzioni per l\'uso =)</string>
 <string name="loading">Caricamento, attendere...</string>
 <string name="human">Umano</string>
 <string name="cpu">CPU</string>
