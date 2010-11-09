@@ -1,6 +1,6 @@
-package com.equilibrium;
+package com.l1ck.equilibrium;
 
-import com.equilibrium.logic.EQPlayer;
+import com.l1ck.equilibrium.logic.EQPlayer;
 
 public class Players {
 
@@ -50,6 +50,10 @@ public class Players {
 		} else {
 			return this.p1;
 		}
+	}
+	
+	public boolean isBothBot() {
+		return this.p1.isBot() && this.p2.isBot();
 	}
 
 }

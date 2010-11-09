@@ -6,7 +6,7 @@
 		android:title="@string/size"
 		android:summary="@string/size_summary"
 		android:key="size"
-		android:defaultValue="6"
+		android:defaultValue="5"
 		android:entries="@array/list_sizes"
 		android:entryValues="@array/list_sizes_val" />
 

@@ -1,12 +1,12 @@
-package com.equilibrium;
+package com.l1ck.equilibrium;
 
 import java.util.Vector;
 
-import com.equilibrium.logic.EQAI;
-import com.equilibrium.logic.EQBoard;
-import com.equilibrium.logic.EQCell;
-import com.equilibrium.logic.EQMoves;
-import com.equilibrium.logic.EQPlayer;
+import com.l1ck.equilibrium.logic.EQAI;
+import com.l1ck.equilibrium.logic.EQBoard;
+import com.l1ck.equilibrium.logic.EQCell;
+import com.l1ck.equilibrium.logic.EQMoves;
+import com.l1ck.equilibrium.logic.EQPlayer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -108,7 +108,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 		}
 	};
 	
-	public int lato = 6;						//Numero di caselle per riga
+	public int lato = 5;						//Numero di caselle per riga
 	public Vector<Vector<Cell>> amatriciana;	//Matrice delle caselle
 	public int selectedRow = 0;					//Indice di riga della casella selezionata
 	public int selectedCol = 0;					//Indice di colonna della casella selezionata
@@ -133,6 +133,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	private boolean canVibrate = true;
 	private Vibrator vibro;
 	private boolean pause = false;
+	private AIThread thinkingAI = null;
 	
 	private EQBoard board = null;
 	public Players players = null;
@@ -176,9 +177,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     		firstRun = false;
     		start();
     	}
-    	if (scoreLayout != null) {
-			scoreLayout.invalidate();
-		}
+    	updateScore();
     }
     
     private boolean getPrefs() {
@@ -216,7 +215,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         
         canVibrate = prefs.getBoolean("canVibrate", true);
         
-        int newLato = Integer.parseInt(prefs.getString("size", "6"));
+        int newLato = Integer.parseInt(prefs.getString("size", "5"));
         if (newLato != lato) {
         	lato = newLato;
         	ris = true;
@@ -327,6 +326,8 @@ public class Equilibrium extends Activity implements OnClickListener {
         		if (i == lato || j == lato) {
         			if (i != j) {
         				c = new CellSum(this, i, j);
+        			} else {
+        				c = new CellAIControl(this);
         			}
         		} else {
 	        		EQCell eqc = board.get(i, j);
@@ -364,12 +365,19 @@ public class Equilibrium extends Activity implements OnClickListener {
         l.addView(numbersLayout);
         
         if (players.get().isBot()) {
-        	doAIMove();
+        	if (players.getOther().isBot()) {
+        		pauseAI();
+        	} else {
+        		doAIMove();
+        	}
         }
     }
     
     public void pauseAI() {
     	this.pause = true;
+    	if (thinkingAI != null) {
+    		thinkingAI.interrupt();
+    	}
     }
     
     public void resumeAI() {
@@ -377,12 +385,17 @@ public class Equilibrium extends Activity implements OnClickListener {
     	doAIMove();
 	}
     
+    public boolean isPaused() {
+    	return this.pause;
+    }
+    
     public void doAIMove() {
     	if (pause) {
     		return;
     	}
     	startLoading();
-    	new AIThread(cpuLevel).start();
+    	thinkingAI = new AIThread(cpuLevel);
+    	thinkingAI.start();
     }
     
     public void nextPlayer() {
@@ -407,6 +420,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void stopLoading() {
     	this.blockInteraction = false;
+    	this.thinkingAI = null;
     	numbersLayout.removeAllViews();
     }
     
@@ -531,13 +545,16 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void updateScore() {
     	scoreLayout.removeAllViews();
+    	TableLayout table = new TableLayout(this);
+    	table.setStretchAllColumns(true);
+    	TableRow r = new TableRow(this);
     	for (int i = 1; i <= 2; i++) {
     		String out = "";
 	    	TextView t = new TextView(this);
+	    	t.setGravity(Gravity.CENTER_HORIZONTAL);
 	    	t.setTypeface(TEXT_FONT);
 	    	t.setTextSize(20);
 	    	t.setTextColor(players.get(i).getColor());
-	    	//t.setTypeface(Typeface.DEFAULT_BOLD);
 	    	if (players.get(i) == players.get()) {
     			out += "» ";
 	    	}
@@ -545,13 +562,10 @@ public class Equilibrium extends Activity implements OnClickListener {
 	    	out += ": ";
 	    	out += players.get(i).getScore(board);
 	    	t.setText(out);
-	    	scoreLayout.addView(t);
-	    	if (i != 2) {
-	    		t = new TextView(this);
-	    		t.setText("     ");
-	    		scoreLayout.addView(t);
-	    	}
+	    	r.addView(t);
     	}
+    	table.addView(r);
+    	scoreLayout.addView(table);
     }
     
     public void drawCross(int row, int col) {

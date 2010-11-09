@@ -1,4 +1,4 @@
-package com.equilibrium;
+package com.l1ck.equilibrium;
 
 import android.os.Bundle;
 import android.preference.ListPreference;

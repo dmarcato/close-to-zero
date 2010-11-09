@@ -1,9 +1,10 @@
-package com.equilibrium;
+package com.l1ck.equilibrium;
 
-import com.equilibrium.logic.EQCell;
+import com.l1ck.equilibrium.logic.EQCell;
 
 import android.view.MotionEvent;
 import android.view.View;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -51,7 +52,7 @@ public class Cell extends View {
         	row = logic.getRow();
             col = logic.getCol();
         }
-        bkImage = e.getResources().getDrawable(com.equilibrium.R.drawable.trans);
+        bkImage = e.getResources().getDrawable(R.drawable.trans);
         bkImage.setAlpha(255);
         sign = number = "";
         currentAlpha = originalAlpha;

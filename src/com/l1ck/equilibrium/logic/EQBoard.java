@@ -1,6 +1,6 @@
-package com.equilibrium.logic;
+package com.l1ck.equilibrium.logic;
 
-import com.equilibrium.logic.EQCell;
+import com.l1ck.equilibrium.logic.EQCell;
 
 public class EQBoard implements Cloneable{
 
