@@ -1,9 +1,6 @@
 package com.equilibrium.logic;
 
 import java.util.Random;
-import java.util.Vector;
-
-import com.equilibrium.logic.*;
 
 public final class EQAI extends Thread {
 	

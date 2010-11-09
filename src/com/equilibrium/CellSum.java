@@ -4,15 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View.MeasureSpec;
-
-import com.equilibrium.logic.EQCell;
 
 public class CellSum extends Cell {
 
@@ -114,27 +108,24 @@ public class CellSum extends Cell {
 		}
     	//canvas.drawColor(Color.argb(100, Color.red(bkColor), Color.green(bkColor), Color.blue(bkColor)));
     	//canvas.drawColor(bkColor);
-    	
-        Paint p = new Paint();
-        p.setAntiAlias(true);
         
-        p.setColor(bkColor);
+        painter.setColor(bkColor);
         if (row == e.lato) {
-        	p.setShader(new LinearGradient(size / 2, 0, size / 2, size, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
-        	canvas.drawRoundRect(new RectF(0, -size / 2, size, size*6/7), size / 2, size / 2, p);
+        	painter.setShader(new LinearGradient(size / 2, 0, size / 2, size, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
+        	canvas.drawRoundRect(new RectF(0, -size / 2, size, size*6/7), size / 2, size / 2, painter);
         } else {
-        	p.setShader(new LinearGradient(0, size / 2, size, size / 2, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
-        	canvas.drawRoundRect(new RectF(-size / 2, 0, size*6/7, size), size / 2, size / 2, p);
+        	painter.setShader(new LinearGradient(0, size / 2, size, size / 2, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
+        	canvas.drawRoundRect(new RectF(-size / 2, 0, size*6/7, size), size / 2, size / 2, painter);
         }
-        p.setShader(null);
+        painter.setShader(null);
         
         if (CellSum.SHOW_SUM) {
-        	p.setAlpha(255);
-        	p.setTextSize(size/3);
-	        p.setFakeBoldText(true);
-	        p.setShadowLayer(currentShadow, 0, 0, signColor);
-	        p.setColor(currentNumberColor);
-	        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (5*size/8), p);
+        	painter.setAlpha(255);
+        	painter.setTextSize(size/3);
+	        painter.setFakeBoldText(true);
+	        painter.setShadowLayer(currentShadow, 0, 0, signColor);
+	        painter.setColor(currentNumberColor);
+	        canvas.drawText(number, (getWidth()/2)-(painter.measureText(number)/2), (5*size/8), painter);
         }
     }
 	
@@ -156,6 +147,14 @@ public class CellSum extends Cell {
     		break;
     	}
 		return true;
+    }
+	
+	public int getRow() {
+    	return this.row;
+    }
+    
+    public int getCol() {
+    	return this.col;
     }
 
 }

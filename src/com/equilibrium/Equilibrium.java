@@ -1,6 +1,5 @@
 package com.equilibrium;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 import com.equilibrium.logic.EQAI;
@@ -18,30 +17,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Rect;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.SubMenu;
-import android.view.TouchDelegate;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -77,7 +67,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 				move = EQAI.greedyAlg(board, players.get(), players.getOther());
 				break;
 			case AIThread.HARD:
-				move = EQAI.greedyAlg(board, players.get(), players.getOther());
+				move = EQAI.extendedGreedyAlg(board, players.get(), players.getOther());
 				break;
 			}
 			Message m = new Message();
@@ -96,17 +86,22 @@ public class Equilibrium extends Activity implements OnClickListener {
 			switch (msg.what) {
 			case Equilibrium.AIMOVE:
 				stopLoading();
-				doVibration();
-				EQMoves.EQSingleMove move = (EQMoves.EQSingleMove) msg.obj;
-				addMove(move);
-				if (lastClicked != null) {
-					lastClicked.normal();
-					eraseCross(lastClicked.logic.getRow(), lastClicked.logic.getCol());
+				if (msg.obj == null) {
+					Toast tmp = Toast.makeText(Equilibrium.this, "Nessuna mossa disponibile", Toast.LENGTH_LONG);
+					tmp.show();
+				} else {
+					doVibration();
+					EQMoves.EQSingleMove move = (EQMoves.EQSingleMove) msg.obj;
+					addMove(move);
+					if (lastClicked != null) {
+						lastClicked.normal();
+						eraseCross(lastClicked.getRow(), lastClicked.getCol());
+					}
+					drawCross(move.getRow(), move.getCol());
+					lastClicked = amatriciana.get(move.getRow()).get(move.getCol());
+					lastClicked.select();
+					//loadingDialog.dismiss();
 				}
-				drawCross(move.getRow(), move.getCol());
-				lastClicked = amatriciana.get(move.getRow()).get(move.getCol());
-				lastClicked.select();
-				//loadingDialog.dismiss();
 				break;
 			}
 			super.handleMessage(msg);
@@ -137,9 +132,13 @@ public class Equilibrium extends Activity implements OnClickListener {
 	private boolean blockInteraction = false;
 	private boolean canVibrate = true;
 	private Vibrator vibro;
+	private boolean pause = false;
 	
 	private EQBoard board = null;
 	public Players players = null;
+	
+	public static Typeface NUMBER_FONT = null;
+	public static Typeface TEXT_FONT = null;
 	
 	public static final int MENU_NEW_GAME = 424;
 	public static final int MENU_SETTINGS = 548;
@@ -159,6 +158,9 @@ public class Equilibrium extends Activity implements OnClickListener {
         this.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         
         vibro = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        
+        Equilibrium.NUMBER_FONT = Typeface.createFromAsset(getAssets(), "fonts/danielbd.ttf");
+        Equilibrium.TEXT_FONT = Typeface.createFromAsset(getAssets(), "fonts/DESYREL_.ttf");
         
         l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
@@ -366,8 +368,19 @@ public class Equilibrium extends Activity implements OnClickListener {
         }
     }
     
+    public void pauseAI() {
+    	this.pause = true;
+    }
+    
+    public void resumeAI() {
+    	this.pause = false;
+    	doAIMove();
+	}
+    
     public void doAIMove() {
-    	//loadingDialog = ProgressDialog.show(this, "", getResources().getText(R.string.loading), true);
+    	if (pause) {
+    		return;
+    	}
     	startLoading();
     	new AIThread(cpuLevel).start();
     }
@@ -383,9 +396,9 @@ public class Equilibrium extends Activity implements OnClickListener {
     	this.blockInteraction = true;
     	numbersLayout.removeAllViews();
     	TextView t = new TextView(this);
+    	t.setTypeface(TEXT_FONT);
+    	t.setTextSize(25);
     	t.setTextColor(players.get().getColor());
-    	t.setTextSize(20);
-    	t.setTypeface(Typeface.DEFAULT_BOLD);
     	t.setText(R.string.thinking);
     	t.setGravity(Gravity.CENTER);
     	t.setPadding(5, 5, 5, 5);
@@ -521,8 +534,10 @@ public class Equilibrium extends Activity implements OnClickListener {
     	for (int i = 1; i <= 2; i++) {
     		String out = "";
 	    	TextView t = new TextView(this);
+	    	t.setTypeface(TEXT_FONT);
+	    	t.setTextSize(20);
 	    	t.setTextColor(players.get(i).getColor());
-	    	t.setTypeface(Typeface.DEFAULT_BOLD);
+	    	//t.setTypeface(Typeface.DEFAULT_BOLD);
 	    	if (players.get(i) == players.get()) {
     			out += "» ";
 	    	}

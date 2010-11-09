@@ -1,7 +1,5 @@
 package com.equilibrium.logic;
 
-import java.util.Vector;
-
 import com.equilibrium.logic.EQCell;
 
 public class EQBoard implements Cloneable{

@@ -1,21 +1,14 @@
 package com.equilibrium;
 
-import java.util.Vector;
-
 import com.equilibrium.logic.EQCell;
 
-import android.R;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.TouchDelegate;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Toast;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
-import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
 public class Cell extends View {
@@ -42,8 +35,8 @@ public class Cell extends View {
 	protected float originalShadow = 2;
 	protected float highlightShadow = 0.5f;
 	protected float currentShadow = 0;
-	protected boolean[] around;
-	protected int possibilities;
+	
+	protected Paint painter = null;
 	
 	 /**
      * Constructor.  This version is only needed if you will be instantiating
@@ -64,11 +57,10 @@ public class Cell extends View {
         currentAlpha = originalAlpha;
         currentShadow = originalShadow;
         currentNumberColor = numberColor;
-        possibilities = e.lato;
-        around = new boolean[e.lato+1];
-        for (int i = 0; i <= e.lato; i++) {
-        	around[i] = false;
-        }
+        
+        painter = new Paint();
+        painter.setAntiAlias(true);
+        painter.setTypeface(Equilibrium.NUMBER_FONT);
     }
     
     /**
@@ -127,14 +119,11 @@ public class Cell extends View {
         
         canvas.drawColor(bkColor);
         
-        Paint p = new Paint();
-        p.setAntiAlias(true);
-        
-        p.setColor(borderColor);
-        canvas.drawLine(0, 0, getWidth(), 0, p);
-        canvas.drawLine(0, 0, 0, getHeight(), p);
-        canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), p);
-        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), p);
+        painter.setColor(borderColor);
+        canvas.drawLine(0, 0, getWidth(), 0, painter);
+        canvas.drawLine(0, 0, 0, getHeight(), painter);
+        canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), painter);
+        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), painter);
         
         //canvas.drawRGB(Color.red(signColor), Color.green(signColor), Color.blue(signColor));
         int padding = (int) Math.round(0.17*size);
@@ -142,11 +131,11 @@ public class Cell extends View {
         bkImage.draw(canvas);
         canvas.drawARGB(currentAlpha, 255, 255, 255);
         
-        p.setTextSize(size*2/3);
-        p.setFakeBoldText(true);
-        p.setShadowLayer(currentShadow, 0, 0, signColor);
-        p.setColor(currentNumberColor);
-        canvas.drawText(number, (getWidth()/2)-(p.measureText(number)/2), (3*size/4), p);
+        painter.setTextSize(size*2/3);
+        painter.setFakeBoldText(true);
+        painter.setShadowLayer(currentShadow, 0, 0, signColor);
+        painter.setColor(currentNumberColor);
+        canvas.drawText(number, (getWidth()/2)-(painter.measureText(number)/2), (3*size/4), painter);
     }
     
     public boolean onTouchEvent(MotionEvent event) {
@@ -246,5 +235,13 @@ public class Cell extends View {
     	currentAlpha = originalAlpha;
     	currentNumberColor = numberColor;
     	invalidate();
+    }
+    
+    public int getRow() {
+    	return this.logic.getRow();
+    }
+    
+    public int getCol() {
+    	return this.logic.getCol();
     }
 }

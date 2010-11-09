@@ -2,8 +2,6 @@ package com.equilibrium.logic;
 
 import java.util.Vector;
 
-import android.util.Log;
-
 public class EQPlayer {
 	//private EQBoard board;
 	private Vector<Boolean> playerRows;
