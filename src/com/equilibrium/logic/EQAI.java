@@ -85,4 +85,48 @@ public final class EQAI extends Thread {
 
 		return bestMoves.get(new Random().nextInt(bestMoves.size()));
 	}
+	
+	static public EQMoves.EQSingleMove extendedGreedyAlg(EQBoard board, EQPlayer player, EQPlayer opp)
+	{
+		int best = -1000, diff, plSocreMin = 1000, pltmp;
+		EQBoard brd = ((EQBoard)board.clone());
+		EQMoves bestMoves = new EQMoves();
+		EQCell cell = null;
+		for (int i = 0; i < brd.getDimension(); i++)
+			for (int j = 0; j < brd.getDimension(); j++)
+			{
+				cell = brd.get(i, j);
+				if (!cell.isSet())
+				{
+					for (int k = 0; k < cell.getPsb().size(); k++)
+					{
+						EQMoves.EQSingleMove move = new EQMoves.EQSingleMove(cell.getPsb().get(k), i, j);
+						
+						try {
+							brd.insert(k+1, i, j);
+						} catch (EQMoves m) {}
+						
+						pltmp = player.getScore(brd);
+						diff = opp.getScore(brd) - pltmp;
+						
+						if (diff >= best)
+						{
+							if (diff > best || pltmp < plSocreMin) {
+								bestMoves.clear();
+								plSocreMin = pltmp;
+							}
+							best = diff;
+							bestMoves.add(move);
+						}
+						brd.delete(i, j);
+					}
+				}
+			}
+		
+		if (bestMoves.size() == 0) {
+			return null;
+		}
+		
+		return bestMoves.get(new Random().nextInt(bestMoves.size()));
+	}
 }
