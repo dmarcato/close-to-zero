@@ -31,7 +31,7 @@ public class EQCell implements Cloneable {
 		for (int i = 0; i < possibilities.size(); i++)
 			if (possibilities.get(i) == 0)
 				psb.add(i+1);
-		return psb; 
+		return psb;
 	}
 	
 	public boolean isSet() { return setted; }
@@ -64,17 +64,21 @@ public class EQCell implements Cloneable {
 		return cell;
 	}
 	
-	public void addPsb(int v)
+	public boolean addPsb(int v)
 	{
-		possibilities.set(v-1, possibilities.get(v-1)-1);
+		int tmp = possibilities.get(v-1)-1;
+		possibilities.set(v-1, tmp);
 		if (value == 0 && setted && !getPsb().isEmpty()) {
 			unsetValue();
 		}
+		return (!setted && tmp == 0);
 	}
 	
-	public void removePsb(int v)
+	public boolean removePsb(int v)
 	{
-		possibilities.set(v-1, possibilities.get(v-1)+1);
+		int tmp = possibilities.get(v-1)+1;
+		possibilities.set(v-1, tmp);
+		return (!setted && tmp == 1);
 	}
 	
 	public String toString() {
