@@ -12,7 +12,7 @@ public class EQBoard implements Cloneable{
 	private static class Coord {
 		
 		public static String get(int r, int c) {
-			return String.valueOf(r)+String.valueOf(c);
+			return String.valueOf(r)+":"+String.valueOf(c);
 		}
 	}
 	
