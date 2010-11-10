@@ -445,11 +445,11 @@ public class Equilibrium extends Activity implements OnClickListener {
     	Button btn;
     	for (int i = 0; i < around.size(); i++) {
     		btn = new Button(this);
-    		/*btn.setHeight(amatriciana.get(row).get(col).getSize());
-    		btn.setWidth(amatriciana.get(row).get(col).getSize());*/
+    		btn.setHeight(amatriciana.get(row).get(col).getSize());
+    		btn.setWidth(amatriciana.get(row).get(col).getSize());
             btn.setText(Integer.toString(around.elementAt(i)));
-            btn.setTextSize(amatriciana.get(row).get(col).getSize()*2/3);
-            btn.setTypeface(TEXT_FONT);
+            //btn.setTextSize(amatriciana.get(row).get(col).getSize()*2/3);
+            //btn.setTypeface(TEXT_FONT);
             btn.setOnClickListener(this);
             c.addView(btn);
     	}
