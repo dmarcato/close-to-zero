@@ -24,9 +24,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -83,8 +85,12 @@ public class Equilibrium extends Activity implements OnClickListener {
 	Handler threadHandler = new Handler(){
 		// @Override
 		public void handleMessage(Message msg) {
+			
 			switch (msg.what) {
 			case Equilibrium.AIMOVE:
+				if (pause) {
+					return;
+				}
 				stopLoading();
 				if (msg.obj == null) {
 					Toast tmp = Toast.makeText(Equilibrium.this, "Nessuna mossa disponibile", Toast.LENGTH_LONG);
@@ -239,10 +245,11 @@ public class Equilibrium extends Activity implements OnClickListener {
             start();
             return true;
         case MENU_SETTINGS:
+        	pauseAI();
         	startActivity(new Intent(getBaseContext(), Settings.class));
         	return true;
         case MENU_HELP:
-        	this.showDialog(DIALOG_HELP); //No funsia :/
+        	this.showDialog(DIALOG_HELP);
         	return true;
         case MENU_QUIT:
             finish();
@@ -364,6 +371,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         l.addView(a);
         l.addView(numbersLayout);
         
+        this.pause = false;
         if (players.get().isBot()) {
         	if (players.getOther().isBot()) {
         		pauseAI();
@@ -378,6 +386,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     	if (thinkingAI != null) {
     		thinkingAI.interrupt();
     	}
+    	stopLoading();
     }
     
     public void resumeAI() {
@@ -591,7 +600,18 @@ public class Equilibrium extends Activity implements OnClickListener {
     }
     
     /*public boolean onTouchEvent(MotionEvent event) {
-    	int x = (int) event.getX();
+    	Log.i("Equilibrium", "Equilibrium");
+    	/*switch (event.getAction()) {
+    	case MotionEvent.ACTION_DOWN:
+    		return false;
+    	case MotionEvent.ACTION_MOVE:
+    		this.dispatchTouchEvent(event);
+    		return false;
+    	case MotionEvent.ACTION_UP:
+    		return true;
+    	}
+    	//Log.i("Equilibrium", String.valueOf(b));
+    	/*int x = (int) event.getX();
     	int y = (int) event.getY();
     	Cell theCell = null;
     	for (int i = 0; i < lato; i++) {

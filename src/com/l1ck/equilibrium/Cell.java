@@ -2,6 +2,7 @@ package com.l1ck.equilibrium;
 
 import com.l1ck.equilibrium.logic.EQCell;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.content.BroadcastReceiver;
@@ -147,7 +148,7 @@ public class Cell extends View {
 				e.eraseCross(e.lastClicked.row, e.lastClicked.col);
     		}
 			e.lastMoved = this;
-    		break;
+			break;
     	case MotionEvent.ACTION_UP:
     		e.selectedRow = row;
     		e.selectedCol = col;
