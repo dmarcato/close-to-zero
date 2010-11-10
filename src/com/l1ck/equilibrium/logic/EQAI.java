@@ -112,8 +112,6 @@ public final class EQAI extends Thread {
 						if (diff >= best) {
 							if (pltmp < plScoreMin || diff > best) {
 								bestMoves.clear();
-							}
-							if (pltmp < plScoreMin) {
 								plScoreMin = pltmp;
 							}
 							if (!(pltmp > plScoreMin))
