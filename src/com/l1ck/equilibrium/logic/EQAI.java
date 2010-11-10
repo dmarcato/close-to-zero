@@ -88,7 +88,7 @@ public final class EQAI extends Thread {
 	
 	static public EQMoves.EQSingleMove extendedGreedyAlg(EQBoard board, EQPlayer player, EQPlayer opp)
 	{
-		int best = -1000, diff, plSocreMin = 1000, pltmp;
+		int best = -1000, diff, plScoreMin = 1000, pltmp;
 		EQBoard brd = ((EQBoard)board.clone());
 		EQMoves bestMoves = new EQMoves();
 		EQCell cell = null;
@@ -109,15 +109,18 @@ public final class EQAI extends Thread {
 						pltmp = player.getScore(brd);
 						diff = opp.getScore(brd) - pltmp;
 						
-						if (diff >= best)
-						{
-							if (diff > best || pltmp < plSocreMin) {
+						if (diff >= best) {
+							if (pltmp < plScoreMin || diff > best) {
 								bestMoves.clear();
-								plSocreMin = pltmp;
 							}
+							if (pltmp < plScoreMin) {
+								plScoreMin = pltmp;
+							}
+							if (!(pltmp > plScoreMin))
+								bestMoves.add(move);
 							best = diff;
-							bestMoves.add(move);
 						}
+						
 						brd.delete(i, j);
 					}
 				}
