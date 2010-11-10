@@ -9,13 +9,10 @@ import com.l1ck.equilibrium.logic.EQCell;
 
 public class EQBoard implements Cloneable{
 
-	private class Coord {
-		public int row;
-		public int col;
+	private static class Coord {
 		
-		public Coord(int r, int c) {
-			this.row = r;
-			this.col = c;
+		public static String get(int r, int c) {
+			return String.valueOf(r)+String.valueOf(c);
 		}
 	}
 	
@@ -23,7 +20,7 @@ public class EQBoard implements Cloneable{
 	private EQCell[][] board;
 	private int[] rowsSum;
 	private int[] columnsSum;
-	private Hashtable<Integer, Hashtable<Coord, EQCell>> psbList;
+	private Hashtable<Integer, Hashtable<String, EQCell>> psbList;
 	private Hashtable<Integer, Integer> maxGain;
 	
 	public EQBoard() {
@@ -35,15 +32,15 @@ public class EQBoard implements Cloneable{
 		board = new EQCell[dimension][dimension];
 		rowsSum = new int[dimension];
 		columnsSum = new int[dimension];
-		psbList = new Hashtable<Integer, Hashtable<Coord, EQCell>>();
+		psbList = new Hashtable<Integer, Hashtable<String, EQCell>>();
 		maxGain = new Hashtable<Integer, Integer>();
-		Hashtable<Coord, EQCell> tmp = new Hashtable<Coord, EQCell>();
+		Hashtable<String, EQCell> tmp = new Hashtable<String, EQCell>();
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
 				board[i][j] = new EQCell(dimension, i, j);
-				tmp.put(new Coord(i, j), board[i][j]);
+				tmp.put(Coord.get(i, j), board[i][j]);
 			}
-			psbList.put(i+1, new Hashtable<Coord, EQCell>());
+			psbList.put(i+1, new Hashtable<String, EQCell>());
 			maxGain.put(i+1, dimension*dimension);
 		}
 		psbList.put(dimension, tmp);
@@ -75,14 +72,15 @@ public class EQBoard implements Cloneable{
 				for (int l = -1; l <= 1; l++) {	
 					if (i+k >= 0 && i+k < dimension && j+l >= 0 && j+l < dimension) {
 						int psbSize = board[i+k][j+l].getPsb().size();
-						if (psbSize > 0) {
-							psbList.get(psbSize).remove(new Coord(i+k, j+l));
-							if (k != 0 && l != 0 && psbSize > 1) {
-								psbList.get(psbSize-1).put(new Coord(i+k, j+l), board[i+k][j+l]);
-							}
-						}
 						if (board[i+k][j+l].removePsb(v)) {
 							maxGain.put(v, maxGain.get(v) - 1);
+						}
+						int newPsbSize = board[i+k][j+l].getPsb().size();
+						if (newPsbSize != psbSize && psbSize > 0 && psbList.get(psbSize).containsKey(Coord.get(i+k, j+l))) {
+							psbList.get(psbSize).remove(Coord.get(i+k, j+l));
+							if (!(k == 0 && l == 0) && psbSize > 1) {
+								psbList.get(psbSize-1).put(Coord.get(i+k, j+l), board[i+k][j+l]);
+							}
 						}
 					}
 				}
@@ -94,10 +92,6 @@ public class EQBoard implements Cloneable{
 			
 			rowsSum[i] += board[i][j].getValue();
 			columnsSum[j] += board[i][j].getValue();
-			
-			/*for (int k = 1; k <= maxGain.size(); k++) {
-				Log.i("Equilibrium", String.valueOf(maxGain.get(k)));
-			}*/
 			
 			EQMoves moves = checkBoard();
 			if (moves.size() > 0) {
@@ -118,15 +112,17 @@ public class EQBoard implements Cloneable{
 			for (int k = -1; k <= 1; k++) {
 				for (int l = -1; l <= 1; l++) {	
 					if (i+k >= 0 && i+k < dimension && j+l >= 0 && j+l < dimension) {
+						int psbSize = board[i+k][j+l].getPsb().size();
 						if (board[i+k][j+l].addPsb(v)) {
 							maxGain.put(v, maxGain.get(v) + 1);
 						}
-						int psbSize = board[i+k][j+l].getPsb().size();
-						if (psbSize > 0) {
-							if (k != 0 && l != 0 && psbSize > 1) {
-								psbList.get(psbSize-1).remove(new Coord(i+k, j+l));
+						int newPsbSize = board[i+k][j+l].getPsb().size();
+						// CONTROLLARE!!!
+						if (newPsbSize != psbSize && psbSize > 0) {
+							if (!(k == 0 && l == 0) && psbSize > 1) {
+								psbList.get(psbSize-1).remove(Coord.get(i+k, j+l));
 							}
-							psbList.get(psbSize).put(new Coord(i+k, j+l), board[i+k][j+l]);
+							psbList.get(psbSize).put(Coord.get(i+k, j+l), board[i+k][j+l]);
 						}
 					}
 				}
