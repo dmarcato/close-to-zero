@@ -97,6 +97,8 @@ public class EQBoard implements Cloneable{
 			if (moves.size() > 0) {
 				throw moves;
 			}
+			
+			Log.i("Equilibrium", maxGain.toString());
 		}
 	}
 	
@@ -120,9 +122,9 @@ public class EQBoard implements Cloneable{
 						// CONTROLLARE!!!
 						if (newPsbSize != psbSize && psbSize > 0) {
 							if (!(k == 0 && l == 0) && psbSize > 1) {
-								psbList.get(psbSize-1).remove(Coord.get(i+k, j+l));
+								psbList.get(psbSize).remove(Coord.get(i+k, j+l));
 							}
-							psbList.get(psbSize).put(Coord.get(i+k, j+l), board[i+k][j+l]);
+							psbList.get(psbSize+1).put(Coord.get(i+k, j+l), board[i+k][j+l]);
 						}
 					}
 				}
@@ -136,6 +138,8 @@ public class EQBoard implements Cloneable{
 			columnsSum[j] -= board[i][j].getValue();
 			
 			board[i][j].unsetValue();
+			
+			Log.i("Equilibrium", maxGain.toString());
 		}
 	}
 	
