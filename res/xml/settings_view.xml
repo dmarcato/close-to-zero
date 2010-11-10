@@ -42,7 +42,7 @@
 			android:title="@string/player_type"
 			android:summary="@string/player_type_summary"
 			android:key="p2Cpu"
-			android:defaultValue="human"
+			android:defaultValue="cpu"
 			android:entries="@array/list_player_type"
 			android:entryValues="@array/list_player_type_val" />
 			

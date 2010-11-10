@@ -197,7 +197,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         	ris = true;
         }
         
-        boolean newP2Cpu = (prefs.getString("p2Cpu", "human").equals("human")) ? false : true;
+        boolean newP2Cpu = (prefs.getString("p2Cpu", "cpu").equals("human")) ? false : true;
         if (newP2Cpu != p2Cpu) {
         	p2Cpu = newP2Cpu;
         	ris = true;
