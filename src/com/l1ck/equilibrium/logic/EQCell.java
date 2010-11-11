@@ -82,16 +82,17 @@ public class EQCell implements Cloneable {
 	}
 	
 	public String toString() {
+		String out = String.valueOf(this.row)+";"+String.valueOf(this.column)+": ";
 		if (setted) {
 			if (plus) 
-				return "+"+((Integer)value).toString();
+				return out+"+"+((Integer)value).toString();
 			else 
-				return ((Integer)value).toString();
+				return out+((Integer)value).toString();
 		} else {
 			if (plus)
-				return "+";
+				return out+"+";
 			else	
-				return "-";
+				return out+"-";
 		}
 	}
 }

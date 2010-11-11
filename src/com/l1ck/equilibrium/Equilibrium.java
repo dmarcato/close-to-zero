@@ -63,7 +63,8 @@ public class Equilibrium extends Activity implements OnClickListener {
 			EQMoves.EQSingleMove move = null;
 			switch (this.gameType) {
 			case AIThread.EASY:
-				move = EQAI.simpleAlg(board, players.get(), players.getOther());
+				//move = EQAI.simpleAlg(board, players.get(), players.getOther());
+				move = EQAI.smartAlg(board, players.get(), players.getOther());
 				break;
 			case AIThread.STANDARD:
 				move = EQAI.greedyAlg(board, players.get(), players.getOther());

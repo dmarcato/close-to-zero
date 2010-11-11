@@ -1,6 +1,10 @@
 package com.l1ck.equilibrium.logic;
 
+import java.util.Hashtable;
 import java.util.Random;
+import java.util.Vector;
+
+import android.util.Log;
 
 public final class EQAI extends Thread {
 	
@@ -21,7 +25,7 @@ public final class EQAI extends Thread {
 						EQMoves.EQSingleMove move = new EQMoves.EQSingleMove(cell.getPsb().get(k), i, j);
 						
 						try {
-							brd.insert(k+1, i, j);
+							brd.insert(move);
 						} catch (EQMoves m) {}
 						
 						diff = opp.getScore(brd) - player.getScore(brd);
@@ -103,7 +107,7 @@ public final class EQAI extends Thread {
 						EQMoves.EQSingleMove move = new EQMoves.EQSingleMove(cell.getPsb().get(k), i, j);
 						
 						try {
-							brd.insert(k+1, i, j);
+							brd.insert(move);
 						} catch (EQMoves m) {}
 						
 						pltmp = player.getScore(brd);
@@ -129,5 +133,60 @@ public final class EQAI extends Thread {
 		}
 		
 		return bestMoves.get(new Random().nextInt(bestMoves.size()));
+	}
+	
+	static public EQMoves.EQSingleMove smartAlg(EQBoard board, EQPlayer player, EQPlayer opp) {
+		int maxGain = board.getMaxGain();
+		int lvl = board.getDimension();
+		int best = -1000, diff, plScoreMin = 1000, pltmp;
+		EQBoard brd = ((EQBoard)board.clone());
+		EQMoves bestMoves = new EQMoves();
+		EQCell cell = null;
+		int initialDiff = opp.getScore(brd) - player.getScore(brd);
+		Log.i("Equilibrium", String.valueOf(maxGain));
+		Log.i("Equilibrium", String.valueOf(initialDiff));
+		for (int i = 1; i <= brd.getDimension(); i++) {
+			Log.i("Equilibrium", brd.getPsbCells(i).values().toString());
+		}
+		while (lvl > 0) {
+			Vector<EQCell> psbs = new Vector<EQCell>(brd.getPsbCells(lvl).values());
+			for (int i = 0; i < psbs.size(); i++) {
+				
+				cell = psbs.get(i);
+				for (int k = 0; k < cell.getPsb().size(); k++)
+				{
+					EQMoves.EQSingleMove move = new EQMoves.EQSingleMove(cell.getPsb().get(k), cell.getRow(), cell.getCol());
+					
+					try {
+						brd.insert(move);
+					} catch (EQMoves m) {}
+					
+					pltmp = player.getScore(brd);
+					diff = opp.getScore(brd) - pltmp - initialDiff;
+					
+					if (diff == maxGain) {
+						return move;
+					} else {
+						
+					}
+					
+					/*if (diff >= best) {
+						if (pltmp < plScoreMin || diff > best) {
+							bestMoves.clear();
+							plScoreMin = pltmp;
+						}
+						if (!(pltmp > plScoreMin))
+							bestMoves.add(move);
+						best = diff;
+					}*/
+					
+					brd.delete(cell.getRow(), cell.getCol());
+				}
+				
+			}
+			
+			lvl--;
+		}
+		return null;
 	}
 }
