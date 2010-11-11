@@ -110,13 +110,18 @@ public class CellSum extends Cell {
     	//canvas.drawColor(bkColor);
         
         painter.setColor(bkColor);
-        if (row == e.lato) {
-        	painter.setShader(new LinearGradient(size / 2, 0, size / 2, size, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
-        	canvas.drawRoundRect(new RectF(0, -size / 2, size, size*6/7), size / 2, size / 2, painter);
+        int gradColor = Color.argb(150, Color.red(bkColor), Color.green(bkColor), Color.blue(bkColor));
+        painter.setShader(new LinearGradient(size / 2, 0, size / 2, size / 2, gradColor, bkColor, Shader.TileMode.MIRROR));
+        int padding = (int) Math.round(0.03*size);
+        canvas.drawRoundRect(new RectF(padding, padding, size-padding, size-padding), size/7, size/7, painter);
+        
+        /*if (row == e.lato) {
+        	//painter.setShader(new LinearGradient(size / 2, 0, size / 2, size, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
+        	canvas.drawRoundRect(new RectF(padding, padding, size-padding, size-padding), size / 2, size / 2, painter);
         } else {
-        	painter.setShader(new LinearGradient(0, size / 2, size, size / 2, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
+        	//painter.setShader(new LinearGradient(0, size / 2, size, size / 2, Color.WHITE, bkColor, Shader.TileMode.REPEAT));
         	canvas.drawRoundRect(new RectF(-size / 2, 0, size*6/7, size), size / 2, size / 2, painter);
-        }
+        }*/
         painter.setShader(null);
         
         if (CellSum.SHOW_SUM) {
@@ -126,6 +131,7 @@ public class CellSum extends Cell {
 	        painter.setShadowLayer(currentShadow, 0, 0, signColor);
 	        painter.setColor(currentNumberColor);
 	        canvas.drawText(number, (getWidth()/2)-(painter.measureText(number)/2), (5*size/8), painter);
+	        painter.setShadowLayer(0, 0, 0, 0);
         }
     }
 	
@@ -144,6 +150,7 @@ public class CellSum extends Cell {
     		}
     		e.lastClicked = this;
     		e.drawCross(row, col);
+    		e.hideNumbers();
     		break;
     	}
 		return true;

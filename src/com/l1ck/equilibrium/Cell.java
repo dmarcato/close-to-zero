@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -25,20 +26,21 @@ public class Cell extends View {
 	public int row;
 	public int col;
 	public boolean numberSetted = false;
-	public int originalBkColor = 0xFFEEEEEE;
-	public int bkColor = 0xFFEEEEEE;
+	public int originalBkColor = Color.LTGRAY;//0xFFEEEEEE;
+	public int bkColor = Color.LTGRAY;//0xFFEEEEEE;
 	protected int borderColor = Color.DKGRAY;
 	protected int signColor = Color.RED;
 	protected int numberColor = Color.WHITE;
 	protected int highlightNumberColor = 0;
 	protected int currentNumberColor = 0;
 	protected Drawable bkImage = null;
-	protected int originalAlpha = 255-30;
-	protected int selectedAlpha = 255-150;
+	protected int originalAlpha = 255-220;
+	protected int selectedAlpha = 255-30;
 	protected int currentAlpha = 0;
 	protected float originalShadow = 2;
 	protected float highlightShadow = 0.5f;
 	protected float currentShadow = 0;
+	protected boolean showBorder = false;
 	
 	protected Paint painter = null;
 	
@@ -121,25 +123,31 @@ public class Cell extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
-        canvas.drawColor(bkColor);
+        //canvas.drawColor(bkColor);
         
-        painter.setColor(borderColor);
-        canvas.drawLine(0, 0, getWidth(), 0, painter);
+        painter.setColor(bkColor);
+        painter.setShader(new LinearGradient(size / 2, 0, size / 2, size / 2, bkColor, Color.WHITE, Shader.TileMode.MIRROR));
+        /*canvas.drawLine(0, 0, getWidth(), 0, painter);
         canvas.drawLine(0, 0, 0, getHeight(), painter);
         canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), painter);
-        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), painter);
+        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), painter);*/
+        int padding = (int) Math.round(0.03*size);
+        canvas.drawRoundRect(new RectF(padding, padding, size-padding, size-padding), size/7, size/7, painter);
+        painter.setShader(null);
         
         //canvas.drawRGB(Color.red(signColor), Color.green(signColor), Color.blue(signColor));
-        int padding = (int) Math.round(0.17*size);
+        padding = (int) Math.round(0.17*size);
         bkImage.setBounds(padding, padding, size-padding, size-padding);
+        bkImage.setAlpha(currentAlpha);
         bkImage.draw(canvas);
-        canvas.drawARGB(currentAlpha, 255, 255, 255);
+        //canvas.drawARGB(currentAlpha, 255, 255, 255);
         
         painter.setTextSize(size*2/3);
         painter.setFakeBoldText(true);
         painter.setShadowLayer(currentShadow, 0, 0, signColor);
         painter.setColor(currentNumberColor);
         canvas.drawText(number, (getWidth()/2)-(painter.measureText(number)/2), (3*size/4), painter);
+        painter.setShadowLayer(0, 0, 0, 0);
     }
     
     public boolean onTouchEvent(MotionEvent event) {
@@ -231,6 +239,8 @@ public class Cell extends View {
     
     public void select() {
     	currentAlpha = selectedAlpha;
+    	currentNumberColor = numberColor;
+    	showBorder = true;
     	invalidate();
     }
     
@@ -238,6 +248,7 @@ public class Cell extends View {
     	currentShadow = originalShadow;
     	currentAlpha = originalAlpha;
     	currentNumberColor = numberColor;
+    	showBorder = false;
     	invalidate();
     }
     

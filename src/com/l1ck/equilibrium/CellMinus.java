@@ -16,6 +16,10 @@ public class CellMinus extends Cell {
 	
 	@Override
     protected void onDraw(Canvas canvas) {
+		bkColor = originalBkColor;
+        if (showBorder) {
+        	bkColor = Color.argb(Color.alpha(signColor), Color.red(signColor)+50, Color.green(signColor)+50, Color.blue(signColor));
+        }
         super.onDraw(canvas);
 	}
 
