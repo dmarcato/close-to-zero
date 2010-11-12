@@ -76,9 +76,9 @@ public class EQCell implements Cloneable {
 	
 	public boolean removePsb(int v)
 	{
-		int tmp = possibilities.get(v-1)+1;
-		possibilities.set(v-1, tmp);
-		return (!setted && tmp == 1);
+		int tmp = possibilities.get(v-1);
+		possibilities.set(v-1, tmp+1);
+		return (!setted && tmp == 0);
 	}
 	
 	public String toString() {

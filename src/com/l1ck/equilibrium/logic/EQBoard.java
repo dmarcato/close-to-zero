@@ -57,6 +57,10 @@ public class EQBoard implements Cloneable{
 		return (i+1)*2;
 	}
 	
+	public Hashtable<Integer, Integer> getMG() {
+		return maxGain;
+	}
+	
 	public EQCell get(int i, int j)
 	{
 		if (i < 0 || i > dimension || j < 0 || j > dimension)
@@ -103,8 +107,11 @@ public class EQBoard implements Cloneable{
 				}
 			}
 			
+			Vector<Integer> psbij = board[i][j].getPsb();
 			for (int k = 1; k <= dimension; k++) {
-				maxGain.put(k, maxGain.get(k) - 1);
+				if (psbij.contains(k) || k == v) {
+					maxGain.put(k, maxGain.get(k) - 1);
+				}
 			}
 			
 			rowsSum[i] += board[i][j].getValue();
@@ -117,6 +124,16 @@ public class EQBoard implements Cloneable{
 			
 			//Log.i("Equilibrium", maxGain.toString());
 		}
+		
+		if (v == 0) {
+			Vector<Integer> psbij = board[i][j].getPsb();
+			for (int k = 1; k <= dimension; k++) {
+				if (psbij.contains(k) || k == v) {
+					maxGain.put(k, maxGain.get(k) - 1);
+				}
+			}
+		}
+			
 	}
 	
 	public void insert(EQMoves.EQSingleMove mv) throws EQMoves {
@@ -147,8 +164,11 @@ public class EQBoard implements Cloneable{
 				}
 			}
 			
+			Vector<Integer> psbij = board[i][j].getPsb();
 			for (int k = 1; k <= dimension; k++) {
-				maxGain.put(k, maxGain.get(k) + 1);
+				if (psbij.contains(k) || k == v) {
+					maxGain.put(k, maxGain.get(k) + 1);
+				}
 			}
 			
 			rowsSum[i] -= board[i][j].getValue();
@@ -157,6 +177,13 @@ public class EQBoard implements Cloneable{
 			board[i][j].unsetValue();
 			
 			//Log.i("Equilibrium", maxGain.toString());
+		} else if (v == 0) {
+			Vector<Integer> psbij = board[i][j].getPsb();
+			for (int k = 1; k <= dimension; k++) {
+				if (psbij.contains(k) || k == v) {
+					maxGain.put(k, maxGain.get(k) - 1);
+				}
+			}
 		}
 	}
 	
