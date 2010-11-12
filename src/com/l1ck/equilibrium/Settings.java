@@ -1,5 +1,8 @@
 package com.l1ck.equilibrium;
 
+import com.admob.android.ads.AdManager;
+import com.admob.android.ads.AdView;
+
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;

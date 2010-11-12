@@ -75,5 +75,5 @@
 		android:defaultValue="true"
 		android:summary="@string/vibration_summary"
 		android:key="canVibrate" />
-	
+
 </PreferenceScreen>

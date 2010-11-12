@@ -2,6 +2,8 @@ package com.l1ck.equilibrium;
 
 import java.util.Vector;
 
+import com.admob.android.ads.AdManager;
+import com.admob.android.ads.AdView;
 import com.l1ck.equilibrium.logic.EQAI;
 import com.l1ck.equilibrium.logic.EQBoard;
 import com.l1ck.equilibrium.logic.EQCell;
@@ -24,6 +26,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -63,14 +66,14 @@ public class Equilibrium extends Activity implements OnClickListener {
 			EQMoves.EQSingleMove move = null;
 			switch (this.gameType) {
 			case AIThread.EASY:
-				//move = EQAI.simpleAlg(board, players.get(), players.getOther());
-				move = EQAI.smartAlg(board, players.get(), players.getOther());
+				move = EQAI.simpleAlg(board, players.get(), players.getOther());
 				break;
 			case AIThread.STANDARD:
-				move = EQAI.greedyAlg(board, players.get(), players.getOther());
+				//move = EQAI.greedyAlg(board, players.get(), players.getOther());
+				move = EQAI.extendedGreedyAlg(board, players.get(), players.getOther());
 				break;
 			case AIThread.HARD:
-				move = EQAI.extendedGreedyAlg(board, players.get(), players.getOther());
+				move = EQAI.smartAlg(board, players.get(), players.getOther());
 				break;
 			}
 			Message m = new Message();
@@ -141,6 +144,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	private Vibrator vibro;
 	private boolean pause = false;
 	private AIThread thinkingAI = null;
+	private DisplayMetrics displayMetrics = null;
 	
 	private EQBoard board = null;
 	public Players players = null;
@@ -170,10 +174,33 @@ public class Equilibrium extends Activity implements OnClickListener {
         Equilibrium.NUMBER_FONT = Typeface.createFromAsset(getAssets(), "fonts/danielbd.ttf");
         Equilibrium.TEXT_FONT = Typeface.createFromAsset(getAssets(), "fonts/DESYREL_.ttf");
         
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setGravity(Gravity.FILL_VERTICAL);
         l = new LinearLayout(this);
         l.setOrientation(LinearLayout.VERTICAL);
         l.setGravity(Gravity.FILL_VERTICAL);
-        setContentView(l);
+        
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        
+        AdView adView = null;
+        if (displayMetrics.heightPixels > 320) {
+	        AdManager.setTestDevices(new String[] {
+	        		AdManager.TEST_EMULATOR,	// Android emulator
+	        		"54C99084BAD7C6DA232F0DD4215BA36D", // Tattoo
+	        });
+	        adView = new AdView(this);
+	        adView.requestFreshAd();
+	        adView.setRequestInterval(60);
+        }
+        
+        container.addView(l);
+        if (adView != null) {
+        	container.addView(adView);
+        }
+        
+        setContentView(container);
     }
     
     @Override
@@ -247,7 +274,11 @@ public class Equilibrium extends Activity implements OnClickListener {
             return true;
         case MENU_SETTINGS:
         	pauseAI();
-        	startActivity(new Intent(getBaseContext(), Settings.class));
+        	if (displayMetrics.heightPixels <= 320) {
+        		startActivity(new Intent(getBaseContext(), SettingsTab.class));
+        	} else {
+        		startActivity(new Intent(getBaseContext(), Settings.class));
+        	}
         	return true;
         case MENU_HELP:
         	this.showDialog(DIALOG_HELP);
