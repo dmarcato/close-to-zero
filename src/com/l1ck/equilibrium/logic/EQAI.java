@@ -168,18 +168,18 @@ public final class EQAI extends Thread {
 						return move;
 					} else {
 						
-					}
-					
-					/*if (diff >= best) {
-						if (pltmp < plScoreMin || diff > best) {
-							bestMoves.clear();
-							plScoreMin = pltmp;
+						diff = opp.getScore(brd) - pltmp;
+						if (diff >= best) {
+							if (pltmp < plScoreMin || diff > best) {
+								bestMoves.clear();
+								plScoreMin = pltmp;
+							}
+							if (!(pltmp > plScoreMin))
+								bestMoves.add(move);
+							best = diff;
 						}
-						if (!(pltmp > plScoreMin))
-							bestMoves.add(move);
-						best = diff;
-					}*/
 					
+					}
 					brd.delete(cell.getRow(), cell.getCol());
 				}
 				
@@ -187,6 +187,35 @@ public final class EQAI extends Thread {
 			
 			lvl--;
 		}
-		return null;
+		
+		if (bestMoves.size() == 0) {
+			return null;
+		}
+		
+		int min = 1000, tmpmin, imin = 0;
+		EQMoves.EQSingleMove mv;
+		for (int i = 0; i < bestMoves.size(); i++)
+		{
+			try {
+				brd.insert(bestMoves.get(i));
+			} catch (EQMoves m) {}
+			
+			mv = smartAlg(brd, opp, player);
+			if (mv != null) {
+				try {
+					brd.insert(bestMoves.get(i));
+				} catch (EQMoves m) {}
+				
+				tmpmin =  player.getScore(brd) - opp.getScore(brd);
+				if (tmpmin < min) {
+					imin = i;
+				}
+				
+				brd.delete(mv.getRow(), mv.getCol());
+			}
+			brd.delete(bestMoves.get(i).getRow(), bestMoves.get(i).getCol());
+		}
+		
+		return bestMoves.get(imin);
 	}
 }
