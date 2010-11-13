@@ -200,10 +200,10 @@ public final class EQAI extends Thread {
 				brd.insert(bestMoves.get(i));
 			} catch (EQMoves m) {}
 			
-			mv = smartAlg(brd, opp, player);
+			mv = extendedGreedyAlg(brd, opp, player);
 			if (mv != null) {
 				try {
-					brd.insert(bestMoves.get(i));
+					brd.insert(mv);
 				} catch (EQMoves m) {}
 				
 				tmpmin =  player.getScore(brd) - opp.getScore(brd);
