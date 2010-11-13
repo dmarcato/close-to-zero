@@ -1,6 +1,5 @@
 package com.l1ck.equilibrium.logic;
 
-import java.util.Hashtable;
 import java.util.Random;
 import java.util.Vector;
 

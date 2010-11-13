@@ -27,15 +27,11 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -55,6 +51,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	private class AIThread extends Thread {
 		
 		private int gameType = 0;						//Indica il tipo di algoritmo da usare
+		private boolean suggest = false;				//Mossa di suggerimento
 		
 		//Indica i tipi di algoritmi disponibili
 		public static final int EASY = 1;
@@ -62,7 +59,12 @@ public class Equilibrium extends Activity implements OnClickListener {
 		public static final int HARD = 3;
 		
 		public AIThread(int gt) {
+			this(gt, false);
+		}
+		
+		public AIThread(int gt, boolean suggestMove) {
 			this.gameType = gt;
+			this.suggest = suggestMove;
 		}
 		
 		public void run() {
@@ -80,7 +82,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 				break;
 			}
 			Message m = new Message();
-            m.what = Equilibrium.AIMOVE;
+            m.what = (this.suggest) ? Equilibrium.AISUGGEST : Equilibrium.AIMOVE;
             m.obj = move;
             Equilibrium.this.threadHandler.sendMessage(m);
 		}
@@ -94,13 +96,33 @@ public class Equilibrium extends Activity implements OnClickListener {
 		public void handleMessage(Message msg) {
 			
 			switch (msg.what) {
+			case Equilibrium.AISUGGEST:
+				stopLoading();
+				if (msg.obj == null) {
+					Toast tmp = Toast.makeText(Equilibrium.this, Equilibrium.this.getApplicationContext().getResources().getString(R.string.no_moves_available), Toast.LENGTH_LONG);
+					tmp.show();
+				} else {
+					doVibration();
+					EQMoves.EQSingleMove move = (EQMoves.EQSingleMove) msg.obj;
+					if (lastClicked != null) {
+						lastClicked.normal();
+						eraseCross(lastClicked.getRow(), lastClicked.getCol());
+					}
+					selectedRow = move.getRow();
+					selectedCol = move.getCol();
+					drawCross(selectedRow, selectedCol);
+					lastClicked = amatriciana.get(selectedRow).get(selectedCol);
+					lastClicked.select();
+					showNumbers(selectedRow, selectedCol);
+				}
+				break;
 			case Equilibrium.AIMOVE:
 				if (pause) {
 					return;
 				}
 				stopLoading();
 				if (msg.obj == null) {
-					Toast tmp = Toast.makeText(Equilibrium.this, "Nessuna mossa disponibile", Toast.LENGTH_LONG);
+					Toast tmp = Toast.makeText(Equilibrium.this, Equilibrium.this.getApplicationContext().getResources().getString(R.string.no_moves_available), Toast.LENGTH_LONG);
 					tmp.show();
 				} else {
 					doVibration();
@@ -113,7 +135,6 @@ public class Equilibrium extends Activity implements OnClickListener {
 					drawCross(move.getRow(), move.getCol());
 					lastClicked = amatriciana.get(move.getRow()).get(move.getCol());
 					lastClicked.select();
-					//loadingDialog.dismiss();
 				}
 				break;
 			}
@@ -136,7 +157,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public boolean p1Cpu = false;
 	public boolean p2Cpu = false;
 	public String p1Color = "green";
-	public String p2Color = "magenta";
+	public String p2Color = "yellow";
 	public int cpuLevel = AIThread.EASY;
 	private LinearLayout scoreLayout;
 	private HorizontalScrollView numbersLayout;
@@ -148,6 +169,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	private boolean pause = false;
 	private AIThread thinkingAI = null;
 	private DisplayMetrics displayMetrics = null;
+	private EQMoves moveHistory = null;
 	
 	private EQBoard board = null;
 	public Players players = null;
@@ -156,13 +178,18 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public static Typeface TEXT_FONT = null;
 	
 	public static final int MENU_NEW_GAME = 424;
+	public static final int MENU_UNDO = 215;
 	public static final int MENU_SETTINGS = 548;
 	public static final int MENU_HELP = 362;
+	public static final int MENU_ABOUT = 654;
+	public static final int MENU_SUGGEST = 345;
 	public static final int MENU_QUIT = 189;
 	
 	public static final int DIALOG_HELP = 165;
+	public static final int DIALOG_ABOUT = 245;
 	
 	public static final int AIMOVE = 875;
+	public static final int AISUGGEST = 556;
 	
     /** Called when the activity is first created. */
     @Override
@@ -259,9 +286,12 @@ public class Equilibrium extends Activity implements OnClickListener {
     /* Creates the menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_NEW_GAME, 0, R.string.menu_new).setIcon(android.R.drawable.ic_menu_add);
-        menu.add(0, MENU_SETTINGS, 1, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
-        menu.add(0, MENU_HELP, 2, R.string.menu_help).setIcon(android.R.drawable.ic_menu_help);
-        menu.add(0, MENU_QUIT, 3, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+        menu.add(0, MENU_UNDO, 1, R.string.menu_undo).setIcon(android.R.drawable.ic_menu_revert);
+        menu.add(0, MENU_SUGGEST, 2, R.string.menu_suggest).setIcon(android.R.drawable.ic_menu_search);
+        menu.add(0, MENU_HELP, 3, R.string.menu_help).setIcon(android.R.drawable.ic_menu_help);
+        menu.add(0, MENU_SETTINGS, 4, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
+        menu.add(0, MENU_ABOUT, 5, R.string.menu_about).setIcon(android.R.drawable.ic_menu_info_details);
+        menu.add(0, MENU_QUIT, 6, R.string.menu_exit).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
         return true;
     }
 
@@ -270,6 +300,11 @@ public class Equilibrium extends Activity implements OnClickListener {
         switch (item.getItemId()) {
         case MENU_NEW_GAME:
             start();
+            return true;
+        case MENU_UNDO:
+        	if (!blockInteraction) {
+        		undoLastMove(true);
+        	}
             return true;
         case MENU_SETTINGS:
         	pauseAI();
@@ -282,14 +317,24 @@ public class Equilibrium extends Activity implements OnClickListener {
         case MENU_HELP:
         	this.showDialog(DIALOG_HELP);
         	return true;
+        case MENU_ABOUT:
+        	this.showDialog(DIALOG_ABOUT);
+        	return true;
+        case MENU_SUGGEST:
+        	if (!blockInteraction) {
+	        	startLoading();
+	        	thinkingAI = new AIThread(cpuLevel, true);
+	        	thinkingAI.start();
+        	}
+        	return true;
         case MENU_QUIT:
             finish();
             return true;
         }
         return false;
     }
-    
-    protected Dialog onCreateDialog(int id) {
+
+	protected Dialog onCreateDialog(int id) {
     	Dialog dialog = null;
     	switch (id) {
     	case DIALOG_HELP:
@@ -297,10 +342,12 @@ public class Equilibrium extends Activity implements OnClickListener {
 
         	dialog.setContentView(R.layout.help);
         	dialog.setTitle(R.string.help);
-        	/*TextView text = (TextView) dialog.findViewById(R.id.text);
-        	text.setText("Hello, this is a custom dialog!");
-        	ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        	image.setImageResource(R.drawable.android);*/
+        	break;
+    	case DIALOG_ABOUT:
+    		dialog = new Dialog(this);
+
+        	dialog.setContentView(R.layout.about);
+        	dialog.setTitle(R.string.about);
         	break;
     	}
     	return dialog;
@@ -312,6 +359,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     	
     	//Creo la board
     	board = new EQBoard(lato);
+    	moveHistory = new EQMoves();
     	
     	//Turni da giocare
     	turnLeft = lato*lato;
@@ -354,7 +402,6 @@ public class Equilibrium extends Activity implements OnClickListener {
     	
         TableLayout a = new TableLayout(this);
         a.setStretchAllColumns(true);
-        
         amatriciana = new Vector<Vector<Cell>>();
         for (int i = 0; i <= lato; i++) {
         	TableRow r = new TableRow(this);
@@ -439,8 +486,36 @@ public class Equilibrium extends Activity implements OnClickListener {
     	thinkingAI.start();
     }
     
+    public void undoLastMove(boolean rec) {
+    	if (moveHistory.size() > 0) {
+    		EQMoves.EQSingleMove lastMove = null;
+    		do {
+    			lastMove = moveHistory.pop();
+    			this.board.delete(lastMove);
+    			this.turnLeft++;
+    			this.updateRowSum(lastMove.getRow());
+        		this.updateColSum(lastMove.getCol());
+    		} while (moveHistory.size() > 0 && lastMove.getValue() == 0);
+    		if (players.getOther().isBot()) {
+    			if (rec) {
+    				undoLastMove(false);
+    			}
+    		} else {
+    			nextPlayer();
+    		}
+    		if (this.lastClicked != null) {
+    			this.lastClicked.normal();
+    		}
+    		l.invalidate();
+    	} else {
+    		Toast tmp = Toast.makeText(this, getResources().getString(R.string.undo_error), Toast.LENGTH_LONG);
+    		tmp.show();
+    	}
+	}
+    
     public void nextPlayer() {
     	players.next();
+    	updateScore();
     	if (players.get().isBot()) {
     		doAIMove();
     	}
@@ -480,8 +555,6 @@ public class Equilibrium extends Activity implements OnClickListener {
     		btn.setHeight(amatriciana.get(row).get(col).getSize());
     		btn.setWidth(amatriciana.get(row).get(col).getSize());
             btn.setText(Integer.toString(around.elementAt(i)));
-            //btn.setTextSize(amatriciana.get(row).get(col).getSize()*2/3);
-            //btn.setTypeface(TEXT_FONT);
             btn.setOnClickListener(this);
             c.addView(btn);
     	}
@@ -543,14 +616,14 @@ public class Equilibrium extends Activity implements OnClickListener {
     public void addMove(EQMoves.EQSingleMove move) {
     	try {
     		amatriciana.get(move.getRow()).get(move.getCol()).select();
-    		amatriciana.get(move.getRow()).get(move.getCol()).setNumber(move.getValue());
     		turnLeft--;
+    		moveHistory.add(move);
     		board.insert(move);
     	} catch (EQMoves zeroMove) {
     		try {
 				for (int i = 0; i < zeroMove.size(); i++) {
-					amatriciana.get(zeroMove.get(i).getRow()).get(zeroMove.get(i).getCol()).setNumber(zeroMove.get(i).getValue());
 					turnLeft--;
+					moveHistory.add(zeroMove.get(i));
 					board.insert(zeroMove.get(i));
 				}
 			} catch (EQMoves m) {}
@@ -573,7 +646,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     	} else {
     		tmp = players.getOther();
     	}
-    	amatriciana.get(row).get(lato).setNumber(tmp.getRowSum(board, row));
+    	((CellSum)amatriciana.get(row).get(lato)).setNumber(tmp.getRowSum(board, row));
     }
     
     public void updateColSum(int col) {
@@ -583,7 +656,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     	} else {
     		tmp = players.getOther();
     	}
-    	amatriciana.get(lato).get(col).setNumber(tmp.getColumnSum(board, col));
+    	((CellSum)amatriciana.get(lato).get(col)).setNumber(tmp.getColumnSum(board, col));
     }
     
     public void updateScore() {
@@ -633,52 +706,4 @@ public class Equilibrium extends Activity implements OnClickListener {
     	}
     }
     
-    /*public boolean onTouchEvent(MotionEvent event) {
-    	Log.i("Equilibrium", "Equilibrium");
-    	/*switch (event.getAction()) {
-    	case MotionEvent.ACTION_DOWN:
-    		return false;
-    	case MotionEvent.ACTION_MOVE:
-    		this.dispatchTouchEvent(event);
-    		return false;
-    	case MotionEvent.ACTION_UP:
-    		return true;
-    	}
-    	//Log.i("Equilibrium", String.valueOf(b));
-    	/*int x = (int) event.getX();
-    	int y = (int) event.getY();
-    	Cell theCell = null;
-    	for (int i = 0; i < lato; i++) {
-    		for (int j = 0; j < lato; j++) {
-    			Rect r = new Rect();
-    			Cell c = amatriciana.get(i).get(j);
-    			r.left = c.getLeft();
-    			r.top = c.getTop();
-    			r.right = c.getRight();
-    			r.bottom = c.getBottom();
-    			if (r.contains(x, y)) {
-    				theCell = amatriciana.get(i).get(j);
-    			}
-    		}
-    	}
-    	if (theCell != null) {
-			switch (event.getAction()) {
-	    	case MotionEvent.ACTION_DOWN:
-	    		if (lastClicked != null) {
-					lastClicked.normal();
-					eraseCross(lastClicked.row, lastClicked.col);
-	    		}
-				lastMoved = theCell;
-	    		break;
-	    	case MotionEvent.ACTION_UP:
-	    		if ((lastClicked != null) && (lastClicked != theCell)) {
-	    			lastClicked.normal();
-	    		}
-	    		lastClicked = theCell;
-	    		drawCross(theCell.logic.getRow(), theCell.logic.getCol());
-	    		break;
-	    	}
-    	}
-		return true;
-    }*/
 }

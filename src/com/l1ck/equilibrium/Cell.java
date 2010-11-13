@@ -2,10 +2,8 @@ package com.l1ck.equilibrium;
 
 import com.l1ck.equilibrium.logic.EQCell;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
@@ -13,19 +11,15 @@ import android.graphics.Paint;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
 public class Cell extends View {
 
 	protected Equilibrium e;
 	protected EQCell logic;
-	protected String sign;
-	protected String number;
 	protected int size;
 	public int row;
 	public int col;
-	public boolean numberSetted = false;
 	public int originalBkColor = Color.LTGRAY;//0xFFEEEEEE;
 	public int bkColor = Color.LTGRAY;//0xFFEEEEEE;
 	protected int borderColor = Color.DKGRAY;
@@ -59,7 +53,6 @@ public class Cell extends View {
         }
         bkImage = e.getResources().getDrawable(R.drawable.trans);
         bkImage.setAlpha(255);
-        sign = number = "";
         currentAlpha = originalAlpha;
         currentShadow = originalShadow;
         currentNumberColor = numberColor;
@@ -123,30 +116,23 @@ public class Cell extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
-        //canvas.drawColor(bkColor);
-        
         painter.setColor(bkColor);
         painter.setShader(new LinearGradient(size / 2, 0, size / 2, size / 2, bkColor, Color.WHITE, Shader.TileMode.MIRROR));
-        /*canvas.drawLine(0, 0, getWidth(), 0, painter);
-        canvas.drawLine(0, 0, 0, getHeight(), painter);
-        canvas.drawLine(getWidth(), 0, getWidth(), getHeight(), painter);
-        canvas.drawLine(getWidth(), getHeight(), 0, getHeight(), painter);*/
         int padding = (int) Math.round(0.03*size);
         canvas.drawRoundRect(new RectF(padding, padding, size-padding, size-padding), size/7, size/7, painter);
         painter.setShader(null);
         
-        //canvas.drawRGB(Color.red(signColor), Color.green(signColor), Color.blue(signColor));
         padding = (int) Math.round(0.17*size);
         bkImage.setBounds(padding, padding, size-padding, size-padding);
         bkImage.setAlpha(currentAlpha);
         bkImage.draw(canvas);
-        //canvas.drawARGB(currentAlpha, 255, 255, 255);
         
         painter.setTextSize(size*2/3);
         painter.setFakeBoldText(true);
         painter.setShadowLayer(currentShadow, 0, 0, signColor);
         painter.setColor(currentNumberColor);
-        canvas.drawText(number, (getWidth()/2)-(painter.measureText(number)/2), (3*size/4), painter);
+        String n = (this.isSetted()) ? String.valueOf(getNumber()) : "";
+        canvas.drawText(n, (getWidth()/2)-(painter.measureText(n)/2), (3*size/4), painter);
         painter.setShadowLayer(0, 0, 0, 0);
     }
     
@@ -162,7 +148,7 @@ public class Cell extends View {
     	case MotionEvent.ACTION_UP:
     		e.selectedRow = row;
     		e.selectedCol = col;
-    		if (numberSetted == false) {
+    		if (!this.isSetted()) {
     			e.showNumbers(row, col);
     			select();
     		} else {
@@ -178,30 +164,13 @@ public class Cell extends View {
 		return true;
     }
     
-    public void setBkColor(int color) {
-    	setBkColor(color, false);
-    }
-    
-    public void setBkColor(int color, boolean original) {
-    	bkColor = color;
-    	if (original == true) {
-    		originalBkColor = color;
-    	}
-    	invalidate();
-    }
-    
-    public void setSignColor(int color) {
+    public boolean isSetted() {
+		return this.logic.isSet();
+	}
+
+	public void setSignColor(int color) {
     	signColor = color;
     	invalidate();
-    }
-    
-    public void setSign(String txt) {
-    	sign = txt;
-    	invalidate();
-    }
-    
-    public String getSign() {
-    	return sign;
     }
     
     public void setNumberColor(int color) {
@@ -209,22 +178,8 @@ public class Cell extends View {
     	invalidate();
     }
     
-    public void setNumber(int num) {
-    	setNumber(String.valueOf(num));
-    }
-    
-    public void setNumber(String txt) {
-    	number = txt;
-    	numberSetted = true;
-    	invalidate();
-    }
-    
     public int getNumber() {
-    	if (number != "") {
-    		return Integer.parseInt(number);
-    	} else {
-    		return 0;
-    	}
+    	return Math.abs(this.logic.getValue());
     }
     
     public int getSize() {

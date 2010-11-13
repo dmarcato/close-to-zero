@@ -146,7 +146,7 @@ public class EQBoard implements Cloneable{
 		if (v > 0){
 			
 			for (int k = -1; k <= 1; k++) {
-				for (int l = -1; l <= 1; l++) {	
+				for (int l = -1; l <= 1; l++) {
 					if (i+k >= 0 && i+k < dimension && j+l >= 0 && j+l < dimension) {
 						int psbSize = board[i+k][j+l].getPsb().size();
 						if (board[i+k][j+l].addPsb(v)) {
@@ -185,6 +185,10 @@ public class EQBoard implements Cloneable{
 				}
 			}
 		}
+	}
+	
+	public void delete(EQMoves.EQSingleMove mv) {
+		delete(mv.getRow(), mv.getCol());
 	}
 	
 	private EQMoves checkBoard() {

@@ -39,6 +39,10 @@ public class EQMoves extends Exception {
 		public int getValue() {
 			return value;
 		}
+		
+		public String toString() {
+			return "["+String.valueOf(this.getRow())+","+String.valueOf(this.getCol())+"]: "+String.valueOf(this.getValue());
+		}
 	}
 	
 	private Vector<EQSingleMove> moveList;
@@ -58,6 +62,17 @@ public class EQMoves extends Exception {
 	
 	public EQSingleMove get(int i) {
 		return moveList.get(i);
+	}
+	
+	public EQSingleMove getLast() {
+		return moveList.get(moveList.size()-1);
+	}
+	
+	public EQSingleMove pop() {
+		int pos = moveList.size()-1;
+		EQMoves.EQSingleMove m = moveList.get(pos);
+		moveList.remove(pos);
+		return m;
 	}
 	
 	public void add(EQSingleMove mv) {

@@ -3,7 +3,11 @@
     
     
 <string name="menu_new">Nuova partita</string>
+<string name="menu_undo">Annulla ultima mossa</string>
 <string name="menu_settings">Impostazioni</string>
+<string name="menu_help">Istruzioni</string>
+<string name="menu_about">About</string>
+<string name="menu_suggest">Suggerisci mossa</string>
 <string name="menu_exit">Esci</string>
 
 
@@ -21,9 +25,10 @@
 <string name="vs_cpu_summary">Il secondo giocatore è controllato dalla CPU</string>
 <string name="partial_sum">Mostra somme parziali</string>
 <string name="partial_sum_summary">Mostra una riga e una colonna con le somme parziali</string>
-<string name="menu_help">Aiuto</string>
-<string name="help">Aiuto</string>
+<string name="help">Istruzioni</string>
 <string name="help_content">Istruzioni per l\'uso =)</string>
+<string name="about">About</string>
+<string name="about_content">About...</string>
 <string name="loading">Caricamento, attendere...</string>
 <string name="human">Umano</string>
 <string name="cpu">CPU</string>
@@ -40,4 +45,6 @@
 <string name="thinking">Sto pensando...</string>
 <string name="vibration">Feedback tattile</string>
 <string name="vibration_summary">Feedback tattile per le mosse</string>
+<string name="undo_error">Nessuna mossa da annullare</string>
+<string name="no_moves_available">Nessuna mossa disponibile</string>
 </resources>

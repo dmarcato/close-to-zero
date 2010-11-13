@@ -3,7 +3,11 @@
     
     
 <string name="menu_new">New game</string>
+<string name="menu_undo">Undo last move</string>
 <string name="menu_settings">Settings</string>
+<string name="menu_help">Instructions</string>
+<string name="menu_about">About</string>
+<string name="menu_suggest">Suggest move</string>
 <string name="menu_exit">Exit</string>
 
 
@@ -21,9 +25,10 @@
 <string name="vs_cpu_summary">Second player is controlled by CPU</string>
 <string name="partial_sum">Show partial sum</string>
 <string name="partial_sum_summary">Display a row and a col with partial sums</string>
-<string name="menu_help">Help</string>
-<string name="help">Help</string>
+<string name="help">Instructions</string>
 <string name="help_content">This is how it works: bla bla bla =)</string>
+<string name="about">About</string>
+<string name="about_content">About...</string>
 <string name="loading">Loading, please wait...</string>
 <string name="human">Human</string>
 <string name="cpu">CPU</string>
@@ -40,4 +45,6 @@
 <string name="thinking">Thinking...</string>
 <string name="vibration">Haptic feedback</string>
 <string name="vibration_summary">Haptic feedback for moves</string>
+<string name="undo_error">No moves to undo</string>
+<string name="no_moves_available">No moves available</string>
 </resources>
