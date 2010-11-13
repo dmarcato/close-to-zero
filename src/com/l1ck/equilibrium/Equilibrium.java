@@ -33,11 +33,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -165,24 +168,22 @@ public class Equilibrium extends Activity implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.main);
         
         this.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        
+        setContentView(R.layout.main);
         
         vibro = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         
         Equilibrium.NUMBER_FONT = Typeface.createFromAsset(getAssets(), "fonts/danielbd.ttf");
         Equilibrium.TEXT_FONT = Typeface.createFromAsset(getAssets(), "fonts/DESYREL_.ttf");
         
-        LinearLayout container = new LinearLayout(this);
-        container.setOrientation(LinearLayout.VERTICAL);
-        container.setGravity(Gravity.FILL_VERTICAL);
-        l = new LinearLayout(this);
-        l.setOrientation(LinearLayout.VERTICAL);
-        l.setGravity(Gravity.FILL_VERTICAL);
-        
         displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        
+        l = (LinearLayout)this.findViewById(R.id.l);
+        l.setOrientation(LinearLayout.VERTICAL);
+        l.setGravity(Gravity.FILL_VERTICAL);
         
         AdView adView = null;
         if (displayMetrics.heightPixels > 320) {
@@ -190,17 +191,15 @@ public class Equilibrium extends Activity implements OnClickListener {
 	        		AdManager.TEST_EMULATOR,	// Android emulator
 	        		"54C99084BAD7C6DA232F0DD4215BA36D", // Tattoo
 	        });
-	        adView = new AdView(this);
+	        adView = (AdView)this.findViewById(R.id.ad);
 	        adView.requestFreshAd();
 	        adView.setRequestInterval(60);
         }
         
-        container.addView(l);
         if (adView != null) {
-        	container.addView(adView);
+        	RelativeLayout tmp = (RelativeLayout)this.findViewById(R.id.adLayout);
+        	tmp.setVisibility(RelativeLayout.VISIBLE);
         }
-        
-        setContentView(container);
     }
     
     @Override
@@ -415,6 +414,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     
     public void pauseAI() {
     	this.pause = true;
+    	this.blockInteraction = true;
     	if (thinkingAI != null) {
     		thinkingAI.interrupt();
     	}
