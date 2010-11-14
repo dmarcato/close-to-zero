@@ -134,7 +134,7 @@ public final class EQAI extends Thread {
 		return bestMoves.get(new Random().nextInt(bestMoves.size()));
 	}
 	
-	static public EQMoves.EQSingleMove smartAlg(EQBoard board, EQPlayer player, EQPlayer opp) {
+	static public EQMoves.EQSingleMove smartAlg(EQBoard board, EQPlayer player, EQPlayer opp, boolean first) {
 		int maxGain = board.getMaxGain();
 		int lvl = board.getDimension();
 		int best = -1000, diff, plScoreMin = 1000, pltmp;
@@ -191,6 +191,9 @@ public final class EQAI extends Thread {
 			return null;
 		}
 		
+		if (!first)
+			return bestMoves.get(new Random().nextInt(bestMoves.size()));
+		
 		int min = 1000, tmpmin, imin = 0;
 		EQMoves.EQSingleMove mv;
 		for (int i = 0; i < bestMoves.size(); i++)
@@ -199,7 +202,7 @@ public final class EQAI extends Thread {
 				brd.insert(bestMoves.get(i));
 			} catch (EQMoves m) {}
 			
-			mv = extendedGreedyAlg(brd, opp, player);
+			mv = smartAlg(brd, opp, player, false);
 			if (mv != null) {
 				try {
 					brd.insert(mv);

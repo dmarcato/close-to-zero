@@ -78,7 +78,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 				move = EQAI.extendedGreedyAlg(board, players.get(), players.getOther());
 				break;
 			case AIThread.HARD:
-				move = EQAI.smartAlg(board, players.get(), players.getOther());
+				move = EQAI.smartAlg(board, players.get(), players.getOther(), true);
 				break;
 			}
 			Message m = new Message();
