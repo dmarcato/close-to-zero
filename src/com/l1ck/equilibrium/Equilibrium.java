@@ -227,6 +227,27 @@ public class Equilibrium extends Activity implements OnClickListener {
         	RelativeLayout tmp = (RelativeLayout)this.findViewById(R.id.adLayout);
         	tmp.setVisibility(RelativeLayout.VISIBLE);
         }
+        
+        startActivityForResult(new Intent(getBaseContext(), Startup.class), 0);
+    }
+    
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	switch (requestCode) {
+    	case 0:
+    		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
+    		editor.putString("p1Cpu", "human");
+    		switch (resultCode) {
+    		case R.id.btnCpu:
+    			editor.putString("p2Cpu", "cpu");
+    			break;
+    		case R.id.btnHuman:
+    			editor.putString("p2Cpu", "human");
+    			break;
+    		}
+    		editor.commit();
+    		start();
+    		break;
+    	}
     }
     
     @Override
@@ -280,6 +301,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         	lato = newLato;
         	ris = true;
         }
+        
         return ris;
 	}
     

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    
+
+<string name="playVsHuman">Gioca contro un umano</string>
+<string name="playVsCpu">Gioca contro la CPU</string>
+
 <string name="menu_new">Nuova partita</string>
 <string name="menu_undo">Annulla ultima mossa</string>
 <string name="menu_settings">Impostazioni</string>

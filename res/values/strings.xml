@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    
+
+<string name="playVsHuman">Play vs Human</string>
+<string name="playVsCpu">Play vs CPU</string>
+
 <string name="menu_new">New game</string>
 <string name="menu_undo">Undo last move</string>
 <string name="menu_settings">Settings</string>

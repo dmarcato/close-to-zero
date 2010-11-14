@@ -1,9 +1,13 @@
 package com.l1ck.equilibrium;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class Settings extends PreferenceActivity {
 	
@@ -11,7 +15,15 @@ public class Settings extends PreferenceActivity {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_view);
-                
+        
+        /*PreferenceManager.getDefaultSharedPreferences(getBaseContext()).registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+
+			public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+				Log.i("Equilibrium", "Changed: "+key+": "+String.valueOf(sp.getBoolean(key, false)));
+			}
+	    	
+	    });*/
+        
         updateSummary();
     }
 	
