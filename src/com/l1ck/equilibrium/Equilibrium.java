@@ -471,23 +471,23 @@ public class Equilibrium extends Activity implements OnClickListener {
         l.addView(a);
         l.addView(numbersLayout);
         
-        this.pause = false;
+        pauseAI();
         if (players.get().isBot()) {
-        	if (players.getOther().isBot()) {
-        		pauseAI();
-        	} else {
+        	if (!players.getOther().isBot()) {
         		doAIMove();
         	}
         }
     }
     
     public void pauseAI() {
-    	this.pause = true;
-    	this.blockInteraction = true;
-    	if (thinkingAI != null) {
-    		thinkingAI.interrupt();
+    	if (players.isBothBot()) {
+	    	this.pause = true;
+	    	this.blockInteraction = true;
+	    	if (thinkingAI != null) {
+	    		thinkingAI.interrupt();
+	    	}
+	    	stopLoading();
     	}
-    	stopLoading();
     }
     
     public void resumeAI() {
