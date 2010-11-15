@@ -156,8 +156,8 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public boolean showPartialSum = true;
 	public boolean p1Cpu = false;
 	public boolean p2Cpu = false;
-	public String p1Color = "green";
-	public String p2Color = "yellow";
+	public String p1Color = "cyan";
+	public String p2Color = "gray";
 	public int cpuLevel = AIThread.EASY;
 	private LinearLayout scoreLayout;
 	private HorizontalScrollView numbersLayout;
@@ -176,6 +176,9 @@ public class Equilibrium extends Activity implements OnClickListener {
 	
 	public static Typeface NUMBER_FONT = null;
 	public static Typeface TEXT_FONT = null;
+	public static Typeface EQ_FONT = null;
+	
+	public static final int TEXT_SIZE = 15;
 	
 	public static final int MENU_NEW_GAME = 424;
 	public static final int MENU_UNDO = 215;
@@ -203,7 +206,8 @@ public class Equilibrium extends Activity implements OnClickListener {
         vibro = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         
         Equilibrium.NUMBER_FONT = Typeface.createFromAsset(getAssets(), "fonts/danielbd.ttf");
-        Equilibrium.TEXT_FONT = Typeface.createFromAsset(getAssets(), "fonts/DESYREL_.ttf");
+        Equilibrium.TEXT_FONT = Typeface.createFromAsset(getAssets(), "fonts/HappyKiller.ttf");
+        Equilibrium.EQ_FONT = Typeface.createFromAsset(getAssets(), "fonts/BINREGUL.TTF");
         
         displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -284,8 +288,8 @@ public class Equilibrium extends Activity implements OnClickListener {
         	ris = true;
         }
         
-        p1Color = prefs.getString("p1Color", "green");
-        p2Color = prefs.getString("p2Color", "yellow");
+        p1Color = prefs.getString("p1Color", "cyan");
+        p2Color = prefs.getString("p2Color", "gray");
         if (players != null) {
         	players.get(1).setColor(Color.parseColor(p1Color));
         	players.get(2).setColor(Color.parseColor(p2Color));
@@ -548,7 +552,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     	numbersLayout.removeAllViews();
     	TextView t = new TextView(this);
     	t.setTypeface(TEXT_FONT);
-    	t.setTextSize(25);
+    	t.setTextSize(TEXT_SIZE+5);
     	t.setTextColor(players.get().getColor());
     	t.setText(R.string.thinking);
     	t.setGravity(Gravity.CENTER);
@@ -691,7 +695,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	    	TextView t = new TextView(this);
 	    	t.setGravity(Gravity.CENTER_HORIZONTAL);
 	    	t.setTypeface(TEXT_FONT);
-	    	t.setTextSize(20);
+	    	t.setTextSize(TEXT_SIZE);
 	    	t.setTextColor(players.get(i).getColor());
 	    	if (players.get(i) == players.get()) {
     			out += "» ";

@@ -25,7 +25,8 @@ public class CellAIControl extends Cell {
     @Override
     protected void onDraw(Canvas canvas) {
     	painter.setShader(new LinearGradient(0, 0, size / 2, size / 2, e.players.get(1).getColor(), e.players.get(2).getColor(), Shader.TileMode.MIRROR));
-        painter.setTextSize(size/2-1);
+    	painter.setTypeface(Equilibrium.EQ_FONT);
+    	painter.setTextSize(size);
         painter.setFakeBoldText(true);
         painter.setShadowLayer(currentShadow, 0, 0, signColor);
         painter.setColor(currentNumberColor);
@@ -42,7 +43,7 @@ public class CellAIControl extends Cell {
         	}
             canvas.drawPath(p, painter);
         } else {
-        	canvas.drawText("EQ", 0, (size*2/3), painter);
+        	canvas.drawText("EQ", (size-painter.measureText("EQ"))/2, (size*3/4), painter);
         }
     }
     

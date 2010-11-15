@@ -27,7 +27,7 @@
 			android:title="@string/player_color"
 			android:summary="@string/player_color_summary"
 			android:key="p1Color"
-			android:defaultValue="green"
+			android:defaultValue="cyan"
 			android:entries="@array/list_player_color"
 			android:entryValues="@array/list_player_color_val" />
 		
@@ -50,7 +50,7 @@
 			android:title="@string/player_color"
 			android:summary="@string/player_color_summary"
 			android:key="p2Color"
-			android:defaultValue="yellow"
+			android:defaultValue="gray"
 			android:entries="@array/list_player_color"
 			android:entryValues="@array/list_player_color_val" />
 		
