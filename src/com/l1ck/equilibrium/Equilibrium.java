@@ -28,6 +28,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -241,6 +242,9 @@ public class Equilibrium extends Activity implements OnClickListener {
     		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
     		editor.putString("p1Cpu", "human");
     		switch (resultCode) {
+    		case RESULT_CANCELED:
+    			this.finish();
+    			break;
     		case R.id.btnCpu:
     			editor.putString("p2Cpu", "cpu");
     			break;
@@ -254,8 +258,13 @@ public class Equilibrium extends Activity implements OnClickListener {
     	}
     }
     
-    public void onBackPressed () {
-    	startActivityForResult(new Intent(getBaseContext(), Startup.class), 0);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        	startActivityForResult(new Intent(getBaseContext(), Startup.class), 0);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
     
     @Override
