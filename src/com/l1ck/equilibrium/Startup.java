@@ -28,6 +28,9 @@ public class Startup extends Activity implements OnClickListener {
 		case R.id.btnHuman:
 			this.setResult(R.id.btnHuman);
 			break;
+		case R.id.btnHelp:
+			this.setResult(R.id.btnHelp);
+			break;
 		}
 		this.finish();
 	}

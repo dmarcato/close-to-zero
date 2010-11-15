@@ -9,22 +9,31 @@
 		android:id="@+id/imgContainer"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_centerVertical="true"
 		android:layout_centerHorizontal="true"
-		android:paddingTop="80dp">
-		
+		android:paddingTop="120dp">
+			
 		<Button
 			android:id="@+id/btnHuman"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
 			android:text="@string/playVsHuman"
 			android:onClick="onClick" />
 		<Button
 			android:id="@+id/btnCpu"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_toRightOf="@id/btnHuman"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@id/btnHuman"
 			android:text="@string/playVsCpu"
+			android:onClick="onClick" />
+		<Button
+			android:id="@+id/btnHelp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@id/btnCpu"
+			android:text="@string/help"
 			android:onClick="onClick" />
 			
 	</RelativeLayout>
