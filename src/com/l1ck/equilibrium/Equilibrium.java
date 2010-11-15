@@ -254,6 +254,10 @@ public class Equilibrium extends Activity implements OnClickListener {
     	}
     }
     
+    public void onBackPressed () {
+    	startActivityForResult(new Intent(getBaseContext(), Startup.class), 0);
+    }
+    
     @Override
     public void onStart() {
     	super.onStart();
