@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.view.MotionEvent;
+import android.view.animation.AnimationUtils;
 
 public class CellAIControl extends Cell {
 
