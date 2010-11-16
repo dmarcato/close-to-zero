@@ -2,21 +2,37 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/layout_root"
-	android:orientation="horizontal"
+	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
+	android:gravity="center"
 	android:padding="10dp">
-
-	<ImageView android:id="@+id/image"
+	
+	<TextView
 		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
-		android:layout_marginRight="10dp"
-		android:src="@drawable/icon" />
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="The game Equilibrium come from an idea of Mirko Polato" />
+	
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp"
+		android:text="Developed and designed by:" />
 		
-	<TextView android:id="@+id/text"
+	<TextView
 		android:layout_width="wrap_content"
-		android:layout_height="fill_parent"
-		android:textColor="#FFF"
-		android:text="@string/about_content" />
+		android:layout_height="wrap_content"
+		android:text="Dario Marcato &lt;dm0388@gmail.com&gt;" />
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Mirko Polato &lt;mak1788@gmail.com&gt;" />
+	
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:text="©2010 L1CK - l1ck.dev@gmail.com" />
   
 </LinearLayout>

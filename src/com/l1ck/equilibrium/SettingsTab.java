@@ -31,7 +31,7 @@ public class SettingsTab extends TabActivity {
 		
 		AdManager.setTestDevices(new String[] {
 				AdManager.TEST_EMULATOR,	// Android emulator
-				"54C99084BAD7C6DA232F0DD4215BA36D", // Tattoo
+				//"54C99084BAD7C6DA232F0DD4215BA36D", // Tattoo
 		});
 		AdView adView = (AdView)this.findViewById(R.id.ad);
 		adView.requestFreshAd();

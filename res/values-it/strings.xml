@@ -30,7 +30,6 @@
 <string name="help">Istruzioni</string>
 <string name="help_content">Lo scopo del gioco è di mantenere la somma delle proprie righe e colonne più vicina allo zero. Ad ogni turno devi inserire un numero in una cella libera. Non si possono inserire 2 numeri uguali in celle vicine. Le celle contrassegnate con il simbolo "-" sottraggono il numero, quelle con il "+" lo sommano. Il totale di ogni riga e colonna corrisponde alla distanza dallo 0. Vince chi ha il punteggio minimo una volta riempita la griglia.</string>
 <string name="about">About</string>
-<string name="about_content">About...</string>
 <string name="loading">Caricamento, attendere...</string>
 <string name="human">Umano</string>
 <string name="cpu">CPU</string>

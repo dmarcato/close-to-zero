@@ -34,7 +34,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -222,7 +221,7 @@ public class Equilibrium extends Activity implements OnClickListener {
         if (displayMetrics.heightPixels > 320) {
 	        AdManager.setTestDevices(new String[] {
 	        		AdManager.TEST_EMULATOR,	// Android emulator
-	        		"54C99084BAD7C6DA232F0DD4215BA36D", // Tattoo
+	        		//"54C99084BAD7C6DA232F0DD4215BA36D", // Tattoo
 	        });
 	        adView = (AdView)this.findViewById(R.id.ad);
 	        adView.requestFreshAd();

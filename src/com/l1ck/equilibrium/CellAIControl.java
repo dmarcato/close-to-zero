@@ -16,6 +16,7 @@ public class CellAIControl extends Cell {
 		super(context, null);
 		this.currentNumberColor = Color.YELLOW;
 		this.signColor = Color.WHITE;
+		this.startAnimation(AnimationUtils.loadAnimation(e, R.anim.punto));
 	}
 	
 	/**
