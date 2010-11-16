@@ -28,7 +28,7 @@
 <string name="partial_sum">Show partial sum</string>
 <string name="partial_sum_summary">Display a row and a col with partial sums</string>
 <string name="help">Instructions</string>
-<string name="help_content">This is how it works: bla bla bla =)</string>
+<string name="help_content">The goal of the game is to keep the sum of your rows and columns as close as possible to zero. At every turn, you must enter a number in a free cell. You can\'t enter the same number in two adjacent cells. The cells marked with the symbol "-" subtract the number, those with the "+" sum it. The total of each row and column corresponds to the distance from 0. Whoever has the minimum score once filled the grid wins.</string>
 <string name="about">About</string>
 <string name="about_content">About...</string>
 <string name="loading">Loading, please wait...</string>
