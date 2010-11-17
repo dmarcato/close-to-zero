@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+<string-array name="list_game_mode">
+<item>Classica</item>
+<item>Stile Sudoku</item>
+</string-array>
 <string-array name="list_player_type"><item>Umano</item>
 <item>CPU</item>
 </string-array>

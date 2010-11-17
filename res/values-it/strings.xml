@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-<string name="playVsHuman">Gioca contro un umano</string>
-<string name="playVsCpu">Gioca contro la CPU</string>
+<string name="playVsHuman">contro umano</string>
+<string name="playVsCpu">contro CPU</string>
+<string name="game_mode_sudoku">Stile Sudoku</string>
+<string name="game_mode_classic">Classica</string>
 
 <string name="menu_new">Nuova partita</string>
 <string name="menu_undo">Annulla ultima mossa</string>
@@ -22,8 +23,8 @@
 <string name="settings">Impostazioni</string>
 <string name="size">Dimensioni</string>
 <string name="size_summary">Scegli le dimensioni della griglia di gioco</string>
-
-
+<string name="game_mode">Modalità di gioco</string>
+<string name="game_mode_summary">Scegli la modalità di gioco</string>
 <string name="vs_cpu_summary">Il secondo giocatore è controllato dalla CPU</string>
 <string name="partial_sum">Mostra somme parziali</string>
 <string name="partial_sum_summary">Mostra una riga e una colonna con le somme parziali</string>

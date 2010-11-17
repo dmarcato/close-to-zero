@@ -9,6 +9,7 @@ import com.l1ck.equilibrium.logic.EQBoard;
 import com.l1ck.equilibrium.logic.EQCell;
 import com.l1ck.equilibrium.logic.EQMoves;
 import com.l1ck.equilibrium.logic.EQPlayer;
+import com.l1ck.equilibrium.logic.EQSudokuBoard;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -160,12 +161,13 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public String p1Color = "cyan";
 	public String p2Color = "gray";
 	public int cpuLevel = AIThread.EASY;
+	public int gameMode = GAME_MODE_NORMAL;
 	private LinearLayout scoreLayout;
 	private HorizontalScrollView numbersLayout;
 	protected ProgressDialog loadingDialog;
-	private boolean firstRun = true;
 	private boolean blockInteraction = false;
 	private boolean canVibrate = true;
+	private boolean firstRun = true;
 	private Vibrator vibro;
 	private boolean pause = false;
 	private AIThread thinkingAI = null;
@@ -180,6 +182,9 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public static Typeface EQ_FONT = null;
 	
 	public static final int TEXT_SIZE = 15;
+	
+	public static final int GAME_MODE_NORMAL = 100;
+	public static final int GAME_MODE_SUDOKU = 200;
 	
 	public static final int MENU_NEW_GAME = 424;
 	public static final int MENU_UNDO = 215;
@@ -233,30 +238,24 @@ public class Equilibrium extends Activity implements OnClickListener {
         	tmp.setVisibility(RelativeLayout.VISIBLE);
         }
         
+        getPrefs();
+        
         startActivityForResult(new Intent(getBaseContext(), Startup.class), 0);
     }
     
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	switch (requestCode) {
     	case 0:
-    		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
-    		editor.putString("p1Cpu", "human");
     		switch (resultCode) {
     		case RESULT_CANCELED:
     			this.finish();
     			break;
-    		case R.id.btnCpu:
-    			editor.putString("p2Cpu", "cpu");
-    			break;
-    		case R.id.btnHuman:
-    			editor.putString("p2Cpu", "human");
-    			break;
-    		case R.id.btnHelp:
-    			this.showDialog(DIALOG_HELP);
-    			break;
+			default:
+				getPrefs();
+				start();
+	    		updateScore();
+				break;
     		}
-    		editor.commit();
-    		start();
     		break;
     	}
     }
@@ -301,6 +300,12 @@ public class Equilibrium extends Activity implements OnClickListener {
         int newCpuLevel = Integer.parseInt(prefs.getString("cpuLevel", String.valueOf(AIThread.EASY)));
         if (newCpuLevel != cpuLevel) {
         	cpuLevel = newCpuLevel;
+        	ris = true;
+        }
+        
+        int newGameMode = Integer.parseInt(prefs.getString("gameMode", String.valueOf(GAME_MODE_NORMAL)));
+        if (newGameMode != gameMode) {
+        	gameMode = newGameMode;
         	ris = true;
         }
         
@@ -400,7 +405,14 @@ public class Equilibrium extends Activity implements OnClickListener {
     	l.removeAllViews();
     	
     	//Creo la board
-    	board = new EQBoard(lato);
+    	switch (this.gameMode) {
+    	case GAME_MODE_NORMAL:
+    		board = new EQBoard(lato);
+    		break;
+    	case GAME_MODE_SUDOKU:
+    		board = new EQSudokuBoard(lato);
+    		break;
+    	}
     	moveHistory = new EQMoves();
     	
     	//Turni da giocare

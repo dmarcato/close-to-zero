@@ -17,6 +17,14 @@
 <item>8</item>
 <item>9</item>
 </string-array>
+<string-array name="list_game_mode">
+<item>Classic</item>
+<item>Sudoku-Like</item>
+</string-array>
+<string-array name="list_game_mode_val">
+<item>100</item>
+<item>200</item>
+</string-array>
 <string-array name="list_player_type"><item>Human</item>
 <item>CPU</item>
 </string-array>

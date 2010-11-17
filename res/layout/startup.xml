@@ -17,19 +17,58 @@
 	</RelativeLayout>
 	
 	<RelativeLayout
-		android:id="@+id/imgContainer"
+		android:id="@+id/firstStage"
 		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:layout_centerHorizontal="true"
 		android:paddingTop="120dp">
+		
+		<Button
+			android:id="@+id/btnClassic"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:text="@string/game_mode_classic"
+			android:onClick="onClick"
+			android:tag="firstStage" />
+		<Button
+			android:id="@+id/btnSudoku"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@id/btnClassic"
+			android:text="@string/game_mode_sudoku"
+			android:onClick="onClick"
+			android:layout_marginTop="5dp"
+			android:tag="firstStage" />
+		<Button
+			android:id="@+id/btnHelp"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@id/btnSudoku"
+			android:text="@string/help"
+			android:onClick="onClick"
+			android:layout_marginTop="5dp"
+			android:tag="help" />
 			
+	</RelativeLayout>
+	
+	<RelativeLayout
+		android:id="@+id/secondStage"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:layout_centerHorizontal="true"
+		android:paddingTop="120dp"
+		android:visibility="invisible">
 		<Button
 			android:id="@+id/btnHuman"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerHorizontal="true"
 			android:text="@string/playVsHuman"
-			android:onClick="onClick" />
+			android:onClick="onClick"
+			android:tag="secondStage" />
 		<Button
 			android:id="@+id/btnCpu"
 			android:layout_width="wrap_content"
@@ -37,16 +76,9 @@
 			android:layout_centerHorizontal="true"
 			android:layout_below="@id/btnHuman"
 			android:text="@string/playVsCpu"
-			android:onClick="onClick" />
-		<Button
-			android:id="@+id/btnHelp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
-			android:layout_below="@id/btnCpu"
-			android:text="@string/help"
-			android:onClick="onClick" />
-			
+			android:onClick="onClick"
+			android:layout_marginTop="5dp"
+			android:tag="secondStage" />
 	</RelativeLayout>
 	
 </RelativeLayout>

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-<string name="playVsHuman">Play vs Human</string>
-<string name="playVsCpu">Play vs CPU</string>
+<string name="playVsHuman">vs Human</string>
+<string name="playVsCpu">vs CPU</string>
+<string name="game_mode_sudoku">Sudoku-Like</string>
+<string name="game_mode_classic">Classic</string>
 
 <string name="menu_new">New game</string>
 <string name="menu_undo">Undo last move</string>
@@ -22,6 +23,8 @@
 <string name="settings">Settings</string>
 <string name="size">Size</string>
 <string name="size_summary">Choose the grid\'s size</string>
+<string name="game_mode">Game mode</string>
+<string name="game_mode_summary">Choose the game mode</string>
 <string name="app_name">Equilibrium</string>
 <string name="vs_cpu">vs CPU</string>
 <string name="vs_cpu_summary">Second player is controlled by CPU</string>
