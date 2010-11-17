@@ -59,7 +59,7 @@ public class Startup extends Activity implements OnClickListener, android.conten
 			editor.putString("gameMode", String.valueOf(Equilibrium.GAME_MODE_NORMAL));
 			break;
 		case R.id.btnSudoku:
-			editor.putString("gameMode", String.valueOf(Equilibrium.GAME_MODE_NORMAL));
+			editor.putString("gameMode", String.valueOf(Equilibrium.GAME_MODE_SUDOKU));
 			break;
 		case R.id.btnCpu:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
