@@ -210,7 +210,7 @@ public class EQBoard implements Cloneable{
 		//EQBoard newb = new EQBoard(dimension);
 		EQBoard newb = null;
 		try {
-			newb = this.getClass().newInstance();
+			newb = this.getClass().getConstructor(Integer.TYPE).newInstance(dimension);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
