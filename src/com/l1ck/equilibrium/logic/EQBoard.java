@@ -9,19 +9,19 @@ import com.l1ck.equilibrium.logic.EQCell;
 
 public class EQBoard implements Cloneable{
 
-	private static class Coord {
+	protected static class Coord {
 		
 		public static String get(int r, int c) {
 			return String.valueOf(r)+":"+String.valueOf(c);
 		}
 	}
 	
-	private int dimension;
-	private EQCell[][] board;
-	private int[] rowsSum;
-	private int[] columnsSum;
-	private Hashtable<Integer, Hashtable<String, EQCell>> psbList;
-	private Hashtable<Integer, Integer> maxGain;
+	protected int dimension;
+	protected EQCell[][] board;
+	protected int[] rowsSum;
+	protected int[] columnsSum;
+	protected Hashtable<Integer, Hashtable<String, EQCell>> psbList;
+	protected Hashtable<Integer, Integer> maxGain;
 	
 	public EQBoard() {
 		this(5);
@@ -191,7 +191,7 @@ public class EQBoard implements Cloneable{
 		delete(mv.getRow(), mv.getCol());
 	}
 	
-	private EQMoves checkBoard() {
+	protected EQMoves checkBoard() {
 		EQMoves moves = new EQMoves(); 
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
