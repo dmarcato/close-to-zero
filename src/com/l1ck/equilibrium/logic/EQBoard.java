@@ -206,7 +206,14 @@ public class EQBoard implements Cloneable{
 
 	public Object clone() 
 	{
-		EQBoard newb = new EQBoard(dimension);
+		
+		//EQBoard newb = new EQBoard(dimension);
+		EQBoard newb = null;
+		try {
+			newb = this.getClass().newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		for (int i = 0; i < dimension; i++) {
 			for (int j = 0; j < dimension; j++) {
 				if (board[i][j].isSet())
