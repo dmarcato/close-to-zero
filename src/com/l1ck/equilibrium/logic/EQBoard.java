@@ -1,11 +1,11 @@
-package com.l1ck.closetozero.logic;
+package com.l1ck.equilibrium.logic;
 
 import java.util.Hashtable;
 import java.util.Vector;
 
 import android.util.Log;
 
-import com.l1ck.closetozero.logic.EQCell;
+import com.l1ck.equilibrium.logic.EQCell;
 
 public class EQBoard implements Cloneable{
 

@@ -1,4 +1,4 @@
-package com.l1ck.closetozero.logic;
+package com.l1ck.equilibrium.logic;
 import java.util.Vector;
 
 //import EQBoard.Coord;

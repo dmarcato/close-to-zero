@@ -1,15 +1,16 @@
-package com.l1ck.closetozero;
+package com.l1ck.equilibrium;
 
 import java.util.Vector;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.AdView;
-import com.l1ck.closetozero.logic.EQAI;
-import com.l1ck.closetozero.logic.EQBoard;
-import com.l1ck.closetozero.logic.EQCell;
-import com.l1ck.closetozero.logic.EQMoves;
-import com.l1ck.closetozero.logic.EQPlayer;
-import com.l1ck.closetozero.logic.EQSudokuBoard;
+import com.l1ck.closetozero.R;
+import com.l1ck.equilibrium.logic.EQAI;
+import com.l1ck.equilibrium.logic.EQBoard;
+import com.l1ck.equilibrium.logic.EQCell;
+import com.l1ck.equilibrium.logic.EQMoves;
+import com.l1ck.equilibrium.logic.EQPlayer;
+import com.l1ck.equilibrium.logic.EQSudokuBoard;
 
 import android.app.Activity;
 import android.app.AlertDialog;

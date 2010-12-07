@@ -1,6 +1,7 @@
-package com.l1ck.closetozero;
+package com.l1ck.equilibrium;
 
-import com.l1ck.closetozero.logic.EQCell;
+import com.l1ck.closetozero.R;
+import com.l1ck.equilibrium.logic.EQCell;
 
 import android.view.MotionEvent;
 import android.view.View;

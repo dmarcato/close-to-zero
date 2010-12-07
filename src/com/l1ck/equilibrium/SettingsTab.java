@@ -1,7 +1,8 @@
-package com.l1ck.closetozero;
+package com.l1ck.equilibrium;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.AdView;
+import com.l1ck.closetozero.R;
 
 import android.app.TabActivity;
 import android.content.Intent;

@@ -1,4 +1,4 @@
-package com.l1ck.closetozero;
+package com.l1ck.equilibrium;
 
 import android.content.Context;
 import android.graphics.Canvas;
