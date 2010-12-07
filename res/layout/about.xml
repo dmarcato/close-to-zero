@@ -12,7 +12,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:gravity="center"
-		android:text="The game Equilibrium come from an idea of Mirko Polato" />
+		android:text="The game Close to Zero come from an idea of Mirko Polato" />
 	
 	<TextView
 		android:layout_width="wrap_content"
@@ -33,6 +33,6 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="20dp"
-		android:text="©2010 L1CK - l1ck.dev@gmail.com" />
+		android:text="L1CK - l1ck.dev@gmail.com" />
   
 </LinearLayout>

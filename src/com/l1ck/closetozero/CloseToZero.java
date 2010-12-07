@@ -1,15 +1,15 @@
-package com.l1ck.equilibrium;
+package com.l1ck.closetozero;
 
 import java.util.Vector;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.AdView;
-import com.l1ck.equilibrium.logic.EQAI;
-import com.l1ck.equilibrium.logic.EQBoard;
-import com.l1ck.equilibrium.logic.EQCell;
-import com.l1ck.equilibrium.logic.EQMoves;
-import com.l1ck.equilibrium.logic.EQPlayer;
-import com.l1ck.equilibrium.logic.EQSudokuBoard;
+import com.l1ck.closetozero.logic.EQAI;
+import com.l1ck.closetozero.logic.EQBoard;
+import com.l1ck.closetozero.logic.EQCell;
+import com.l1ck.closetozero.logic.EQMoves;
+import com.l1ck.closetozero.logic.EQPlayer;
+import com.l1ck.closetozero.logic.EQSudokuBoard;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -44,7 +44,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Equilibrium extends Activity implements OnClickListener {
+public class CloseToZero extends Activity implements OnClickListener {
 	
 	/**
 	 * Thread per l'esecuzione di mosse da parte dell'AI
@@ -84,9 +84,9 @@ public class Equilibrium extends Activity implements OnClickListener {
 				break;
 			}
 			Message m = new Message();
-            m.what = (this.suggest) ? Equilibrium.AISUGGEST : Equilibrium.AIMOVE;
+            m.what = (this.suggest) ? CloseToZero.AISUGGEST : CloseToZero.AIMOVE;
             m.obj = move;
-            Equilibrium.this.threadHandler.sendMessage(m);
+            CloseToZero.this.threadHandler.sendMessage(m);
 		}
 	}
 	
@@ -98,10 +98,10 @@ public class Equilibrium extends Activity implements OnClickListener {
 		public void handleMessage(Message msg) {
 			
 			switch (msg.what) {
-			case Equilibrium.AISUGGEST:
+			case CloseToZero.AISUGGEST:
 				stopLoading();
 				if (msg.obj == null) {
-					Toast tmp = Toast.makeText(Equilibrium.this, Equilibrium.this.getApplicationContext().getResources().getString(R.string.no_moves_available), Toast.LENGTH_LONG);
+					Toast tmp = Toast.makeText(CloseToZero.this, CloseToZero.this.getApplicationContext().getResources().getString(R.string.no_moves_available), Toast.LENGTH_LONG);
 					tmp.show();
 				} else {
 					doVibration();
@@ -118,13 +118,13 @@ public class Equilibrium extends Activity implements OnClickListener {
 					showNumbers(selectedRow, selectedCol);
 				}
 				break;
-			case Equilibrium.AIMOVE:
+			case CloseToZero.AIMOVE:
 				if (pause) {
 					return;
 				}
 				stopLoading();
 				if (msg.obj == null) {
-					Toast tmp = Toast.makeText(Equilibrium.this, Equilibrium.this.getApplicationContext().getResources().getString(R.string.no_moves_available), Toast.LENGTH_LONG);
+					Toast tmp = Toast.makeText(CloseToZero.this, CloseToZero.this.getApplicationContext().getResources().getString(R.string.no_moves_available), Toast.LENGTH_LONG);
 					tmp.show();
 				} else {
 					doVibration();
@@ -180,6 +180,7 @@ public class Equilibrium extends Activity implements OnClickListener {
 	public static Typeface NUMBER_FONT = null;
 	public static Typeface TEXT_FONT = null;
 	public static Typeface EQ_FONT = null;
+	public static Typeface CZ_FONT = null;
 	
 	public static final int TEXT_SIZE = 15;
 	
@@ -211,9 +212,10 @@ public class Equilibrium extends Activity implements OnClickListener {
         
         vibro = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         
-        Equilibrium.NUMBER_FONT = Typeface.createFromAsset(getAssets(), "fonts/danielbd.ttf");
-        Equilibrium.TEXT_FONT = Typeface.createFromAsset(getAssets(), "fonts/HappyKiller.ttf");
-        Equilibrium.EQ_FONT = Typeface.createFromAsset(getAssets(), "fonts/BINREGUL.TTF");
+        CloseToZero.NUMBER_FONT = Typeface.createFromAsset(getAssets(), "fonts/danielbd.ttf");
+        CloseToZero.TEXT_FONT = Typeface.createFromAsset(getAssets(), "fonts/HappyKiller.ttf");
+        CloseToZero.EQ_FONT = Typeface.createFromAsset(getAssets(), "fonts/BINREGUL.TTF");
+        CloseToZero.CZ_FONT = Typeface.createFromAsset(getAssets(), "fonts/Visitor-TT2-BRK-.ttf");
         
         displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -640,7 +642,7 @@ public class Equilibrium extends Activity implements OnClickListener {
     	       .setCancelable(false)
     	       .setPositiveButton(R.string.new_game, new DialogInterface.OnClickListener() {
     	           public void onClick(DialogInterface dialog, int id) {
-    	                Equilibrium.this.start();
+    	                CloseToZero.this.start();
     	                dialog.dismiss();
     	           }
     	       })

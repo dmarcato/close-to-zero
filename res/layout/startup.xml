@@ -3,15 +3,15 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:background="@drawable/equilibrium_startup">
+	android:background="@drawable/closetozero_startup">
 	
 	<RelativeLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:layout_marginTop="50dp">
-		<ImageView android:id="@+id/textEquilibrium"
-			android:src="@drawable/scritta_equilibrium"
+		<ImageView android:id="@+id/textClosetozero"
+			android:src="@drawable/scritta_closetozero"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 	</RelativeLayout>

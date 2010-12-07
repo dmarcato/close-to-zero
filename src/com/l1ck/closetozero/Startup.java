@@ -1,4 +1,4 @@
-package com.l1ck.equilibrium;
+package com.l1ck.closetozero;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -39,7 +39,7 @@ public class Startup extends Activity implements OnClickListener, android.conten
         }
         a.start();
         
-        this.findViewById(R.id.textEquilibrium).startAnimation(AnimationUtils.loadAnimation(this, R.anim.punto));
+        this.findViewById(R.id.textClosetozero).startAnimation(AnimationUtils.loadAnimation(this, R.anim.punto));
         
         editor = PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit();
     }
@@ -56,10 +56,10 @@ public class Startup extends Activity implements OnClickListener, android.conten
 		}
 		switch (b.getId()) {
 		case R.id.btnClassic:
-			editor.putString("gameMode", String.valueOf(Equilibrium.GAME_MODE_NORMAL));
+			editor.putString("gameMode", String.valueOf(CloseToZero.GAME_MODE_NORMAL));
 			break;
 		case R.id.btnSudoku:
-			editor.putString("gameMode", String.valueOf(Equilibrium.GAME_MODE_SUDOKU));
+			editor.putString("gameMode", String.valueOf(CloseToZero.GAME_MODE_SUDOKU));
 			break;
 		case R.id.btnCpu:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -76,7 +76,7 @@ public class Startup extends Activity implements OnClickListener, android.conten
 			this.finish();
 			break;
 		case R.id.btnHelp:
-			this.showDialog(Equilibrium.DIALOG_HELP);
+			this.showDialog(CloseToZero.DIALOG_HELP);
 			break;
 		}
 	}
@@ -85,7 +85,7 @@ public class Startup extends Activity implements OnClickListener, android.conten
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
         	if (this.firstStage) {
-	        	this.setResult(Equilibrium.RESULT_CANCELED);
+	        	this.setResult(CloseToZero.RESULT_CANCELED);
 	        	this.finish();
         	} else {
         		this.firstStage = true;
@@ -101,7 +101,7 @@ public class Startup extends Activity implements OnClickListener, android.conten
 	protected Dialog onCreateDialog(int id) {
     	Dialog dialog = null;
     	switch (id) {
-    	case Equilibrium.DIALOG_HELP:
+    	case CloseToZero.DIALOG_HELP:
     		dialog = new Dialog(this);
         	dialog.setContentView(R.layout.help);
         	dialog.setTitle(R.string.help);

@@ -1,6 +1,6 @@
-package com.l1ck.equilibrium;
+package com.l1ck.closetozero;
 
-import com.l1ck.equilibrium.logic.EQPlayer;
+import com.l1ck.closetozero.logic.EQPlayer;
 
 public class Players {
 

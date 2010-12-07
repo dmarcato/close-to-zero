@@ -1,4 +1,4 @@
-package com.l1ck.equilibrium;
+package com.l1ck.closetozero;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.AdView;

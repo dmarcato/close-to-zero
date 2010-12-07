@@ -1,6 +1,6 @@
-package com.l1ck.equilibrium;
+package com.l1ck.closetozero;
 
-import com.l1ck.equilibrium.logic.EQCell;
+import com.l1ck.closetozero.logic.EQCell;
 
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +15,7 @@ import android.graphics.drawable.Drawable;
 
 public class Cell extends View {
 
-	protected Equilibrium e;
+	protected CloseToZero e;
 	protected EQCell logic;
 	protected int size;
 	public int row;
@@ -45,7 +45,7 @@ public class Cell extends View {
      */
     public Cell(Context context, EQCell l) {
         super(context);
-        e = (Equilibrium) getContext();
+        e = (CloseToZero) getContext();
         logic = l;
         if (logic != null) {
         	row = logic.getRow();
@@ -59,7 +59,7 @@ public class Cell extends View {
         
         painter = new Paint();
         painter.setAntiAlias(true);
-        painter.setTypeface(Equilibrium.NUMBER_FONT);
+        painter.setTypeface(CloseToZero.NUMBER_FONT);
     }
     
     /**

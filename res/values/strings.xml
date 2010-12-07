@@ -25,7 +25,7 @@
 <string name="size_summary">Choose the grid\'s size</string>
 <string name="game_mode">Game mode</string>
 <string name="game_mode_summary">Choose the game mode</string>
-<string name="app_name">Equilibrium</string>
+<string name="app_name">Close to Zero</string>
 <string name="vs_cpu">vs CPU</string>
 <string name="vs_cpu_summary">Second player is controlled by CPU</string>
 <string name="partial_sum">Show partial sum</string>

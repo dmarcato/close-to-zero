@@ -1,4 +1,4 @@
-package com.l1ck.equilibrium;
+package com.l1ck.closetozero;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -27,7 +27,6 @@ public class CellAIControl extends Cell {
     @Override
     protected void onDraw(Canvas canvas) {
     	painter.setShader(new LinearGradient(0, 0, size / 2, size / 2, e.players.get(1).getColor(), e.players.get(2).getColor(), Shader.TileMode.MIRROR));
-    	painter.setTypeface(Equilibrium.EQ_FONT);
     	painter.setTextSize(size);
         painter.setFakeBoldText(true);
         painter.setShadowLayer(currentShadow, 0, 0, signColor);
@@ -45,7 +44,11 @@ public class CellAIControl extends Cell {
         	}
             canvas.drawPath(p, painter);
         } else {
-        	canvas.drawText("EQ", (size-painter.measureText("EQ"))/2, (size*3/4), painter);
+        	painter.setTypeface(CloseToZero.EQ_FONT);
+        	canvas.drawText("C", (size-painter.measureText("CZ"))/2, (size*3/4), painter);
+        	painter.setTypeface(CloseToZero.CZ_FONT);
+        	painter.setTextSize(size*1.1f);
+        	canvas.drawText("Z", (size-painter.measureText("CZ"))/2+painter.measureText("CZ")/2, (size*3/4), painter);
         }
     }
     

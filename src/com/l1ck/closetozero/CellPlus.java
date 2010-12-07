@@ -1,10 +1,10 @@
-package com.l1ck.equilibrium;
+package com.l1ck.closetozero;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
-import com.l1ck.equilibrium.logic.EQCell;
+import com.l1ck.closetozero.logic.EQCell;
 
 public class CellPlus extends Cell {
 

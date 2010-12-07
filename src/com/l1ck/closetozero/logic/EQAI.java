@@ -1,4 +1,4 @@
-package com.l1ck.equilibrium.logic;
+package com.l1ck.closetozero.logic;
 
 import java.util.Random;
 import java.util.Vector;

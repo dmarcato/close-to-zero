@@ -1,4 +1,4 @@
-package com.l1ck.equilibrium;
+package com.l1ck.closetozero;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
