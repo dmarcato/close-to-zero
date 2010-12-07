@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
-import com.l1ck.closetozero.R;
 import com.l1ck.equilibrium.logic.EQCell;
 
 public class CellPlus extends Cell {

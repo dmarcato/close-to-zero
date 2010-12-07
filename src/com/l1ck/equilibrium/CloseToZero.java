@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.AdView;
-import com.l1ck.closetozero.R;
 import com.l1ck.equilibrium.logic.EQAI;
 import com.l1ck.equilibrium.logic.EQBoard;
 import com.l1ck.equilibrium.logic.EQCell;

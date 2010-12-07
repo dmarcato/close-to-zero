@@ -1,7 +1,5 @@
 package com.l1ck.equilibrium;
 
-import com.l1ck.closetozero.R;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;

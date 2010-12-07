@@ -1,6 +1,5 @@
 package com.l1ck.equilibrium;
 
-import com.l1ck.closetozero.R;
 import com.l1ck.equilibrium.logic.EQCell;
 
 import android.view.MotionEvent;
